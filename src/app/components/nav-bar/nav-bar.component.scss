@@ -1,0 +1,14 @@
+.wrapper{
+  position: fixed;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 22px;
+  z-index: 101;
+  font-size: 22px;
+  .logo{
+    font-family: cursive;
+  }
+}

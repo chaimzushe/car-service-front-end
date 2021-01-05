@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<div class="app">
+  <app-nav-bar></app-nav-bar>
+  <div class="pusher"></div>
+  <div class="router">
+    <router-outlet></router-outlet>
+  </div>
+
+  <app-footer *ngIf="showFooter()"></app-footer>
+</div>
+

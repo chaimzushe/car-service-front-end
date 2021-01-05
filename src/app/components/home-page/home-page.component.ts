@@ -6,7 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit {
-
+settings = [
+  {iconClass: 'fal fa-car', name: 'Receive car', link: 'register'},
+  {iconClass: 'fal fa-cog', name: 'Configure Services', link: 'Configure-service'},
+  {iconClass: 'fal fa-history', name: 'View Car History', link: 'car-history'},
+]
   constructor() { }
 
   ngOnInit(): void {

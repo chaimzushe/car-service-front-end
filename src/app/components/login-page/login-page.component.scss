@@ -1,10 +1,10 @@
 .wrapper {
   background-color: #015673;
-  height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 80px 22px;
+  min-height: calc(100vh - 70px);
 }
 
 .header {
@@ -13,9 +13,9 @@
   text-align: center;
   color: white;
   font-size: 30px;
-  font-family: cursive;
   text-transform: uppercase;
   letter-spacing: 3px;
+  line-height: 150%;;
 }
 
 
@@ -23,7 +23,7 @@
   width: 100%;
   max-width: 500px;
   color: white;
-  @media(min-width: 350px){
+  @media(min-width: 390px){
     br {
       display: none;
     }
