@@ -3,5 +3,17 @@
 @import "~@fortawesome/fontawesome-pro/css/all.min.css";
 @import "../src/vars.scss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.err-panel {
+  background-color: $warning-red;
+  .mat-focus-indicator.mat-button.mat-button-base {
+    color: white;
+  }
+}

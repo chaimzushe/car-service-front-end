@@ -13,8 +13,8 @@ export class AuthGuardService implements CanActivate {
   }
 
   async canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) {
-    const user = null;
-    if (!!user) {
+    const loggedIn = sessionStorage.getItem('loggedIn');
+    if (!!loggedIn) {
       return true;
     }
     else {
