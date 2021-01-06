@@ -8,10 +8,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HomePageComponent implements OnInit {
 settings = [
-  {iconClass: 'fal fa-car', name: 'Receive car', link: 'register'},
-  {iconClass: 'fal fa-cog', name: 'Configure Services', link: 'Configure-service'},
-  {iconClass: 'fal fa-history', name: 'View Car History', link: 'car-history'},
+  {iconClass: 'fal fa-hand-receiving', name: 'Receive car', link: 'register'},
+  {iconClass: 'fal fa-cog', name: 'Configure Services', link: 'repair-options', ready: true},
+  {iconClass: 'fal fa-cars', name: 'Manage cars', link: 'cars', ready: true},
 ]
+
   constructor() { }
 
   ngOnInit(): void {

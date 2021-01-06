@@ -1,0 +1,15 @@
+@import "../../../vars.scss";;
+.sub-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  align-items: center;
+  background-color: white;
+}
+::ng-deep {
+  .mat-btn {
+    min-width: 100px;
+    background-color: $deep-blue;
+    color: white;
+  }
+}

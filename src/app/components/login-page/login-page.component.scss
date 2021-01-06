@@ -1,5 +1,7 @@
+
+@import "../../../vars.scss";
 .wrapper {
-  background-color: #015673;
+  background-color: $deep-blue;
   display: flex;
   align-items: center;
   flex-direction: column;
