@@ -7,8 +7,8 @@ import { Injectable } from '@angular/core';
 export class RepairService {
 
   constructor(private http: HttpClient) { }
-
-  baseApi = "https://car-service-shop.herokuapp.com/api" //'http://localhost:2000/api'
+  //baseApi = 'https://car-service-shop.herokuapp.com/api'
+  baseApi = 'http://localhost:2000/api'
 
 
   getRepairDetail(repairId: any) {

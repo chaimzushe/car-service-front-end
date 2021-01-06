@@ -17,7 +17,7 @@ export class CarService {
 
   //:id
 
-  getAllCars(carId: any) {
+  getAllCars(carId = null) {
     return this.http.get(`${this.baseApi}/cars`);
   }
 

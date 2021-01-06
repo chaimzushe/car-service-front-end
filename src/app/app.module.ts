@@ -25,7 +25,8 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatMenuModule} from '@angular/material/menu';
 import { ConfirmActionComponent } from './dialogs/confirm-action/confirm-action.component';
 import { RepairFormComponent } from './components/repair-form/repair-form.component';
-
+import { ReceiveCarComponent } from './components/receive-car/receive-car.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,8 @@ import { RepairFormComponent } from './components/repair-form/repair-form.compon
     SubNavComponent,
     CarFormComponent,
     ConfirmActionComponent,
-    RepairFormComponent
+    RepairFormComponent,
+    ReceiveCarComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ import { RepairFormComponent } from './components/repair-form/repair-form.compon
     MatDialogModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatMenuModule
+    MatMenuModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

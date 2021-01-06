@@ -48,6 +48,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       name: [repair.name, [Validators.required]],
       intervalCheck: [repair.intervalCheck],
+      checkWhenMilageIsAt: [repair.checkWhenMilageIsAt],
     });
   }
 

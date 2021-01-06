@@ -1,0 +1,24 @@
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
+<div class="wrapper">
+  <h3>Receive New Car</h3>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input type="text"
+             placeholder="Select Car"
+             aria-label="Number"
+             matInput
+             [ngModelOptions]="{standalone: true}"
+             (keyup)="filterCars($event)"
+             [(ngModel)]="selectedCar"
+             [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let car of filteredCars" [value]="car.carNumber">
+          car# {{car.carNumber}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+
+
+

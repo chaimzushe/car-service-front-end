@@ -4,6 +4,7 @@ import { CarFormComponent } from './components/car-form/car-form.component';
 import { CarListComponent } from './components/car-list/car-list.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { ReceiveCarComponent } from './components/receive-car/receive-car.component';
 import { RepairFormComponent } from './components/repair-form/repair-form.component';
 import { RepairOptionListComponent } from './components/repair-option-list/repair-option-list.component';
 import { VisitListComponent } from './components/visit-list/visit-list.component';
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: "login",
     component: LoginPageComponent
+  },
+  {
+    path: "receive-car",
+    component: ReceiveCarComponent
   },
   {
     path: "cars",

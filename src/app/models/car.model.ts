@@ -11,7 +11,8 @@ export interface ICar {
 
 export interface Repair {
   name: number;
-  intervalCheck: string;
+  intervalCheck: number;
+  checkWhenMilageIsAt: number;
 }
 
 
