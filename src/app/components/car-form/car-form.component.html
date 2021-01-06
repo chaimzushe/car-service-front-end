@@ -1,7 +1,7 @@
 
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 <div class="wrapper">
-  <h3 class="form_header"> New Car</h3>
+  <h3 class="form_header"> {{carId ? 'Edit' : 'New'}} Car</h3>
   <form (submit)="submit()" class="form" *ngIf="form" [formGroup]="form">
     <mat-form-field appearance="standard">
       <mat-label>VIN</mat-label>
