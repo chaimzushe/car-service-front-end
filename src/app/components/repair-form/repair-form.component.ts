@@ -1,49 +1,41 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subNavInfo } from 'src/app/models/car.model';
-import { CarService } from 'src/app/services/car.service';
+import { RepairService } from 'src/app/services/repair.service';
 
 @Component({
-  selector: 'app-car-form',
-  templateUrl: './car-form.component.html',
-  styleUrls: ['./car-form.component.scss']
+  selector: 'app-repair-form',
+  templateUrl: './repair-form.component.html',
+  styleUrls: ['./repair-form.component.scss']
 })
-export class CarFormComponent implements OnInit, OnDestroy {
-  carId: any;
-  carEditing: {};
-  subscription: any = [];
-  form: any;
-  triedSubmitting: any;
-  isSubmitting: any;
+export class RepairFormComponent implements OnInit, OnDestroy {
   subNavInfo: subNavInfo = {
     actionText: '',
     actionLink: [],
-    backLink: '/cars'
+    backLink: '/repair-options'
   }
-  constructor(
-    private fb: FormBuilder,
-    private carService: CarService,
-    private snackbar: MatSnackBar,
-    private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private router: Router
-
-  ) { }
+  repairId: any;
+  repairEditing: any;
+  subscription: any = [];
+  form: any;
+  isSubmitting: any;
+  constructor(private route: ActivatedRoute,
+     private repairService: RepairService, private fb: FormBuilder,
+     private snackbar: MatSnackBar,
+     private router: Router) { }
 
   ngOnInit(): void {
-
     let routeSubscription = this.route.params.subscribe(async params => {
-      this.carId = params.id !== 'new' && params.id;
+      this.repairId = params.id !== 'new' && params.id;
 
-      if (this.carId) {
-        this.carEditing = await this.carService.getCarDetail(this.carId).toPromise();
+      if (this.repairId) {
+        this.repairEditing = await this.repairService.getRepairDetail(this.repairId).toPromise();
       } else {
-        this.carEditing = {};
+        this.repairEditing = {};
       }
-      this.setupForm(this.carEditing);
+      this.setupForm(this.repairEditing);
     });
     this.subscription.push(routeSubscription);
   }
@@ -52,16 +44,11 @@ export class CarFormComponent implements OnInit, OnDestroy {
     this.subscription.forEach(s => s.unsubscribe());
   }
 
-  setupForm(car) {
+  setupForm(repair) {
     this.form = this.fb.group({
-      vin: [car.vin, [Validators.required]],
-      miles: [car.miles || 0],
-      carNumber: [car.carNumber, Validators.required]
+      name: [repair.name, [Validators.required]],
+      intervalCheck: [repair.intervalCheck],
     });
-  }
-
-  invalidInput(val) {
-    return (this.form.get(val).touched || this.triedSubmitting) && (this.form.get(val).invalid);
   }
 
   async submit() {
@@ -71,9 +58,9 @@ export class CarFormComponent implements OnInit, OnDestroy {
       this.snackbar.open("Please fix errors in the form", "Dismiss", { duration: 3000, panelClass: 'err-panel' })
       return this.isSubmitting = false;
     }
-    if (this.carId) {
+    if (this.repairId) {
       try {
-        let car = await this.carService.editCar(this.form.value, this.carId).toPromise();
+        let repair = await this.repairService.editRepair(this.form.value, this.repairId).toPromise();
         return this.afterSaveAction();
       } catch (e) {
         let sb = this.snackbar.open("Error saving", "Dismiss", { duration: 1000, panelClass: 'err-panel' });
@@ -81,7 +68,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
       }
     } else {
       try {
-        let newCar = await this.carService.addCar(this.form.value).toPromise();
+        let newRepair = await this.repairService.addRepair(this.form.value).toPromise();
         this.isSubmitting = false;
 
         return this.afterSaveAction();
@@ -93,11 +80,10 @@ export class CarFormComponent implements OnInit, OnDestroy {
 
   }
   afterSaveAction() {
-    let sb = this.snackbar.open("Car successfully saved", "Dismiss", { duration: 1000 });
+    let sb = this.snackbar.open("Repair successfully saved", "Dismiss", { duration: 1000 });
     sb.afterDismissed().subscribe(x => {
-      this.router.navigate(['/cars']);
+      this.router.navigate(['/repair-options']);
     })
   }
-
 
 }

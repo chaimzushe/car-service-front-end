@@ -2,7 +2,7 @@
   <span>
     <i (click)="navigateBack()" class="far fa-long-arrow-left"></i>
   </span>
-  <span class="actions">
-    <button (click)="navigateToAction()"  mat-button class="mat-btn" >Add Car</button>
+  <span *ngIf="subNavInfo.actionText" class="actions">
+    <button (click)="navigateToAction()"  mat-button class="mat-btn" >{{subNavInfo.actionText}}</button>
   </span>
 </div>

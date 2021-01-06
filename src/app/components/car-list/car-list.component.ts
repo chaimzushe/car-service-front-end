@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
-import { ICar } from 'src/app/models/car.model';
+import { ICar, subNavInfo } from 'src/app/models/car.model';
 import { CarService } from 'src/app/services/car.service';
 
 @Component({
@@ -13,6 +13,11 @@ import { CarService } from 'src/app/services/car.service';
 })
 export class CarListComponent implements OnInit, OnDestroy {
   subs: Subscription[]= [];
+  subNavInfo: subNavInfo = {
+    actionText: 'New Car',
+    actionLink: ['edit', 'new'],
+    backLink: '/home'
+  }
 
   constructor(private carService: CarService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
   ngOnDestroy(): void {

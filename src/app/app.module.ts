@@ -24,6 +24,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import {MatMenuModule} from '@angular/material/menu';
 import { ConfirmActionComponent } from './dialogs/confirm-action/confirm-action.component';
+import { RepairFormComponent } from './components/repair-form/repair-form.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +40,8 @@ import { ConfirmActionComponent } from './dialogs/confirm-action/confirm-action.
     RepairOptionListComponent,
     SubNavComponent,
     CarFormComponent,
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    RepairFormComponent
   ],
   imports: [
     BrowserModule,

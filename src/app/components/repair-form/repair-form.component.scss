@@ -1,0 +1,25 @@
+.wrapper {
+  max-width: 500px;
+  margin: 70px auto;
+  text-align: center;
+  padding: 8px;
+}
+
+.form {
+  background-color: white;
+  box-shadow: 1px 1px 1px 1px lightgray;
+  border-radius: 12px;
+  padding: 12px 18px;
+
+  &_header {
+    font-size: 22px;
+  }
+
+  &_submit {
+    width: 200px;
+  }
+}
+
+.actions {
+  margin-top: 22px;
+}

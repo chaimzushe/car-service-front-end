@@ -1,22 +1,19 @@
 
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 <div class="wrapper">
-  <h3 class="form_header"> New Car</h3>
+  <h3 class="form_header"> New Repair</h3>
   <form (submit)="submit()" class="form" *ngIf="form" [formGroup]="form">
     <mat-form-field appearance="standard">
-      <mat-label>VIN</mat-label>
-      <input formControlName="vin" matInput placeholder="VIN">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Name">
     </mat-form-field>
     <mat-form-field appearance="standard">
-      <mat-label>Car Number</mat-label>
-      <input formControlName="carNumber"  matInput placeholder="Car Number">
-    </mat-form-field>
-    <mat-form-field appearance="standard">
-      <mat-label>Miles</mat-label>
-      <input formControlName="miles" matInput placeholder="miles">
+      <mat-label>Interval Check</mat-label>
+      <input formControlName="intervalCheck"  matInput placeholder="Days">
     </mat-form-field>
     <div class="actions">
       <button type="submit" (click)="submit()" class="form_submit" mat-raised-button color="primary">Submit</button>
     </div>
   </form>
 </div>
+

@@ -1,7 +1,7 @@
-<app-sub-nav></app-sub-nav>
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 
 <div class="list">
-  <mat-card class="card" *ngFor="let car of cars">
+  <mat-card class="card" *ngFor="let car of cars; index as i">
     <div class="top">
       <h3>{{car.carNumber}}</h3>
       <span class="menu" [matMenuTriggerFor]="menu"> <i class="fal fa-ellipsis-v"></i> </span>
@@ -22,10 +22,10 @@
       <button (click)="navigateToEdit(car)" mat-menu-item>
         <span>Edit</span>
       </button>
-      <button (click)="viewItem(car)" mat-menu-item>
+      <button (click)="viewItem(car)" disabled mat-menu-item>
         <span>View</span>
       </button>
-      <button (click)="deleteItem(car)" mat-menu-item>
+      <button (click)="deleteItem(car, i)" mat-menu-item>
         <span>Delete</span>
       </button>
     </mat-menu>

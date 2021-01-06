@@ -4,6 +4,7 @@ import { CarFormComponent } from './components/car-form/car-form.component';
 import { CarListComponent } from './components/car-list/car-list.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { RepairFormComponent } from './components/repair-form/repair-form.component';
 import { RepairOptionListComponent } from './components/repair-option-list/repair-option-list.component';
 import { VisitListComponent } from './components/visit-list/visit-list.component';
 import { AuthGuardService } from './services/auth-guard.service';
@@ -39,7 +40,17 @@ const routes: Routes = [
   },
   {
     path: "repair-options",
-    component: RepairOptionListComponent
+    children: [
+      {
+        path: '',
+        component: RepairOptionListComponent
+
+      },
+      {
+        path: "edit/:id",
+        component: RepairFormComponent,
+      }
+    ]
   },
   {
     path: "visits",

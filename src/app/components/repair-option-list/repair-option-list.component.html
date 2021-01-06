@@ -1,1 +1,27 @@
-<p>repair-option-list works!</p>
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
+
+<div class="list">
+  <mat-card class="card" *ngFor="let repair of repairs">
+    <div class="top">
+      <h3>{{repair.name}}</h3>
+      <span class="menu" [matMenuTriggerFor]="menu"> <i class="fal fa-ellipsis-v"></i> </span>
+    </div>
+    <div class="middle">
+      <p><b>Renew every</b> {{repair.intervalCheck}} days</p>
+    </div>
+
+    <mat-menu #menu="matMenu">
+      <button (click)="navigateToEdit(repair)" mat-menu-item>
+        <span>Edit</span>
+      </button>
+      <button (click)="viewItem(repair)" disabled mat-menu-item>
+        <span>View</span>
+      </button>
+      <button (click)="deleteItem(repair)" mat-menu-item>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card>
+
+</div>
+<app-no-items-found [text]="noItemsText" *ngIf="repairs.length ===0"></app-no-items-found>
