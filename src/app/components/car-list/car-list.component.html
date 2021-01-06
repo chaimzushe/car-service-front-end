@@ -1,7 +1,35 @@
 <app-sub-nav></app-sub-nav>
 
 <div class="list">
+  <mat-card class="card" *ngFor="let car of cars">
+    <div class="top">
+      <h3>{{car.carNumber}}</h3>
+      <span class="menu" [matMenuTriggerFor]="menu"> <i class="fal fa-ellipsis-v"></i> </span>
+    </div>
+    <div class="middle">
+      <p><b>Miles</b> {{car.miles}}</p>
+      <p><b>VIN</b> {{car.vin}}</p>
+    </div>
 
+    <div class="bottom">
+      <p  class="badge">
+        <span class="pre">Last repaired:</span>
+        <span *ngIf="car.lastRepair"> {{car.lastRepair | date}}</span>
+        <span *ngIf="!car.lastRepair"> N/A</span>
+       </p>
+    </div>
+    <mat-menu #menu="matMenu">
+      <button (click)="navigateToEdit(car)" mat-menu-item>
+        <span>Edit</span>
+      </button>
+      <button (click)="viewItem(car)" mat-menu-item>
+        <span>View</span>
+      </button>
+      <button (click)="deleteItem(car)" mat-menu-item>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card>
 
 </div>
 <app-no-items-found [text]="noItemsText" *ngIf="cars.length ===0"></app-no-items-found>

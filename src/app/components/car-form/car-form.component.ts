@@ -67,22 +67,31 @@ export class CarFormComponent implements OnInit, OnDestroy {
       return this.isSubmitting = false;
     }
     if (this.carId) {
-      this.carService.editCar(this.form.value)
+      try {
+        let car = await this.carService.editCar(this.form.value, this.carId).toPromise();
+        return this.afterSaveAction();
+      } catch (e) {
+        let sb = this.snackbar.open("Error saving", "Dismiss", { duration: 1000, panelClass: 'err-panel' });
+        this.isSubmitting = false;
+      }
     } else {
       try {
         let newCar = await this.carService.addCar(this.form.value).toPromise();
         this.isSubmitting = false;
-        console.log(newCar);
-        let sb = this.snackbar.open("Car successfully added", "Dismiss", { duration: 3000 });
-        sb.afterDismissed().subscribe(x => {
-          this.router.navigate(['/cars']);
-        })
+
+        return this.afterSaveAction();
       } catch (e) {
-        let sb = this.snackbar.open("Error saving", "Dismiss", { duration: 3000, panelClass: 'err-panel' });
+        let sb = this.snackbar.open("Error saving", "Dismiss", { duration: 1000, panelClass: 'err-panel' });
         this.isSubmitting = false;
       }
     }
 
+  }
+  afterSaveAction() {
+    let sb = this.snackbar.open("Car successfully saved", "Dismiss", { duration: 1000 });
+    sb.afterDismissed().subscribe(x => {
+      this.router.navigate(['/cars']);
+    })
   }
 
 

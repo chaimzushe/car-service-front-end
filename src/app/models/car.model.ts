@@ -1,11 +1,13 @@
 
 
 export interface ICar {
-  CarNumber:number;
+  _id: string;
+  carNumber:number;
   miles: number;
   visits: RepairVisit[];
   vin: number;
   imageUrl: string;
+  lastRepair: Date | null;
 }
 
 export interface RepairVisit {

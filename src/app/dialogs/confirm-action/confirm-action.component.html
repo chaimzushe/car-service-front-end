@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>
+  <i class="far fa-exclamation-circle"></i> Please confirm
+  </h1>
+<div class="content" mat-dialog-content>
+  <p>{{msg}} </p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="''">No Thanks</button>
+  <button mat-button [mat-dialog-close]="'OK'" cdkFocusInitial>Ok</button>
+</div>
+

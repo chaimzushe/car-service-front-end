@@ -1,0 +1,14 @@
+@import "../../../vars.scss";
+h1 {
+  color: $warning-red;
+  display: flex;
+  align-items: center;
+  i {
+    margin-right: 12px;
+  }
+}
+
+.content{
+  margin-bottom: 22px;
+  line-height: 150%;
+}
