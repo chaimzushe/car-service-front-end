@@ -1,6 +1,6 @@
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 <div class="wrapper">
-  <h3>Receive New Car</h3>
+  <h3>Receive Car</h3>
   <form class="example-form">
     <mat-form-field class="example-full-width">
       <input type="text"
@@ -16,8 +16,40 @@
           car# {{car.carNumber}}
         </mat-option>
       </mat-autocomplete>
+
+    </mat-form-field>
+
+    <mat-form-field *ngIf="selectedCar" class="example-full-width">
+      <input type="text"
+             placeholder="Select Repair needed"
+             aria-label="Number"
+             matInput
+
+             [ngModelOptions]="{standalone: true}"
+             (keyup)="filterRepairs($event)"
+             [(ngModel)]="selectedRepair"
+             [matAutocomplete]="autoRepairs">
+      <mat-autocomplete   (optionSelected)="addRepair($event)" autoActiveFirstOption #autoRepairs="matAutocomplete">
+        <mat-option *ngFor="let repair of filteredRepairs" [value]="repair.name">
+           {{repair.name}}
+        </mat-option>
+      </mat-autocomplete>
+
     </mat-form-field>
   </form>
+<div *ngIf="selectedCar" class="bottom">
+  <h3>Repairs needed</h3>
+  <ng-container *ngIf="repairsNeeded.length">
+    <mat-card class="repair-item" *ngFor="let repair of repairsNeeded; index as i">
+      <span>{{repair.name}}</span>
+      <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
+    </mat-card>
+    <button (click)="createLabel()" mat-raised-button color="primary">Create Label</button>
+  </ng-container>
+
+<app-no-items-found [text]="'No repairs selected'" *ngIf="repairsNeeded.length ===0"></app-no-items-found>
+</div>
+
 </div>
 
 
