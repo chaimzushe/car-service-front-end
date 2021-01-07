@@ -21,10 +21,11 @@
 
     <mat-form-field *ngIf="selectedCar" class="example-full-width">
       <input type="text"
-             placeholder="Select Repair needed"
+             [placeholder]="filteredRepairs.length ? 'Select Repair needed' : 'No repairs available'"
              aria-label="Number"
              matInput
-
+             [disabled]="!filteredRepairs.length"
+              class="repair-input"
              [ngModelOptions]="{standalone: true}"
              (keyup)="filterRepairs($event)"
              [(ngModel)]="selectedRepair"

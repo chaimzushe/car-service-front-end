@@ -46,9 +46,10 @@ export class ReceiveCarComponent implements OnInit {
     }, 100)
 
     this.repairsNeeded.push({ name: event.option.value })
-
+    const input = document.querySelector('.repair-input') as HTMLInputElement;
+    input.blur();
   }
-  removeRepair(i){
+  removeRepair(i) {
     this.repairsNeeded.splice(i, 1);
     this.filteredRepairs = this.allRepairs.filter(c => !this.alreadySelected(c));
   }
@@ -56,7 +57,7 @@ export class ReceiveCarComponent implements OnInit {
     return this.repairsNeeded.find(rep => rep.name === r.name);
   }
 
-  createLabel(){
+  createLabel() {
     return this.snackbar.open("Work in progress. Thank you for your patience 😊 ", "dismiss", { duration: 3000, panelClass: "err-panel" })
   }
 
