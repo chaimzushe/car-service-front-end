@@ -48,8 +48,9 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
 
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
+      this.repairs.splice(i, 1);
       let removeSub = this.repairService.removeRepair(car._id).subscribe(x => {
-        this.repairs.splice(i, 1);
+        //this.repairs.splice(i, 1);
       });
       this.subs.push(removeSub);
     });

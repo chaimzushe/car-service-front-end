@@ -82,7 +82,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
     } else {
       try {
         let newCar = await this.carService.addCar(this.form.value).toPromise();
-        this.isSubmitting = false;
+
 
         return this.afterSaveAction();
       } catch (e) {
@@ -95,6 +95,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
   afterSaveAction() {
     let sb = this.snackbar.open("Car successfully saved", "Dismiss", { duration: 1000 });
     sb.afterDismissed().subscribe(x => {
+      this.isSubmitting = false;
       this.router.navigate(['/cars']);
     })
   }

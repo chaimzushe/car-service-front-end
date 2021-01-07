@@ -47,9 +47,8 @@ export class CarListComponent implements OnInit, OnDestroy {
 
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
-      let removeSub = this.carService.removeCar(car._id).subscribe(x => {
-        this.cars.splice(i, 1);
-      });
+      this.cars.splice(i, 1);
+      let removeSub = this.carService.removeCar(car._id).subscribe(x => {});
       this.subs.push(removeSub);
     });
     this.subs.push(dialogSub);

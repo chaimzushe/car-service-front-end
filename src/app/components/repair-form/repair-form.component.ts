@@ -70,7 +70,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
     } else {
       try {
         let newRepair = await this.repairService.addRepair(this.form.value).toPromise();
-        this.isSubmitting = false;
+
 
         return this.afterSaveAction();
       } catch (e) {
@@ -83,6 +83,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
   afterSaveAction() {
     let sb = this.snackbar.open("Repair successfully saved", "Dismiss", { duration: 1000 });
     sb.afterDismissed().subscribe(x => {
+      this.isSubmitting = false;
       this.router.navigate(['/repair-options']);
     })
   }
