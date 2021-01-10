@@ -18,8 +18,10 @@ export interface Repair {
 
 
 export interface User {
-  Id: number;
-  Name: string;
+  _id: number;
+  name: string;
+  email: string;
+  roles: [];
 
 }
 

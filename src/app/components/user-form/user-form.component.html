@@ -1,0 +1,22 @@
+
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
+<div class="wrapper">
+  <h3 class="form_header"> {{userId ? 'Edit' : 'New'}} User</h3>
+  <form (submit)="submit()" class="form" *ngIf="form" [formGroup]="form">
+    <mat-form-field appearance="standard">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Name">
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Email</mat-label>
+      <input formControlName="email"  matInput placeholder="Email">
+    </mat-form-field>
+
+
+
+    <div class="actions">
+      <button type="submit" (click)="submit()" class="form_submit" mat-raised-button color="primary">Submit</button>
+    </div>
+  </form>
+</div>
+

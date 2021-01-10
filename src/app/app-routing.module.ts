@@ -7,6 +7,8 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { ReceiveCarComponent } from './components/receive-car/receive-car.component';
 import { RepairFormComponent } from './components/repair-form/repair-form.component';
 import { RepairOptionListComponent } from './components/repair-option-list/repair-option-list.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 import { VisitListComponent } from './components/visit-list/visit-list.component';
 import { AuthGuardService } from './services/auth-guard.service';
 
@@ -60,6 +62,21 @@ const routes: Routes = [
   {
     path: "visits",
     component: VisitListComponent
+  },
+
+  {
+    path: "users",
+    children: [
+      {
+        path: '',
+        component: UserListComponent
+
+      },
+      {
+        path: "edit/:id",
+        component: UserFormComponent,
+      }
+    ]
   },
   {
     path: "**",

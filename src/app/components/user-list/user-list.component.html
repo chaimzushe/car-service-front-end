@@ -1,0 +1,27 @@
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
+
+<div class="list">
+  <mat-card class="card" *ngFor="let user of users; index as i">
+    <div class="top">
+      <h3>{{user.name}}</h3>
+      <span class="menu" [matMenuTriggerFor]="menu"> <i class="fal fa-ellipsis-v"></i> </span>
+    </div>
+    <div class="middle">
+      <p><b>Email</b> {{user.email}} days</p>
+    </div>
+
+    <mat-menu #menu="matMenu">
+      <button (click)="navigateToEdit(user)" mat-menu-item>
+        <span>Edit</span>
+      </button>
+      <button (click)="viewItem(user)" disabled mat-menu-item>
+        <span>View</span>
+      </button>
+      <button (click)="deleteItem(user, i)" mat-menu-item>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card>
+
+</div>
+<app-no-items-found [text]="noItemsText" *ngIf="users.length ===0"></app-no-items-found>

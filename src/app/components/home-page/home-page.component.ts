@@ -11,6 +11,7 @@ settings = [
   {iconClass: 'fal fa-hand-receiving', name: 'Receive car', link: 'receive-car', ready: true},
   {iconClass: 'fal fa-tools', name: 'Manage Repairs', link: 'repair-options', ready: true},
   {iconClass: 'fal fa-cars', name: 'Manage cars', link: 'cars', ready: true},
+  {iconClass: 'fal fa-users', name: 'Manage users', link: 'users', ready: true},
 ]
 
   constructor() { }

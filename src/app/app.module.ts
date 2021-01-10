@@ -28,6 +28,8 @@ import { RepairFormComponent } from './components/repair-form/repair-form.compon
 import { ReceiveCarComponent } from './components/receive-car/receive-car.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AgGridModule } from 'ag-grid-angular';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +46,9 @@ import { AgGridModule } from 'ag-grid-angular';
     CarFormComponent,
     ConfirmActionComponent,
     RepairFormComponent,
-    ReceiveCarComponent
+    ReceiveCarComponent,
+    UserListComponent,
+    UserFormComponent
   ],
   imports: [
     BrowserModule,
