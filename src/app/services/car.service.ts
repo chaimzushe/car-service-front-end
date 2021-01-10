@@ -7,8 +7,8 @@ import { Injectable } from '@angular/core';
 export class CarService {
 
 
-  //baseApi =  "https://car-service-shop.herokuapp.com/api" //
-  baseApi =  'http://localhost:2000/api'
+  baseApi =  "https://car-service-shop.herokuapp.com/api" //
+ //baseApi =  'http://localhost:2000/api'
 
   constructor(private http: HttpClient) { }
 
