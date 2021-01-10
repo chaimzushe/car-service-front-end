@@ -19,14 +19,14 @@ export class CarListComponent implements OnInit, OnDestroy {
     backLink: '/home',
     gridView: true
   }
-  girdView =false;
+  girdView =true;
   rowData: any;
   constructor(private carService: CarService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
   ngOnDestroy(): void {
     this.subs.forEach(s=> s.unsubscribe())
   }
   cars: CarFullInfo[] = [];
-  noItemsText = "No cars found";
+  noItemsText = "Loading...";
   defaultColDef = {
     sortable: true,
     resizable: true,
