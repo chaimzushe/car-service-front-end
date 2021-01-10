@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subNavInfo } from 'src/app/models/car.model';
 
@@ -9,6 +9,8 @@ import { subNavInfo } from 'src/app/models/car.model';
 })
 export class SubNavComponent implements OnInit {
   @Input() subNavInfo: subNavInfo;
+  @Output() gridViewToggle = new EventEmitter()
+  isGrid = false;
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -20,6 +22,11 @@ export class SubNavComponent implements OnInit {
 
   navigateToAction() {
     this.router.navigate(this.subNavInfo.actionLink, { relativeTo: this.route })
+  }
+
+  setGridView(){
+    this.isGrid = !this.isGrid;
+    this.gridViewToggle.emit();
   }
 //['edit', 'new']
 }

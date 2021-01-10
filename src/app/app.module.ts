@@ -27,6 +27,7 @@ import { ConfirmActionComponent } from './dialogs/confirm-action/confirm-action.
 import { RepairFormComponent } from './components/repair-form/repair-form.component';
 import { ReceiveCarComponent } from './components/receive-car/receive-car.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { AgGridModule } from 'ag-grid-angular';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +60,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     ReactiveFormsModule,
     HttpClientModule,
     MatMenuModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    AgGridModule.withComponents([]),
   ],
   providers: [],
   bootstrap: [AppComponent]

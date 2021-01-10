@@ -3,6 +3,16 @@
     <i (click)="navigateBack()" class="far fa-long-arrow-left"></i>
   </span>
   <span *ngIf="subNavInfo.actionText" class="actions">
+    <span class="icon filter">
+      <i class="fal fa-filter"></i>
+    </span>
+    <span class="icon search">
+      <i class="fal fa-search"></i>
+    </span>
+    <span (click)="setGridView()" *ngIf="subNavInfo.gridView" class="icon grid-view">
+      <i class="fal "></i>
+      <i  [ngClass]="{'fa-credit-card-blank': isGrid, 'fa-th': !isGrid}" class="fal"></i>
+    </span>
     <button (click)="navigateToAction()"  mat-button class="mat-btn" >{{subNavInfo.actionText}}</button>
   </span>
 </div>

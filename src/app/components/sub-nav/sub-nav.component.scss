@@ -6,6 +6,15 @@
   align-items: center;
   background-color: white;
 }
+.actions {
+  display: inline-flex;
+  align-items: center;
+}
+.icon {
+  margin-right: 16px;
+  font-size: 20px;
+  cursor: pointer;
+}
 ::ng-deep {
   .mat-btn {
     min-width: 100px;

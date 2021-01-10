@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
-import { ICar, subNavInfo } from 'src/app/models/car.model';
+import { ICar, subNavInfo, CarFullInfo } from 'src/app/models/car.model';
 import { CarService } from 'src/app/services/car.service';
 
 @Component({
@@ -16,18 +16,57 @@ export class CarListComponent implements OnInit, OnDestroy {
   subNavInfo: subNavInfo = {
     actionText: 'New Car',
     actionLink: ['edit', 'new'],
-    backLink: '/home'
+    backLink: '/home',
+    gridView: true
   }
-
+  girdView =false;
+  rowData: any;
   constructor(private carService: CarService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
   ngOnDestroy(): void {
     this.subs.forEach(s=> s.unsubscribe())
   }
-  cars: ICar[] = [];
+  cars: CarFullInfo[] = [];
   noItemsText = "No cars found";
+  defaultColDef = {
+    sortable: true,
+    resizable: true,
+    filter: true,
+    enableRowGroup: true,
+    headerCheckboxSelectionFilteredOnly: true,
+    suppressPaste: true,
+  };
 
+  toggleGridView(){
+    this.girdView = !this.girdView;
+  }
+
+  columnDefs = [
+    { field: 'car_id' },
+    { field: 'purchase_date' },
+    { field: 'vin' },
+    { field: 'owner' },
+    { field: 'model' },
+    { field: 'year', sortable: true  },
+    { field: 'color' },
+    { field: 'base' },
+    { field: 'inspct_date' },
+    { field: 'driver' },
+    { field: 'turnover' },
+    { field: 'stage' },
+    { field: 'ituraun_id' },
+    { field: 'lien' },
+    { field: 'add' },
+    { field: 'car_desc' },
+    { field: 'purchasePrice' },
+    { field: '2015Policy' },
+    { field: 'weeklyCharge' },
+  ];
   async ngOnInit() {
-    this.cars = await this.carService.getAllCars(null).toPromise() as ICar[];
+    this.cars = await this.carService.getAllCarsFullInfo(null).toPromise() as CarFullInfo[];
+    this.setupRowData(this.cars)
+  }
+  setupRowData(cars) {
+    this.rowData = cars;
   }
 
   navigateToEdit(car) {
