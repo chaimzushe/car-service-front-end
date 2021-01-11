@@ -2,7 +2,7 @@
 <div class="wrapper">
   <h3>Receive {{selectedCarNumber || 'Car'}}</h3>
 
-  <mat-vertical-stepper *ngIf="carGroupControl" [linear]="true" #stepper>
+  <mat-vertical-stepper *ngIf="carGroupControl" [linear]="false" #stepper>
     <mat-step [stepControl]="carGroupControl">
       <form [formGroup]="carGroupControl">
         <ng-template matStepLabel>Enter Car Number</ng-template>
@@ -98,8 +98,11 @@
               <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
             </span>
 
-            <div *ngIf="repair.note" class="note">
-              *{{repair.note}}
+            <div *ngIf="repair.note || repair.isEditing" class="note">
+
+              <textarea [disabled]="!repair.isEditing" formControlName="note" matInput placeholder="Note for mechanic">
+                <span *ngIf="repair.note">*</span> {{repair.note}}
+              </textarea>
             </div>
           </mat-card>
         </div>

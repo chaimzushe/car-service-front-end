@@ -16,6 +16,7 @@ interface IRepair {
   name: String;
   qty: Number;
   note?: String;
+  isEditing: boolean;
 }
 @Component({
   selector: 'app-receive-car',
