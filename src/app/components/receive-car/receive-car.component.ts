@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { subNavInfo } from 'src/app/models/car.model';
 import { CarService } from 'src/app/services/car.service';
 import { RepairService } from 'src/app/services/repair.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-receive-car',
@@ -22,15 +23,23 @@ export class ReceiveCarComponent implements OnInit {
   filteredCars = [];
   repairsNeeded = [];
   filteredRepairs = [];
-  constructor(private carService: CarService, private repairService: RepairService, private snackbar: MatSnackBar) { }
+  users = [];
+  filteredUsers: any;
+  selectedMechanic = null;
+  constructor(private carService: CarService, private repairService: RepairService, private snackbar: MatSnackBar, private userService: UserService) { }
 
   async ngOnInit() {
     this.filteredCars = this.allCars = await this.carService.getAllCars().toPromise() as [];
     this.filteredRepairs = this.allRepairs = await this.repairService.getAllRepairs().toPromise() as [];
+    this.users = this.filteredUsers = await this.userService.getAllUsers().toPromise() as [];
   }
 
   filterCars(e) {
-    this.filteredCars = this.allCars.filter(c => String(c.carNumber).includes(e.currentTarget.value));
+    this.filteredCars = this.allCars.filter(c => c.name.includes(e.currentTarget.value));
+  }
+
+  filterUsers(e) {
+    this.filteredUsers = this.users.filter(c => String(c.carNumber).includes(e.currentTarget.value));
   }
 
   filterRepairs(e) {
@@ -45,14 +54,17 @@ export class ReceiveCarComponent implements OnInit {
       this.filteredRepairs = this.allRepairs.filter(c => !this.alreadySelected(c));
     }, 100)
 
-    this.repairsNeeded.push({ name: event.option.value })
+    this.repairsNeeded.push({ name: event.option.value, qty: 1 })
     const input = document.querySelector('.repair-input') as HTMLInputElement;
     input.blur();
   }
+
   removeRepair(i) {
     this.repairsNeeded.splice(i, 1);
     this.filteredRepairs = this.allRepairs.filter(c => !this.alreadySelected(c));
   }
+
+
   alreadySelected(r) {
     return this.repairsNeeded.find(rep => rep.name === r.name);
   }

@@ -30,6 +30,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AgGridModule } from 'ag-grid-angular';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
+import {MatSelectModule} from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,6 +66,7 @@ import { UserFormComponent } from './components/user-form/user-form.component';
     HttpClientModule,
     MatMenuModule,
     MatAutocompleteModule,
+    MatSelectModule,
     AgGridModule.withComponents([]),
   ],
   providers: [],

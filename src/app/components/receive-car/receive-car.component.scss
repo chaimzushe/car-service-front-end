@@ -40,3 +40,18 @@ form {
     cursor: pointer;
   }
 }
+.text-qty{
+  select{
+    margin-right: 12px;
+    padding: 3px;
+    bordeR: none;
+    border-bottom: 1px solid;
+    width: 22px;
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  }
+}
+
+

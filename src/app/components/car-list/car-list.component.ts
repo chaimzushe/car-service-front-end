@@ -41,25 +41,12 @@ export class CarListComponent implements OnInit, OnDestroy {
   }
 
   columnDefs = [
-    { field: 'car_id' },
-    { field: 'purchase_date' },
+    { field: 'car_id' , width: 100},
     { field: 'vin' },
-    { field: 'owner' },
     { field: 'model' },
-    { field: 'year', sortable: true  },
+    { field: 'year', width: 150  },
     { field: 'color' },
-    { field: 'base' },
-    { field: 'inspct_date' },
     { field: 'driver' },
-    { field: 'turnover' },
-    { field: 'stage' },
-    { field: 'ituraun_id' },
-    { field: 'lien' },
-    { field: 'add' },
-    { field: 'car_desc' },
-    { field: 'purchasePrice' },
-    { field: '2015Policy' },
-    { field: 'weeklyCharge' },
   ];
   async ngOnInit() {
     this.cars = await this.carService.getAllCarsFullInfo(null).toPromise() as CarFullInfo[];

@@ -6,7 +6,7 @@
   box-sizing: border-box;
   padding-top: 4px;
   justify-items: center;
-  max-width: 800px;
+  max-width: 1400px;
   margin: auto;
   margin-top: 36px;
 }
@@ -29,6 +29,7 @@
 .menu {
   i {
     font-size: 20px;
+    cursor: pointer;
   }
 }
 .middle {

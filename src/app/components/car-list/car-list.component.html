@@ -1,37 +1,6 @@
 <app-sub-nav (gridViewToggle)="toggleGridView()" [subNavInfo]="subNavInfo"></app-sub-nav>
 
-<div *ngIf="!girdView" class="list">
-  <mat-card class="card" *ngFor="let car of cars; index as i">
-    <div class="top">
-      <h3>Car# {{car.car_id}}</h3>
-      <span class="menu" [matMenuTriggerFor]="menu"> <i class="fal fa-ellipsis-v"></i> </span>
-    </div>
-    <div class="middle">
-      <p><b>stage</b>
-        <span> {{car.stage }}</span>
-      </p>
-
-
-    </div>
-
-
-    <mat-menu #menu="matMenu">
-      <button (click)="navigateToEdit(car)" mat-menu-item>
-        <span>Edit</span>
-      </button>
-      <button (click)="viewItem(car)" disabled mat-menu-item>
-        <span>View</span>
-      </button>
-      <button (click)="deleteItem(car, i)" mat-menu-item>
-        <span>Delete</span>
-      </button>
-    </mat-menu>
-  </mat-card>
-
-</div>
-
-
-<div *ngIf="girdView">
+<div>
   <ag-grid-angular
   style="width: 100%; height: calc(100vh - 170px);"
       class="ag-theme-alpine"

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subNavInfo } from 'src/app/models/car.model';
 
@@ -11,9 +12,17 @@ export class SubNavComponent implements OnInit {
   @Input() subNavInfo: subNavInfo;
   @Output() gridViewToggle = new EventEmitter()
   isGrid = false;
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
+  }
+
+  search(){
+    return this.snackbar.open("Work in progress. Thank you for your patience 😊 ", "dismiss", { duration: 3000, panelClass: "err-panel" })
+  }
+
+  filter(){
+    return this.snackbar.open("Work in progress. Thank you for your patience 😊 ", "dismiss", { duration: 3000, panelClass: "err-panel" })
   }
 
   navigateBack() {

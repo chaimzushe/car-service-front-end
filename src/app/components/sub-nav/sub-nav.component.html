@@ -3,10 +3,10 @@
     <i (click)="navigateBack()" class="far fa-long-arrow-left"></i>
   </span>
   <span *ngIf="subNavInfo.actionText" class="actions">
-    <span class="icon filter">
+    <span (click)="filter()" class="icon filter">
       <i class="fal fa-filter"></i>
     </span>
-    <span class="icon search">
+    <span (click)="search()" class="icon search">
       <i class="fal fa-search"></i>
     </span>
     <span (click)="setGridView()" *ngIf="subNavInfo.gridView" class="icon grid-view">

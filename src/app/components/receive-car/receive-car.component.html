@@ -4,6 +4,24 @@
   <form class="example-form">
     <mat-form-field class="example-full-width">
       <input type="text"
+             placeholder="Select Mechanic"
+             aria-label="Number"
+             matInput
+             [ngModelOptions]="{standalone: true}"
+             (keyup)="filterUsers($event)"
+             [(ngModel)]="selectedMechanic"
+             [matAutocomplete]="autoUsers">
+      <mat-autocomplete autoActiveFirstOption #autoUsers="matAutocomplete">
+        <mat-option *ngFor="let user of filteredUsers" [value]="user.name">
+           {{user.name}}
+        </mat-option>
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+
+    <mat-form-field class="example-full-width">
+      <input type="text"
              placeholder="Select Car"
              aria-label="Number"
              matInput
@@ -18,13 +36,15 @@
       </mat-autocomplete>
 
     </mat-form-field>
-
+    <mat-form-field class="example-full-width">
+      <mat-label>Current Car Miles</mat-label>
+      <input matInput placeholder="Miles" >
+    </mat-form-field>
     <mat-form-field *ngIf="selectedCar" class="example-full-width">
       <input type="text"
              [placeholder]="filteredRepairs.length ? 'Select Repair needed' : 'No repairs available'"
              aria-label="Number"
              matInput
-             [disabled]="!filteredRepairs.length"
               class="repair-input"
              [ngModelOptions]="{standalone: true}"
              (keyup)="filterRepairs($event)"
@@ -37,12 +57,29 @@
       </mat-autocomplete>
 
     </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Leave a note</mat-label>
+      <textarea matInput placeholder="Note for mechanic"></textarea>
+    </mat-form-field>
   </form>
 <div *ngIf="selectedCar" class="bottom">
   <h3>Repairs needed</h3>
   <ng-container *ngIf="repairsNeeded.length">
     <mat-card class="repair-item" *ngFor="let repair of repairsNeeded; index as i">
-      <span>{{repair.name}}</span>
+
+      <span class="text-qty">
+        <span>
+
+          <select [(ngModel)]="repair.qty" name="car">
+            <option value="" selected></option>
+            <option *ngFor="let qty of [1,2,3,4]" [value]="qty">
+              {{qty}}
+            </option>
+          </select>
+        </span>
+
+        {{repair.name}}
+      </span>
       <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
     </mat-card>
     <button (click)="createLabel()" mat-raised-button color="primary">Create Label</button>

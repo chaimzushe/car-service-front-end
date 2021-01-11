@@ -19,7 +19,7 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
   }
 
   subs: Subscription[] = [];
-  noItemsText = "No repairs found";
+  noItemsText = "Loading...";
   repairs = [];
   constructor(private repairService: RepairService , private router: Router, private route: ActivatedRoute, private dialog: MatDialog ) { }
 

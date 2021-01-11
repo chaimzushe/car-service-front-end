@@ -18,7 +18,7 @@ export class UserListComponent implements OnInit {
     backLink: '/home'
   }
   subs: Subscription[] = [];
-  noItemsText = "No users found";
+  noItemsText = "Loading...";
   users = [];
   constructor(private userService: UserService ,
               private router: Router,

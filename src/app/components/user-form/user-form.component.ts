@@ -48,7 +48,7 @@ export class UserFormComponent implements OnInit {
   setupForm(user) {
     this.form = this.fb.group({
       name: [user.name, [Validators.required]],
-      email: [user.email],
+      email: [user.email || 'N/A'],
     });
   }
 
