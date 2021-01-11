@@ -31,6 +31,11 @@ import { AgGridModule } from 'ag-grid-angular';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import {MatSelectModule} from '@angular/material/select';
+import {MatStepperModule} from '@angular/material/stepper';
+import { AllModules, ModuleRegistry } from '@ag-grid-enterprise/all-modules';
+
+
+ModuleRegistry.registerModules(AllModules);
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,6 +72,7 @@ import {MatSelectModule} from '@angular/material/select';
     MatMenuModule,
     MatAutocompleteModule,
     MatSelectModule,
+    MatStepperModule,
     AgGridModule.withComponents([]),
   ],
   providers: [],

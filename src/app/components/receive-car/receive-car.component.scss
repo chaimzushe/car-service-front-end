@@ -2,56 +2,68 @@ h3 {
   margin: 60px auto;
   text-align: center;
   font-size: 22px;
-
 }
 
-.wrapper{
-padding: 8px;
-max-width: 500px;
-margin: auto;
+.wrapper {
+  padding: 8px;
+  max-width: 650px;
+  margin: auto;
 }
 
-form {
 
-  margin-top: 54px;
 
-  background-color: white;
-  padding: 22px 12px;
-  border-radius: 4px;
-  box-shadow: 1px 1px 1px 1px lightgray;
-}
 
-.bottom{
-  text-align: center;
-  h3{
-    margin-bottom: 0px;
-  }
-  button{
-    margin-top: 22px;
-    width: 200px;
-  }
-}
-.repair-item{
+.repair-item {
   display: flex;
+  flex-wrap: wrap;
   margin: 6px 0;
   justify-content: space-between;
-  i{
+  i {
     color: red;
     cursor: pointer;
   }
 }
-.text-qty{
-  select{
-    margin-right: 12px;
+.text-qty {
+  select {
+    margin-right: 3px;
     padding: 3px;
-    bordeR: none;
+    border: none;
     border-bottom: 1px solid;
     width: 22px;
     -webkit-appearance: none;
-  -moz-appearance: none;
-  text-indent: 1px;
-  text-overflow: '';
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: "";
   }
 }
 
+.actions {
+  margin: 22px 0;
+  button {
+    width: 100%;
+  }
+}
 
+.repairs-needed {
+  margin: 52px 0;
+}
+
+.note-icon {
+  i {
+    color: rgb(1, 86, 115);
+    cursor: pointer;
+    margin-right: 8px;
+  }
+}
+.main-text{
+
+}
+
+.note{
+  width: 100%;
+  color: gray;
+  margin-top: 12px;
+  padding-left: 12px;
+  font-size: 13px;
+  font-weight: 300;
+}
