@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
-import { ICar, subNavInfo, CarFullInfo } from 'src/app/models/car.model';
+import {  subNavInfo, CarFullInfo } from 'src/app/models/car.model';
 import { CarService } from 'src/app/services/car.service';
 
 @Component({

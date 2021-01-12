@@ -1,4 +1,3 @@
-import { Repair } from './../../models/car.model';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -12,11 +11,21 @@ import { CarService } from 'src/app/services/car.service';
 import { RepairService } from 'src/app/services/repair.service';
 import { UserService } from 'src/app/services/user.service';
 
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  switchMap,
+  tap
+} from 'rxjs/operators';
+import { pipe } from 'rxjs';
+import { Router } from '@angular/router';
+
 interface IRepair {
   name: String;
   qty: Number;
   note?: String;
-  isEditing: boolean;
+  isEditing?: boolean;
 }
 @Component({
   selector: 'app-receive-car',
@@ -27,7 +36,7 @@ export class ReceiveCarComponent implements OnInit {
   subNavInfo: subNavInfo = {
     actionText: '',
     actionLink: [],
-    backLink: '/',
+    backLink: '/services',
   };
   allCars = [];
   allRepairs = [];
@@ -42,25 +51,30 @@ export class ReceiveCarComponent implements OnInit {
   carGroupControl: FormGroup;
   mechanicFormGroup: FormGroup;
   repairListFormGroup: FormGroup;
-
+  visitTypes = ['Maintenance', 'Accident', 'Inspection', 'TLC Other', 'Scheduled']
   constructor(
     private carService: CarService,
     private repairService: RepairService,
     private snackbar: MatSnackBar,
     private fb: FormBuilder,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private router: Router
+  ) { }
+
+
+
 
   hasItemValidator = (
     control: AbstractControl
   ): { [key: string]: any } | null => {
     const valid = !!this.repairsNeeded.length;
+    console.table(this.repairsNeeded)
     return valid ? null : { invalid: { valid: false, value: control.value } };
   };
 
   get selectedCarNumber() {
     return this.carGroupControl && this.carGroupControl.value.carNumber
-      ? '#' + this.carGroupControl.value.carNumber.carNumber
+      ? '#' + this.carGroupControl.value.carNumber.car_id
       : '';
   }
 
@@ -71,9 +85,6 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.filteredCars = this.allCars = (await this.carService
-      .getAllCars()
-      .toPromise()) as [];
     this.filteredRepairs = this.allRepairs = (await this.repairService
       .getAllRepairs()
       .toPromise()) as [];
@@ -81,39 +92,52 @@ export class ReceiveCarComponent implements OnInit {
       .getAllUsers()
       .toPromise()) as [];
     this.setupForms();
+
   }
 
   setupForms() {
     this.carGroupControl = this.fb.group({
       carNumber: [null, Validators.required],
       miles: ['', Validators.required],
+      visitType: ['', Validators.required]
     });
     this.mechanicFormGroup = this.fb.group({
       mechanic: ['', Validators.required],
     });
     this.repairListFormGroup = this.fb.group({
-      selectedFirstRepair: [null, [this.hasItemValidator]],
-      note: [[]],
+      selectedFirstRepair: [null],
+      note: [''],
     });
+    let searchWord;
+    this.carGroupControl.controls['carNumber'].valueChanges.pipe(
+      debounceTime(200),
+      map((e: any) => {
+        searchWord = e;
+        return e;
+      }),
+      distinctUntilChanged(),
+      switchMap(_ => this.filterCars(searchWord))
+    )
+      .subscribe((res: []) => {
+        this.filteredCars = res;
+      });
   }
 
-  editNote(repair, i) {
-    repair.note = 'Note added';
+  editNote(repair: IRepair, i) {
+    repair.isEditing = !repair.isEditing;
   }
 
   carDisplayFunc(event) {
-    return (event && event.carNumber) || '';
+    return (event && event.car_id) || '';
   }
 
   userDisplayFunc(event) {
     return (event && event.name) || '';
   }
 
-  filterCars(e) {
-    console.table(this.allCars);
-    this.filteredCars = this.allCars.filter((c) =>
-      String(c.carNumber).includes(e.currentTarget.value.toLowerCase())
-    );
+  filterCars(value) {
+    console.log(value)
+    return this.carService.getCarTypeAhead(value)
   }
 
   filterUsers(e) {
@@ -164,12 +188,31 @@ export class ReceiveCarComponent implements OnInit {
   alreadySelected(r) {
     return this.repairsNeeded.find((rep) => rep.name === r.name);
   }
-
+  getRepairId(repair) {
+    let curRepair = this.allRepairs.find(r => r.name === repair.name);
+    return curRepair._id;
+  }
   createLabel() {
-    return this.snackbar.open(
-      'Work in progress. Thank you for your patience 😊 ',
-      'dismiss',
-      { duration: 3000, panelClass: 'err-panel' }
-    );
+    const repairs = this.repairsNeeded.map(r => ({
+      qty: r.qty,
+      note: r.note,
+      completed: false,
+      repair: this.getRepairId(r)
+    }));
+
+    const newCarService = {
+      mechanic: this.mechanicFormGroup.value.mechanic._id,
+      car: this.carGroupControl.value.carNumber._id,
+      milesAtService: this.carGroupControl.value.miles,
+      note: this.repairListFormGroup.value.note,
+      visitType: this.carGroupControl.value.visitType,
+      repairs,
+    }
+
+
+    this.carService.createService(newCarService).subscribe(x => {
+      this.snackbar.open("Success", "Dismiss", { duration: 3000 });
+      this.router.navigate(['/services'])
+    });
   }
 }

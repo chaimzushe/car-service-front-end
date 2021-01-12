@@ -13,7 +13,6 @@
             placeholder="Car#"
             aria-label="Number"
             matInput
-            (keyup)="filterCars($event)"
             formControlName="carNumber"
             [matAutocomplete]="autoCars"
           />
@@ -24,7 +23,7 @@
             #autoCars="matAutocomplete"
           >
             <mat-option *ngFor="let car of filteredCars" [value]="car">
-              {{ car.carNumber }}
+              {{ car.car_id }}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
@@ -33,6 +32,14 @@
         <mat-label>Current Car Miles</mat-label>
         <input matInput  formControlName="miles" placeholder="Miles" >
       </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Visit Reason</mat-label>
+        <mat-select formControlName="visitType">
+          <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
         <div>
           <button mat-button matStepperNext>Next</button>
         </div>
@@ -93,14 +100,14 @@
             </span>
             <span class="repair-actions">
               <span (click)="editNote(repair, i)"  class="note-icon">
-                <i class="fal fa-comment-alt-lines"></i>
+                <i [ngClass]="{'fa-comment-alt-lines': !repair.isEditing, 'fa-save': repair.isEditing}" class="fal"></i>
               </span>
               <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
             </span>
 
             <div *ngIf="repair.note || repair.isEditing" class="note">
 
-              <textarea [disabled]="!repair.isEditing" formControlName="note" matInput placeholder="Note for mechanic">
+              <textarea [disabled]="!repair.isEditing" [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.note" matInput placeholder="Note for mechanic">
                 <span *ngIf="repair.note">*</span> {{repair.note}}
               </textarea>
             </div>

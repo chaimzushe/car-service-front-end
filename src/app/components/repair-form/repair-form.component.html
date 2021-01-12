@@ -1,7 +1,7 @@
 
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 <div class="wrapper">
-  <h3 class="form_header"> {{repairId ? 'Edit' : 'New'}} Repair</h3>
+  <h3 class="form_header"> {{repairId ? 'Edit ' + repairEditing.name : 'New Repair'}} </h3>
   <form (submit)="submit()" class="form" *ngIf="form" [formGroup]="form">
     <mat-form-field appearance="standard">
       <mat-label>Name</mat-label>
@@ -15,6 +15,11 @@
     <mat-form-field appearance="standard">
       <mat-label>Check when milage</mat-label>
       <input formControlName="checkWhenMilageIsAt"  matInput placeholder="Miles">
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Price</mat-label>
+      <input formControlName="price"  matInput placeholder="Price">
     </mat-form-field>
 
 

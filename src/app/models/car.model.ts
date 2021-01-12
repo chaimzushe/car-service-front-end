@@ -1,21 +1,10 @@
 
-
-export interface ICar {
-  _id: string;
-  carnumber:number;
-  miles: number;
-  vin: number;
-  imageUrl: string;
-  lastRepair: Date | null;
-}
-
 export interface Repair {
   name: number;
   intervalCheck: number;
   checkWhenMilageIsAt: number;
+  price: number;
 }
-
-
 
 export interface User {
   _id: number;
@@ -25,35 +14,54 @@ export interface User {
 
 }
 
-export interface subNavInfo{
+interface workRepair{
+  completed: boolean;
+  note: string;
+  qty:number;
+  repair: Repair;
+}
+
+export interface subNavInfo {
   actionText: string;
   backLink: string;
   actionLink: string[];
   gridView?: boolean;
 }
 
+export interface Service {
+  car: CarFullInfo;
+  createdAt: Date;
+  mechanic: User;
+  milesAtService: number;
+  note: string;
+  repairs: workRepair[];
+  status: string;
+  updatedAt: Date;
+  visitType: string;
+  fields? : [];
+  _id: string;
+}
+
 
 export interface CarFullInfo {
   car_id: number;
-  purchase_date: number,
-    vin: string,
-    owner: string,
-    model: string,
-    year: number,
-    color: string,
-    base: string,
-    inspct_date: string,
-    driver: string,
-    turnover: number,
-    stage: string,
-    broker: string,
-    ituraun_id: string,
-    lien: string,
-    add: string,
-    car_desc: string,
-    purchasePrice: number,
-    '2015Policy': string,
-    weeklyCharge: number
+  vin: string,
+  model: string,
+  year: number,
+  color: string,
+  driver: string,
 }
+
+
+
+// car number
+// miles at service
+// mechanic
+// status
+// createdAt
+// updatedAt
+  // => repairs
+
+          //note
 
 

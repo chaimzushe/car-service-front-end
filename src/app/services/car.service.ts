@@ -7,8 +7,9 @@ import { Injectable } from '@angular/core';
 export class CarService {
 
 
+
   baseApi =  "https://car-service-shop.herokuapp.com/api" //
- //baseApi =  'http://localhost:2000/api'
+  //baseApi = 'http://localhost:2000/api'
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +17,10 @@ export class CarService {
     return this.http.get(`${this.baseApi}/car/${carId}`);
   }
 
-  //:id
+  getCarTypeAhead(searchWord) {
+    return this.http.post(`${this.baseApi}/car-typeahead`, { searchWord })
+  }
+
 
   getAllCars(carId = null) {
     return this.http.get(`${this.baseApi}/cars`);
@@ -34,6 +38,10 @@ export class CarService {
   }
 
   removeCar(_id: any) {
-    return this.http.post(`${this.baseApi}/delete-car`, {id: _id});
+    return this.http.post(`${this.baseApi}/delete-car`, { id: _id });
+  }
+
+  createService(newCarService) {
+    return this.http.post(`${this.baseApi}/add-carService`, newCarService);
   }
 }

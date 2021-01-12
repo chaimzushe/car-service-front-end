@@ -8,7 +8,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
   baseApi = 'https://car-service-shop.herokuapp.com/api'
- // baseApi = 'http://localhost:2000/api'
+  //baseApi = 'http://localhost:2000/api'
 
 
   getUserDetail(userId: any) {

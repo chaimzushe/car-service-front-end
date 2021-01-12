@@ -1,0 +1,27 @@
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
+
+<div class="list">
+  <mat-card  style="padding: 16px;" class="card" *ngFor="let service of services; index as i">
+
+    <span class="header"> Car# {{service.car.car_id}} </span>
+    <span class="fields">
+      <span class="field" *ngFor="let field of getFields(service)">
+        <b>{{field.name}}: </b> <span class="value">{{field.value}}</span>
+      </span>
+    </span>
+    <span class="user-expand">
+      <span class="user">
+        {{service.mechanic.name.slice(0, 2) | uppercase }}
+      </span>
+      <span class="action-icon">
+        <i class="fal fa-cog"></i>
+      </span>
+      <span class="action-icon">
+        <i class="fal fa-chevron-down"></i>
+      </span>
+    </span>
+
+  </mat-card>
+\
+</div>
+<app-no-items-found [text]="'No Services Found'" *ngIf="services.length ===0"></app-no-items-found>

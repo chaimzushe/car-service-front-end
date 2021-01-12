@@ -3,7 +3,7 @@
 <div class="list">
   <mat-card class="card" *ngFor="let repair of repairs; index as i">
     <div class="top">
-      <h3>{{repair.name}}</h3>
+      <h3> <span>   {{repair.name}} </span>  <span class="price">   {{repair.price | currency: '$'}} </span></h3>
       <span class="menu" [matMenuTriggerFor]="menu"> <i class="fal fa-ellipsis-v"></i> </span>
     </div>
     <div class="middle">

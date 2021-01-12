@@ -22,9 +22,9 @@ export class RepairFormComponent implements OnInit, OnDestroy {
   form: any;
   isSubmitting: any;
   constructor(private route: ActivatedRoute,
-     private repairService: RepairService, private fb: FormBuilder,
-     private snackbar: MatSnackBar,
-     private router: Router) { }
+    private repairService: RepairService, private fb: FormBuilder,
+    private snackbar: MatSnackBar,
+    private router: Router) { }
 
   ngOnInit(): void {
     let routeSubscription = this.route.params.subscribe(async params => {
@@ -49,6 +49,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
       name: [repair.name, [Validators.required]],
       intervalCheck: [repair.intervalCheck],
       checkWhenMilageIsAt: [repair.checkWhenMilageIsAt],
+      price: [repair.price],
     });
   }
 

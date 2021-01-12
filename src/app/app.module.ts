@@ -33,7 +33,8 @@ import { UserFormComponent } from './components/user-form/user-form.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
 import { AllModules, ModuleRegistry } from '@ag-grid-enterprise/all-modules';
-
+import { CarServicesListComponent } from './components/car-services-list/car-services-list.component';
+import { DatePipe } from '@angular/common';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -54,7 +55,8 @@ ModuleRegistry.registerModules(AllModules);
     RepairFormComponent,
     ReceiveCarComponent,
     UserListComponent,
-    UserFormComponent
+    UserFormComponent,
+    CarServicesListComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,7 @@ ModuleRegistry.registerModules(AllModules);
     MatStepperModule,
     AgGridModule.withComponents([]),
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

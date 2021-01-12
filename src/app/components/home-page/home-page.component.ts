@@ -8,10 +8,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HomePageComponent implements OnInit {
 settings = [
-  {iconClass: 'fal fa-hand-receiving', name: 'Receive car', link: 'receive-car', ready: true},
-  {iconClass: 'fal fa-tools', name: 'Manage Repairs', link: 'repair-options', ready: true},
-  {iconClass: 'fal fa-cars', name: 'Manage cars', link: 'cars', ready: true},
-  {iconClass: 'fal fa-users', name: 'Manage users', link: 'users', ready: true},
+  {iconClass: 'fal fa-hand-receiving', name: 'Manage Services', link: 'services', imageUrl: 'receive-splash.jpg', ready: true},
+  {iconClass: 'fal fa-tools', name: 'Manage Repairs', link: 'repair-options', imageUrl: 'repairs-splash.jpg', ready: true},
+  {iconClass: 'fal fa-cars', name: 'Manage cars', link: 'cars', imageUrl: "cars-splash.jpg", ready: true},
+  {iconClass: 'fal fa-users', name: 'Manage users', link: 'users',imageUrl: "users-splash.jpg", ready: true},
 ]
 
   constructor() { }
