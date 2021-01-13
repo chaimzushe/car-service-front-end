@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CarServiceService {
+
   baseApi =  "https://car-service-shop.herokuapp.com/api" //
  // baseApi = 'http://localhost:2000/api'
 
@@ -13,5 +14,9 @@ export class CarServiceService {
 
   getAllServices() {
     return this.http.get(`${this.baseApi}/car-services`);
+  }
+
+  removeService(_id: any) {
+    return this.http.post(`${this.baseApi}/delete-car-service`, { id: _id });
   }
 }

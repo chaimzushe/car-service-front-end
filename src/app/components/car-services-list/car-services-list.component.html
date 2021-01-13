@@ -1,7 +1,7 @@
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 
 <div class="list">
-  <mat-card  style="padding: 16px;" class="card" *ngFor="let service of services; index as i">
+  <mat-card style="padding: 16px;" class="card" *ngFor="let service of services; index as i">
 
     <span class="header"> Car# {{service.car.car_id}} </span>
     <span class="fields">
@@ -13,15 +13,36 @@
       <span class="user">
         {{service.mechanic.name.slice(0, 2) | uppercase }}
       </span>
-      <span class="action-icon">
+      <span [matMenuTriggerFor]="menu" class="action-icon">
         <i class="fal fa-cog"></i>
       </span>
-      <span class="action-icon">
+      <span (click)="toggleExpand(service)" class="action-icon">
         <i class="fal fa-chevron-down"></i>
       </span>
     </span>
-
+    <mat-menu class="menu" #menu="matMenu">
+      <button mat-menu-item>
+        <i class="fas fa-check-circle"></i>
+        <span>Approve</span>
+      </button>
+      <button mat-menu-item>
+        <i class="fal fa-edit"></i>
+        <span>Edit</span>
+      </button>
+      <button (click)="deleteService(service, i)" mat-menu-item>
+        <i class="fal fa-trash-alt"></i>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+    <div  *ngIf="service.expanded" class="expanded">
+      <li *ngFor="let repair of service.repairs">
+         <span> fixed {{repair.qty}} {{repair.repair.name}}</span> <span class="repair-note" *ngIf="repair.note"> *{{repair.note}}</span>
+      </li>
+      <div class="service-note" *ngIf="service.note">
+          *{{service.note}}
+      </div>
+    </div>
   </mat-card>
-\
+
 </div>
 <app-no-items-found [text]="'No Services Found'" *ngIf="services.length ===0"></app-no-items-found>

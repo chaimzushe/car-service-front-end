@@ -16,6 +16,7 @@
   padding: 32px;
   margin: 12px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   b {
     display: inline-block;
@@ -59,6 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 6px;
 }
 
 .user-expand {
@@ -69,7 +71,33 @@
 .action-icon {
   display: inline-block;
   margin: 0 6px;
-  font-size: 20px;
+  font-size: 18px;
   color: gray;
   cursor: pointer;
 }
+
+button {
+  i {
+    display: inline-block;
+    margin-right: 6px;
+  }
+}
+
+.expanded{
+  width: 100%;
+ li {
+   padding: 12px 0;
+   list-style: none;
+   border-bottom: 1px solid lightgray;
+ }
+ .repair-note{
+  margin-left: 12px;
+  color: gray;
+  font-size: 14px;
+ }
+ .service-note{
+   color: gray;
+   padding: 12px;
+ }
+}
+

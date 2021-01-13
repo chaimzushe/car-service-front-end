@@ -40,6 +40,7 @@ export interface Service {
   visitType: string;
   fields? : [];
   _id: string;
+  expanded?: boolean;
 }
 
 
