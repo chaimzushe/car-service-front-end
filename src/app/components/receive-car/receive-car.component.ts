@@ -206,6 +206,7 @@ export class ReceiveCarComponent implements OnInit {
       milesAtService: this.carGroupControl.value.miles,
       note: this.repairListFormGroup.value.note,
       visitType: this.carGroupControl.value.visitType,
+      priceOfOtherWork: 0,
       repairs,
     }
 
