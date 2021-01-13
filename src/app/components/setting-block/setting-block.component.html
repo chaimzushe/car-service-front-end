@@ -1,9 +1,6 @@
 
-<mat-card (click)="navigate()" class="card">
-  <div class="right">
-    <span class="icon"> <i [class]="setting.iconClass"></i> </span>   {{setting.name}}
-  </div>
-  <div class="left">
-    <span class="chevron"><i class="fal fa-chevron-right"></i></span>
+<mat-card [ngStyle]="{'background-image': 'url(assets/images/' + setting.imageUrl + ')'}" (click)="navigate()" class="card">
+  <div class="text">
+      <span class="text_header">{{setting.name}} </span>
   </div>
 </mat-card>
