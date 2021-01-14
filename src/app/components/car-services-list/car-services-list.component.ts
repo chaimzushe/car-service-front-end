@@ -40,7 +40,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       {name: 'Miles', value: service.milesAtService},
       {name: 'Status', value: service.status},
       {name: 'Visit type', value: service.visitType},
-      {name: 'Created', value: this.datePipe.transform(service.createdAt,'short')},
+      {name: 'Serviced', value: this.datePipe.transform(service.serviceTime,'short')},
       {name: 'Updated', value: this.datePipe.transform(service.updatedAt,'short')},
     ]
   }
@@ -65,6 +65,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       this.subs.push(removeSub);
     });
     this.subs.push(dialogSub);
+  }
+
+  search(e){
+    this.carServiceService.getFilteredServices(e).subscribe((d: any) => {
+     this.services = d;
+    });
   }
 
 }

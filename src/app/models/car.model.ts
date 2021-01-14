@@ -29,6 +29,8 @@ export interface subNavInfo {
 }
 
 export interface Service {
+  carNumber: number;
+  mechanicName: string;
   car: CarFullInfo;
   createdAt: Date;
   mechanic: User;
@@ -41,6 +43,7 @@ export interface Service {
   fields? : [];
   _id: string;
   expanded?: boolean;
+  serviceTime: Date;
 }
 
 

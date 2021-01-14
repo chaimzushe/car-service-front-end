@@ -1,4 +1,4 @@
-@import "../../../vars.scss";;
+@import "../../../vars.scss";
 .sub-nav {
   display: flex;
   justify-content: space-between;
@@ -20,5 +20,21 @@
     min-width: 100px;
     background-color: $deep-blue;
     color: white;
+  }
+}
+
+input {
+  border: 1px solid lightgray;
+  padding: 8px;
+  border-radius: 12px;
+  padding-left: 36px;
+}
+
+.search {
+  position: relative;
+  i {
+    position: absolute;
+    top: 10px;
+    left: 10px
   }
 }
