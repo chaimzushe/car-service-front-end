@@ -6,9 +6,9 @@
     <span (click)="filter()" class="icon filter">
       <i class="fal fa-filter"></i>
     </span>
-    <span (keyup)="search()" class="icon search">
+    <span   class="icon search">
       <i class="fal fa-search"></i>
-      <input (click)="search()" [(ngModel)]="searchTerm" type="text">
+      <input (keyup.enter)="search()"[(ngModel)]="searchTerm" type="text">
     </span>
     <span (click)="setGridView()" *ngIf="subNavInfo.gridView" class="icon grid-view">
       <i class="fal "></i>

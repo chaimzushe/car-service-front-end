@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 })
 export class CarServiceService {
 
-  baseApi =  "https://car-service-shop.herokuapp.com/api" //
- // baseApi = 'http://localhost:2000/api'
+  //baseApi =  "https://car-service-shop.herokuapp.com/api" //
+ baseApi = 'http://localhost:2000/api'
 
 
   constructor(private http : HttpClient) { }
@@ -18,5 +18,10 @@ export class CarServiceService {
 
   removeService(_id: any) {
     return this.http.post(`${this.baseApi}/delete-car-service`, { id: _id });
+  }
+
+  getFilteredServices(searchWord){
+    return this.http.post(`${this.baseApi}/car-service-filter`, { searchWord });
+
   }
 }
