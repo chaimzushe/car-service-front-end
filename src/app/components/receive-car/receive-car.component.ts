@@ -107,6 +107,7 @@ export class ReceiveCarComponent implements OnInit {
     this.repairListFormGroup = this.fb.group({
       selectedFirstRepair: [null],
       note: [''],
+      price: [0]
     });
     let searchWord;
     this.carGroupControl.controls['carNumber'].valueChanges.pipe(
@@ -202,15 +203,15 @@ export class ReceiveCarComponent implements OnInit {
 
     const newCarService = {
       mechanic: this.mechanicFormGroup.value.mechanic._id,
+      mechanicName:this.mechanicFormGroup.value.mechanic.name,
+      carNumber:this.carGroupControl.value.carNumber.car_id,
       car: this.carGroupControl.value.carNumber._id,
       milesAtService: this.carGroupControl.value.miles,
       note: this.repairListFormGroup.value.note,
       visitType: this.carGroupControl.value.visitType,
-      priceOfOtherWork: 0,
+      priceOfOtherWork: this.repairListFormGroup.value.price,
       repairs,
     }
-
-
     this.carService.createService(newCarService).subscribe(x => {
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
       this.router.navigate(['/services'])

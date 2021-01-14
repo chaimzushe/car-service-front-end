@@ -2,7 +2,7 @@
 <div class="wrapper">
   <h3>Receive {{selectedCarNumber || 'Car'}}</h3>
 
-  <mat-vertical-stepper *ngIf="carGroupControl" [linear]="false" #stepper>
+  <mat-vertical-stepper *ngIf="carGroupControl" [linear]="true" #stepper>
     <mat-step [stepControl]="carGroupControl">
       <form [formGroup]="carGroupControl">
         <ng-template matStepLabel>Enter Car Number</ng-template>
@@ -132,17 +132,32 @@
 
         </mat-form-field>
 
-        <mat-form-field >
-          <mat-label>Leave a note</mat-label>
-          <textarea formControlName="note" matInput placeholder="Note for mechanic"></textarea>
-        </mat-form-field>
-
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>
         </div>
       </form>
     </mat-step>
+
+    <mat-step [stepControl]="repairListFormGroup">
+      <form [formGroup]="repairListFormGroup">
+        <ng-template matStepLabel>Other Notes</ng-template>
+        <mat-form-field >
+          <mat-label>Leave a note</mat-label>
+          <textarea formControlName="note" matInput placeholder="Note for mechanic"></textarea>
+        </mat-form-field>
+      <mat-form-field >
+      <mat-label>Price of other repairs </mat-label>
+      <input matInput  formControlName="price" placeholder="Price" >
+    </mat-form-field>
+
+
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
 
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
