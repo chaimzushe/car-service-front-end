@@ -35,7 +35,9 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { AllModules, ModuleRegistry } from '@ag-grid-enterprise/all-modules';
 import { CarServicesListComponent } from './components/car-services-list/car-services-list.component';
 import { DatePipe } from '@angular/common';
-
+import { ServicesFilterComponent } from './dialogs/services-filter/services-filter.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ ModuleRegistry.registerModules(AllModules);
     ReceiveCarComponent,
     UserListComponent,
     UserFormComponent,
-    CarServicesListComponent
+    CarServicesListComponent,
+    ServicesFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +78,8 @@ ModuleRegistry.registerModules(AllModules);
     MatAutocompleteModule,
     MatSelectModule,
     MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     AgGridModule.withComponents([]),
   ],
   providers: [DatePipe],

@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Service, subNavInfo } from 'src/app/models/car.model';
+import { Service, subNavInfo, User } from 'src/app/models/car.model';
 import { CarServiceService } from 'src/app/services/car-service.service';
 import { DatePipe } from '@angular/common';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
 import { Subscription } from 'rxjs';
+import { ServicesFilterComponent } from 'src/app/dialogs/services-filter/services-filter.component';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-car-services-list',
   templateUrl: './car-services-list.component.html',
@@ -20,15 +22,20 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
   services: Service[] = [];
   subs: Subscription [] = [];
+  users: any[] =[];
+  searchWord: any;
+  filter: any = {};
   constructor(private carServiceService: CarServiceService ,
     private router: Router,
+    private userService: UserService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private dialog: MatDialog) { }
 
   async ngOnInit() {
     this.services = await this.carServiceService.getAllServices().toPromise() as Service[];
-
+    this.users = await this.userService.getAllUsers().toPromise() as [];
+    this.users = this.users.map( u => u.name);
   }
 
   ngOnDestroy(){
@@ -68,9 +75,30 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   search(e){
-    this.carServiceService.getFilteredServices(e).subscribe((d: any) => {
-     this.services = d;
+    this.searchWord = e;
+    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
+      this.services = f;
     });
   }
+
+  openFilter() {
+
+    let dialogRef = this.dialog.open(ServicesFilterComponent, {
+      width: "400px",
+      autoFocus: false,
+      data: { mechanics: this.users }
+    });
+
+    dialogRef.afterClosed().subscribe(filter => {
+      if (!filter) {
+        return;
+      }
+      this.filter = filter;
+      this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
+            this.services = f;
+      });
+    });
+  }
+
 
 }

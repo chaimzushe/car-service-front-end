@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import {baseApi} from '../util/global-config';
 @Injectable({
   providedIn: 'root'
 })
@@ -8,40 +8,39 @@ export class CarService {
 
 
 
-  baseApi =  "https://car-service-shop.herokuapp.com/api" //
-  //baseApi = 'http://localhost:2000/api'
+
 
   constructor(private http: HttpClient) { }
 
   getCarDetail(carId: any) {
-    return this.http.get(`${this.baseApi}/car/${carId}`);
+    return this.http.get(`${baseApi}/car/${carId}`);
   }
 
   getCarTypeAhead(searchWord) {
-    return this.http.post(`${this.baseApi}/car-typeahead`, { searchWord })
+    return this.http.post(`${baseApi}/car-typeahead`, { searchWord })
   }
 
 
   getAllCars(carId = null) {
-    return this.http.get(`${this.baseApi}/cars`);
+    return this.http.get(`${baseApi}/cars`);
   }
   getAllCarsFullInfo(carId = null) {
-    return this.http.get(`${this.baseApi}/cars-all-info`);
+    return this.http.get(`${baseApi}/cars-all-info`);
   }
 
   addCar(car: any) {
-    return this.http.post(`${this.baseApi}/addcar`, car);
+    return this.http.post(`${baseApi}/addcar`, car);
   }
 
   editCar(car: any, id: number) {
-    return this.http.post(`${this.baseApi}/update-car/${id}`, car);
+    return this.http.post(`${baseApi}/update-car/${id}`, car);
   }
 
   removeCar(_id: any) {
-    return this.http.post(`${this.baseApi}/delete-car`, { id: _id });
+    return this.http.post(`${baseApi}/delete-car`, { id: _id });
   }
 
   createService(newCarService) {
-    return this.http.post(`${this.baseApi}/add-carService`, newCarService);
+    return this.http.post(`${baseApi}/add-carService`, newCarService);
   }
 }

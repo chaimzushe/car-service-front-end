@@ -11,7 +11,9 @@ import { subNavInfo } from 'src/app/models/car.model';
 export class SubNavComponent implements OnInit {
   @Input() subNavInfo: subNavInfo;
   @Output() gridViewToggle = new EventEmitter()
-  @Output() searched = new EventEmitter()
+  @Output() searched = new EventEmitter();
+  @Output() dialogOpened = new EventEmitter();
+
   isGrid = false;
   searchTerm: any;
   constructor(private router: Router, private route: ActivatedRoute, private snackbar: MatSnackBar) { }
@@ -24,7 +26,7 @@ export class SubNavComponent implements OnInit {
   }
 
   filter(){
-    return this.snackbar.open("Work in progress. Thank you for your patience 😊 ", "dismiss", { duration: 3000, panelClass: "err-panel" })
+    this.dialogOpened.emit();
   }
 
   navigateBack() {
