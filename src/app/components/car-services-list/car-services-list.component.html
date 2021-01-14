@@ -2,13 +2,14 @@
 
 <div class="list">
   <h3 class="text-header">Car Services</h3>
-  <mat-card style="padding: 16px;" class="card" *ngFor="let service of services; index as i">
+  <mat-card style="padding: 16px;" class="card"  *ngFor="let service of services; index as i;">
 
     <span class="header"> Car# {{service.car?.car_id}} </span>
     <span class="fields">
       <span class="field" *ngFor="let field of getFields(service)">
         <b>{{field.name}}: </b> <span class="value">{{field.value}}</span>
       </span>
+
     </span>
     <span class="user-expand">
       <span class="user">
@@ -36,10 +37,10 @@
       </button>
     </mat-menu>
     <div  *ngIf="service.expanded" class="expanded">
-      <li *ngFor="let repair of service.repairs">
+      <li [class.service-note--last]="isLast"  *ngFor="let repair of service.repairs; last as isLast;">
          <span> fixed: {{repair.qty}} {{repair.repair?.name}}</span> <span class="repair-note" *ngIf="repair.note"> *{{repair.note}}</span>
       </li>
-      <div class="service-note" *ngIf="service.note">
+      <div class="service-note"  *ngIf="service.note">
           *{{service.note}}
       </div>
     </div>

@@ -38,6 +38,7 @@ import { DatePipe } from '@angular/common';
 import { ServicesFilterComponent } from './dialogs/services-filter/services-filter.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ ModuleRegistry.registerModules(AllModules);
     MatStepperModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
     AgGridModule.withComponents([]),
   ],
   providers: [DatePipe],

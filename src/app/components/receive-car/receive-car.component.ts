@@ -52,6 +52,7 @@ export class ReceiveCarComponent implements OnInit {
   mechanicFormGroup: FormGroup;
   repairListFormGroup: FormGroup;
   visitTypes = ['Maintenance', 'Accident', 'Inspection', 'TLC Other', 'Scheduled']
+  loading = true;
   constructor(
     private carService: CarService,
     private repairService: RepairService,
@@ -74,7 +75,7 @@ export class ReceiveCarComponent implements OnInit {
 
   get selectedCarNumber() {
     return this.carGroupControl && this.carGroupControl.value.carNumber
-      ? '#' + this.carGroupControl.value.carNumber.car_id
+      ? '#' + (this.carGroupControl.value.carNumber.car_id || '--')
       : '';
   }
 
@@ -85,6 +86,7 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async ngOnInit() {
+
     this.filteredRepairs = this.allRepairs = (await this.repairService
       .getAllRepairs()
       .toPromise()) as [];
@@ -92,7 +94,7 @@ export class ReceiveCarComponent implements OnInit {
       .getAllUsers()
       .toPromise()) as [];
     this.setupForms();
-
+    this.loading = false;
   }
 
   setupForms() {
@@ -122,6 +124,7 @@ export class ReceiveCarComponent implements OnInit {
       .subscribe((res: []) => {
         this.filteredCars = res;
       });
+      this.loading = false;
   }
 
   editNote(repair: IRepair, i) {

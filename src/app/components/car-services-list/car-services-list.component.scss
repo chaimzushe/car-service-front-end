@@ -101,6 +101,9 @@ button {
  .service-note{
    color: gray;
    padding: 12px;
+   &--last{
+     border: none;
+   }
  }
 }
 

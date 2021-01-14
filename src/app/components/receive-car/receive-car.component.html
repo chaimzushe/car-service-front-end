@@ -1,174 +1,180 @@
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 <div class="wrapper">
-  <h3>Receive {{selectedCarNumber || 'Car'}}</h3>
-
-  <mat-vertical-stepper *ngIf="carGroupControl" [linear]="true" #stepper>
-    <mat-step [stepControl]="carGroupControl">
-      <form [formGroup]="carGroupControl">
-        <ng-template matStepLabel>Enter Car Number</ng-template>
-        <mat-form-field>
-          <mat-label>Car Number</mat-label>
-          <input
-            type="text"
-            placeholder="Car#"
-            aria-label="Number"
-            matInput
-            formControlName="carNumber"
-            [matAutocomplete]="autoCars"
-          />
-          <mat-autocomplete
-          [displayWith]="carDisplayFunc"
-            (optionSelected)="addCar($event)"
-            autoActiveFirstOption
-            #autoCars="matAutocomplete"
-          >
-            <mat-option *ngFor="let car of filteredCars" [value]="car">
-              {{ car.car_id }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-
-      <mat-form-field >
-        <mat-label>Current Car Miles</mat-label>
-        <input matInput  formControlName="miles" placeholder="Miles" >
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Visit Reason</mat-label>
-        <mat-select formControlName="visitType">
-          <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="mechanicFormGroup">
-      <form [formGroup]="mechanicFormGroup">
-        <ng-template matStepLabel>Mechanic</ng-template>
-        <mat-form-field>
-          <mat-label>Mechanic</mat-label>
-          <input
-            type="text"
-            placeholder="Name"
-            aria-label="Name"
-            matInput
-            (keyup)="filterUsers($event)"
-            formControlName="mechanic"
-            [matAutocomplete]="autoUsers"
-          />
-          <mat-autocomplete
-          [displayWith]="userDisplayFunc"
-            autoActiveFirstOption
-            #autoUsers="matAutocomplete"
-          >
-            <mat-option *ngFor="let user of filteredUsers" [value]="user">
-              {{ user.name }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-
-    <mat-step [stepControl]="repairListFormGroup">
-      <form [formGroup]="repairListFormGroup">
-        <ng-template matStepLabel>Repairs Needed</ng-template>
-
-        <div class="repairs-needed" *ngIf="repairsNeeded.length">
-          <mat-card class="repair-item" *ngFor="let repair of repairsNeeded; index as i">
-
-            <span class="text-qty">
-              <span>
-
-                <select  [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.qty" name="car">
-                  <option value="" selected></option>
-                  <option *ngFor="let qty of [1,2,3,4]" [value]="qty">
-                    {{qty}}
-                  </option>
-                </select>
-              </span>
-
-              <span class="main-text"> {{repair.name}} </span>
-
-
-            </span>
-            <span class="repair-actions">
-              <span (click)="editNote(repair, i)"  class="note-icon">
-                <i [ngClass]="{'fa-comment-alt-lines': !repair.isEditing, 'fa-save': repair.isEditing}" class="fal"></i>
-              </span>
-              <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
-            </span>
-
-            <div *ngIf="repair.note || repair.isEditing" class="note">
-
-              <textarea [disabled]="!repair.isEditing" [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.note" matInput placeholder="Note for mechanic">
-                <span *ngIf="repair.note">*</span> {{repair.note}}
-              </textarea>
-            </div>
-          </mat-card>
-        </div>
-
+  <h3 class="header-text">Receive {{selectedCarNumber || 'Car'}}</h3>
+  <ng-container>
+    <mat-vertical-stepper *ngIf="carGroupControl" [linear]="true" #stepper>
+      <mat-step [stepControl]="carGroupControl">
+        <form [formGroup]="carGroupControl">
+          <ng-template matStepLabel>Enter Car Number</ng-template>
+          <mat-form-field>
+            <mat-label>Car Number</mat-label>
+            <input
+              type="text"
+              placeholder="Car#"
+              aria-label="Number"
+              matInput
+              formControlName="carNumber"
+              [matAutocomplete]="autoCars"
+            />
+            <mat-autocomplete
+            [displayWith]="carDisplayFunc"
+              (optionSelected)="addCar($event)"
+              autoActiveFirstOption
+              #autoCars="matAutocomplete"
+            >
+              <mat-option *ngFor="let car of filteredCars" [value]="car">
+                {{ car.car_id }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
 
         <mat-form-field >
-          <input type="text"
-                 [placeholder]="'Select Repair'"
-                 aria-label="Repairs"
-                 matInput
-                  class="repair-input"
-                 (keyup)="filterRepairs($event)"
-                 formControlName="selectedFirstRepair"
-                 [matAutocomplete]="autoRepairs">
-          <mat-autocomplete   (optionSelected)="addRepair($event)" autoActiveFirstOption #autoRepairs="matAutocomplete">
-            <mat-option *ngFor="let repair of filteredRepairs" [value]="repair.name">
-               {{repair.name}}
-            </mat-option>
-          </mat-autocomplete>
-
+          <mat-label>Current Car Miles</mat-label>
+          <input matInput  formControlName="miles" placeholder="Miles" >
         </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Visit Reason</mat-label>
+          <mat-select formControlName="visitType">
+            <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="mechanicFormGroup">
+        <form [formGroup]="mechanicFormGroup">
+          <ng-template matStepLabel>Mechanic</ng-template>
+          <mat-form-field>
+            <mat-label>Mechanic</mat-label>
+            <input
+              type="text"
+              placeholder="Name"
+              aria-label="Name"
+              matInput
+              (keyup)="filterUsers($event)"
+              formControlName="mechanic"
+              [matAutocomplete]="autoUsers"
+            />
+            <mat-autocomplete
+            [displayWith]="userDisplayFunc"
+              autoActiveFirstOption
+              #autoUsers="matAutocomplete"
+            >
+              <mat-option *ngFor="let user of filteredUsers" [value]="user">
+                {{ user.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="repairListFormGroup">
+        <form [formGroup]="repairListFormGroup">
+          <ng-template matStepLabel>Repairs Needed</ng-template>
+
+          <div class="repairs-needed" *ngIf="repairsNeeded.length">
+            <mat-card class="repair-item" *ngFor="let repair of repairsNeeded; index as i">
+
+              <span class="text-qty">
+                <span>
+
+                  <select  [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.qty" name="car">
+                    <option value="" selected></option>
+                    <option *ngFor="let qty of [1,2,3,4]" [value]="qty">
+                      {{qty}}
+                    </option>
+                  </select>
+                </span>
+
+                <span class="main-text"> {{repair.name}} </span>
+
+
+              </span>
+              <span class="repair-actions">
+                <span (click)="editNote(repair, i)"  class="note-icon">
+                  <i [ngClass]="{'fa-comment-alt-lines': !repair.isEditing, 'fa-save': repair.isEditing}" class="fal"></i>
+                </span>
+                <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
+              </span>
+
+              <div *ngIf="repair.note || repair.isEditing" class="note">
+
+                <textarea [disabled]="!repair.isEditing" [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.note" matInput placeholder="Note for mechanic">
+                  <span *ngIf="repair.note">*</span> {{repair.note}}
+                </textarea>
+              </div>
+            </mat-card>
+          </div>
+
+
+          <mat-form-field >
+            <input type="text"
+                   [placeholder]="'Select Repair'"
+                   aria-label="Repairs"
+                   matInput
+                    class="repair-input"
+                   (keyup)="filterRepairs($event)"
+                   formControlName="selectedFirstRepair"
+                   [matAutocomplete]="autoRepairs">
+            <mat-autocomplete   (optionSelected)="addRepair($event)" autoActiveFirstOption #autoRepairs="matAutocomplete">
+              <mat-option *ngFor="let repair of filteredRepairs" [value]="repair.name">
+                 {{repair.name}}
+              </mat-option>
+            </mat-autocomplete>
+
+          </mat-form-field>
+
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="repairListFormGroup">
+        <form [formGroup]="repairListFormGroup">
+          <ng-template matStepLabel>Other Notes</ng-template>
+          <mat-form-field >
+            <mat-label>Leave a note</mat-label>
+            <textarea formControlName="note" matInput placeholder="Note for mechanic"></textarea>
+          </mat-form-field>
+        <mat-form-field >
+        <mat-label>Price of other repairs </mat-label>
+        <input matInput  formControlName="price" placeholder="Price" >
+      </mat-form-field>
+
+
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <div class="actions">
+          <button (click)="createLabel()" mat-raised-button color="primary">Create Label</button>
+        </div>
 
         <div>
           <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
         </div>
-      </form>
-    </mat-step>
+      </mat-step>
+    </mat-vertical-stepper>
+  </ng-container>
 
-    <mat-step [stepControl]="repairListFormGroup">
-      <form [formGroup]="repairListFormGroup">
-        <ng-template matStepLabel>Other Notes</ng-template>
-        <mat-form-field >
-          <mat-label>Leave a note</mat-label>
-          <textarea formControlName="note" matInput placeholder="Note for mechanic"></textarea>
-        </mat-form-field>
-      <mat-form-field >
-      <mat-label>Price of other repairs </mat-label>
-      <input matInput  formControlName="price" placeholder="Price" >
-    </mat-form-field>
+  <div *ngIf="loading" class="spinner">
+    <mat-spinner></mat-spinner>
+  </div>
 
-
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-
-
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <div class="actions">
-        <button (click)="createLabel()" mat-raised-button color="primary">Create Label</button>
-      </div>
-
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
-    </mat-step>
-  </mat-vertical-stepper>
 </div>
