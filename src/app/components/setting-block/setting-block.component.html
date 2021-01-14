@@ -1,5 +1,8 @@
 
-<mat-card [ngStyle]="{'background-image': 'url(assets/images/' + setting.imageUrl + ')'}" (click)="navigate()" class="card">
+<mat-card (click)="navigate()" class="card">
+  <span class="icon">
+    <i [class]="setting.iconClass"></i>
+  </span>
   <div class="text">
       <span class="text_header">{{setting.name}} </span>
   </div>

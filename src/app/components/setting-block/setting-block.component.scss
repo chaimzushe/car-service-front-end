@@ -20,6 +20,14 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  flex-direction: column;
+
+  .icon{
+    i {
+      font-size: 40px;
+      margin-bottom: 25px;
+    }
+  }
 }
 
 .text {
@@ -33,12 +41,9 @@
 
   span {
     display: inline-block;
-    color: white;
+    color: black;
     font-size: 26px;
     line-height: 150%;
     letter-spacing: 1px;
-    background: rgb(0, 0, 0); /* fallback color */
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
   }
 }
