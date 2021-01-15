@@ -25,9 +25,11 @@
     "@angular/platform-browser-dynamic": "~11.0.1",
     "@angular/router": "~11.0.1",
     "@fortawesome/fontawesome-pro": "^5.15.1",
+    "@types/auth0-js": "^9.14.2",
     "ag-grid-angular": "^25.0.0",
     "ag-grid-community": "^25.0.0",
     "ag-grid-enterprise": "^25.0.0",
+    "auth0-js": "^9.14.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

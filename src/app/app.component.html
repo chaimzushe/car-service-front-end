@@ -1,6 +1,6 @@
 <div class="app">
-  <app-nav-bar></app-nav-bar>
-  <div class="pusher"></div>
+  <app-nav-bar *ngIf="showFooter()"></app-nav-bar>
+  <div *ngIf="showFooter()" class="pusher"></div>
   <div class="router">
     <router-outlet></router-outlet>
   </div>

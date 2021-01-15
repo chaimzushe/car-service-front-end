@@ -16,15 +16,6 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-async login(){
-    console.log(this.email, this.password);
-    const isAuthenticated =  await this.authService.verifyPassword(this.email, this.password);
-    if(isAuthenticated){
-      sessionStorage.setItem('loggedIn', 'true');
-      this.router.navigate(['/home']);
-    } else {
-     this.snackbar.open("Password incorrect", "dismiss", {duration: 3000, panelClass: "err-panel"})
-    }
-  }
+async login(){}
 
 }

@@ -2,7 +2,7 @@
 <div class="wrapper">
   <h3 class="header-text">Receive {{selectedCarNumber || 'Car'}}</h3>
   <ng-container>
-    <mat-vertical-stepper *ngIf="carGroupControl" [linear]="true" #stepper>
+    <mat-vertical-stepper *ngIf="carGroupControl" [linear]="false" #stepper>
       <mat-step [stepControl]="carGroupControl">
         <form [formGroup]="carGroupControl">
           <ng-template matStepLabel>Enter Car Number</ng-template>

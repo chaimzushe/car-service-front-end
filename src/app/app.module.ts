@@ -21,7 +21,7 @@ import { CarFormComponent } from './components/car-form/car-form.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MatMenuModule} from '@angular/material/menu';
 import { ConfirmActionComponent } from './dialogs/confirm-action/confirm-action.component';
 import { RepairFormComponent } from './components/repair-form/repair-form.component';
@@ -39,6 +39,8 @@ import { ServicesFilterComponent } from './dialogs/services-filter/services-filt
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { LoginErrorComponent } from './components/login-error/login-error.component';
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
   declarations: [
@@ -60,7 +62,8 @@ ModuleRegistry.registerModules(AllModules);
     UserListComponent,
     UserFormComponent,
     CarServicesListComponent,
-    ServicesFilterComponent
+    ServicesFilterComponent,
+    LoginErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +87,13 @@ ModuleRegistry.registerModules(AllModules);
     MatProgressSpinnerModule,
     AgGridModule.withComponents([]),
   ],
-  providers: [DatePipe],
+  providers: [DatePipe,
+    {provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

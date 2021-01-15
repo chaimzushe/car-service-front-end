@@ -11,6 +11,7 @@
 }
 .card {
   padding: 22px;
+  color: #015673;
   cursor: pointer;
   height: 100%;
   width: 100%;
@@ -24,25 +25,22 @@
 
   .icon{
     i {
-      font-size: 40px;
+      font-size: 80px;
       margin-bottom: 25px;
     }
   }
 }
 
 .text {
-  color: white;
   font-size: 26px;
   font-weight: bold;
   text-align: center;
-  color: white;
   display: flex;
   align-items: flex-start;
 
   span {
     display: inline-block;
-    color: black;
-    font-size: 26px;
+    font-size: 20px;
     line-height: 150%;
     letter-spacing: 1px;
   }

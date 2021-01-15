@@ -4,6 +4,7 @@ import { CarFormComponent } from './components/car-form/car-form.component';
 import { CarListComponent } from './components/car-list/car-list.component';
 import { CarServicesListComponent } from './components/car-services-list/car-services-list.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { LoginErrorComponent } from './components/login-error/login-error.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { ReceiveCarComponent } from './components/receive-car/receive-car.component';
 import { RepairFormComponent } from './components/repair-form/repair-form.component';
@@ -25,11 +26,12 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: "login",
-    component: LoginPageComponent
+    path: "entry-page",
+    component: LoginErrorComponent
   },
   {
     path: "services",
+    canActivate: [AuthGuardService],
     children: [
       {
         path: '',
@@ -43,6 +45,7 @@ const routes: Routes = [
     ]
   },
   {
+    canActivate: [AuthGuardService],
     path: "cars",
     children: [
       {
@@ -57,6 +60,7 @@ const routes: Routes = [
     ]
   },
   {
+    canActivate: [AuthGuardService],
     path: "repair-options",
     children: [
       {
@@ -71,12 +75,8 @@ const routes: Routes = [
     ]
   },
   {
-    path: "visits",
-    component: VisitListComponent
-  },
-
-  {
     path: "users",
+    canActivate: [AuthGuardService],
     children: [
       {
         path: '',
