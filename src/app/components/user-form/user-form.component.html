@@ -11,7 +11,12 @@
       <mat-label>Email</mat-label>
       <input formControlName="email"  matInput placeholder="Email">
     </mat-form-field>
-
+    <mat-form-field appearance="fill">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
 
     <div class="actions">

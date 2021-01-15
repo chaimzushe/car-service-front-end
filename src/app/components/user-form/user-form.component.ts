@@ -11,7 +11,11 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit {
-
+  roles = [
+    {name: 'Mechanic'},
+    {name: 'Admin'},
+    {name: 'Manager'}
+  ]
   subNavInfo: subNavInfo = {
     actionText: '',
     actionLink: [],
@@ -49,6 +53,7 @@ export class UserFormComponent implements OnInit {
     this.form = this.fb.group({
       name: [user.name, [Validators.required]],
       email: [user.email || 'N/A'],
+      role: [user.role],
     });
   }
 

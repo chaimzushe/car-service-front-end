@@ -55,7 +55,7 @@ export class ReceiveCarComponent implements OnInit {
   visitTypes = ['Maintenance', 'Accident', 'Inspection', 'TLC Other', 'Scheduled']
   loading = true;
   serviceId: any;
-  serviceObj : any= {};
+  serviceObj: any = {};
   constructor(
     private carService: CarService,
     private repairService: RepairService,
@@ -92,10 +92,10 @@ export class ReceiveCarComponent implements OnInit {
 
   async ngOnInit() {
     this.route.params.subscribe(async p => {
-      if(p.id !== 'new'){
+      if (p.id !== 'new') {
         this.serviceId = p.id;
         this.serviceObj = await this.carServiceService.getServiceDetail(p.id).toPromise();
-        this.repairsNeeded = this.serviceObj.repairs.map( r => ({
+        this.repairsNeeded = this.serviceObj.repairs.map(r => ({
           qty: r.qty,
           name: r.repair.name,
           note: r.note
@@ -140,7 +140,7 @@ export class ReceiveCarComponent implements OnInit {
       .subscribe((res: []) => {
         this.filteredCars = res;
       });
-      this.loading = false;
+    this.loading = false;
   }
 
   editNote(repair: IRepair, i) {
@@ -232,10 +232,13 @@ export class ReceiveCarComponent implements OnInit {
       priceOfOtherWork: this.repairListFormGroup.value.price,
       repairs,
     }
-    if(this.serviceId){
+    if (this.serviceId) {
       return this.updateService(newCarService)
     }
     this.carService.createService(newCarService).subscribe(x => {
+      var blob = new Blob([x], { type: 'application/pdf' });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
       this.router.navigate(['/services'])
     });
