@@ -81,6 +81,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     });
   }
 
+  editService(service, i){
+    this.router.navigate([service._id], {relativeTo: this.route})
+  }
+
   openFilter() {
 
     let dialogRef = this.dialog.open(ServicesFilterComponent, {

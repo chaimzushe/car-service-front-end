@@ -39,7 +39,7 @@ const routes: Routes = [
 
       },
       {
-        path: "new",
+        path: ":id",
         component: ReceiveCarComponent,
       }
     ]

@@ -63,7 +63,7 @@ h3 {
   padding-left: 12px;
   font-size: 13px;
   font-weight: 300;
-  textarea{
+  textarea {
     padding: 6px;
     border: 1px solid lightgray;
     color: gray;
@@ -81,4 +81,12 @@ h3 {
   margin: 52px auto;
   margin-bottom: 60px;
   text-align: center;
+}
+.open {
+  ::ng-deep {
+    .mat-vertical-stepper-content {
+      visibility: visible !important;
+      height: 100% !important;
+    }
+  }
 }

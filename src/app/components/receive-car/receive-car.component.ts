@@ -19,7 +19,8 @@ import {
   tap
 } from 'rxjs/operators';
 import { pipe } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CarServiceService } from 'src/app/services/car-service.service';
 
 interface IRepair {
   name: String;
@@ -53,12 +54,16 @@ export class ReceiveCarComponent implements OnInit {
   repairListFormGroup: FormGroup;
   visitTypes = ['Maintenance', 'Accident', 'Inspection', 'TLC Other', 'Scheduled']
   loading = true;
+  serviceId: any;
+  serviceObj : any= {};
   constructor(
     private carService: CarService,
     private repairService: RepairService,
     private snackbar: MatSnackBar,
     private fb: FormBuilder,
     private userService: UserService,
+    private route: ActivatedRoute,
+    private carServiceService: CarServiceService,
     private router: Router
   ) { }
 
@@ -86,30 +91,41 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async ngOnInit() {
-
-    this.filteredRepairs = this.allRepairs = (await this.repairService
-      .getAllRepairs()
-      .toPromise()) as [];
-    this.users = this.filteredUsers = (await this.userService
-      .getAllUsers()
-      .toPromise()) as [];
-    this.setupForms();
-    this.loading = false;
+    this.route.params.subscribe(async p => {
+      if(p.id !== 'new'){
+        this.serviceId = p.id;
+        this.serviceObj = await this.carServiceService.getServiceDetail(p.id).toPromise();
+        this.repairsNeeded = this.serviceObj.repairs.map( r => ({
+          qty: r.qty,
+          name: r.repair.name,
+          note: r.note
+        }));
+        console.log(this.serviceObj)
+      }
+      this.filteredRepairs = this.allRepairs = (await this.repairService
+        .getAllRepairs()
+        .toPromise()) as [];
+      this.users = this.filteredUsers = (await this.userService
+        .getAllUsers()
+        .toPromise()) as [];
+      this.setupForms();
+      this.loading = false;
+    })
   }
 
   setupForms() {
     this.carGroupControl = this.fb.group({
-      carNumber: [null, Validators.required],
-      miles: ['', Validators.required],
-      visitType: ['', Validators.required]
+      carNumber: [this.serviceObj.car, Validators.required],
+      miles: [this.serviceObj.milesAtService, Validators.required],
+      visitType: [this.serviceObj.visitType, Validators.required]
     });
     this.mechanicFormGroup = this.fb.group({
-      mechanic: ['', Validators.required],
+      mechanic: [this.serviceObj.mechanic, Validators.required],
     });
     this.repairListFormGroup = this.fb.group({
       selectedFirstRepair: [null],
-      note: [''],
-      price: [0]
+      note: [this.serviceObj.note],
+      price: [this.serviceObj.priceOfOtherWork || 0]
     });
     let searchWord;
     this.carGroupControl.controls['carNumber'].valueChanges.pipe(
@@ -197,6 +213,7 @@ export class ReceiveCarComponent implements OnInit {
     return curRepair._id;
   }
   createLabel() {
+
     const repairs = this.repairsNeeded.map(r => ({
       qty: r.qty,
       note: r.note,
@@ -215,9 +232,21 @@ export class ReceiveCarComponent implements OnInit {
       priceOfOtherWork: this.repairListFormGroup.value.price,
       repairs,
     }
+    if(this.serviceId){
+      return this.updateService(newCarService)
+    }
     this.carService.createService(newCarService).subscribe(x => {
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
       this.router.navigate(['/services'])
     });
+  }
+  updateService(newCarService) {
+    this.snackbar.open('not ready yet', 'Dismiss', {
+      duration: 3000, panelClass: 'err-panel'
+    });
+    // this.carServiceService.editUService(newCarService, this.serviceId).subscribe(x => {
+    //   this.snackbar.open("Success", "Dismiss", { duration: 3000 });
+    //   this.router.navigate(['/services'])
+    // });
   }
 }

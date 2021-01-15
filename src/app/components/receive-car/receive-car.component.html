@@ -1,8 +1,9 @@
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
-<div class="wrapper">
+
+<div [class.open]="serviceId" class="wrapper">
   <h3 class="header-text">Receive {{selectedCarNumber || 'Car'}}</h3>
   <ng-container>
-    <mat-vertical-stepper *ngIf="carGroupControl" [linear]="false" #stepper>
+    <mat-vertical-stepper *ngIf="carGroupControl" [linear]="!serviceId" #stepper>
       <mat-step [stepControl]="carGroupControl">
         <form [formGroup]="carGroupControl">
           <ng-template matStepLabel>Enter Car Number</ng-template>
@@ -162,7 +163,7 @@
       <mat-step>
         <ng-template matStepLabel>Done</ng-template>
         <div class="actions">
-          <button (click)="createLabel()" mat-raised-button color="primary">Create Label</button>
+          <button (click)="createLabel()" mat-raised-button color="primary">{{!serviceId ? 'Create Label' : 'Update Job'}}</button>
         </div>
 
         <div>

@@ -27,4 +27,17 @@ export class CarServiceService {
     filter.searchWord = searchWord;
     return this.http.post(`${baseApi}/car-service-filter`, filter);
   }
+
+  editUService(service: any, id: number) {
+    return this.http.post(`${baseApi}/update-cars-service/${id}`, service);
+  }
+
+  getServiceDetail(id: any) {
+    return this.http.get(`${baseApi}/car-service/${id}`);
+  }
+
+  createService(newCarService) {
+    return this.http.post(`${baseApi}/add-carService`, newCarService);
+  }
+
 }
