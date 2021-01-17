@@ -4,16 +4,30 @@
   <h3 class="form_header"> {{carId ? 'Edit' : 'New'}} Car</h3>
   <form (submit)="submit()" class="form" *ngIf="form" [formGroup]="form">
     <mat-form-field appearance="standard">
-      <mat-label>VIN</mat-label>
-      <input formControlName="vin" matInput placeholder="VIN">
-    </mat-form-field>
-    <mat-form-field appearance="standard">
       <mat-label>Car Number</mat-label>
       <input formControlName="carNumber"  matInput placeholder="Car Number">
     </mat-form-field>
+
     <mat-form-field appearance="standard">
-      <mat-label>Miles</mat-label>
-      <input formControlName="miles" matInput placeholder="miles">
+      <mat-label>VIN</mat-label>
+      <input formControlName="vin" matInput placeholder="VIN">
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>year</mat-label>
+      <input formControlName="year" matInput placeholder="year">
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Color</mat-label>
+      <input formControlName="color" matInput placeholder="color">
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Model</mat-label>
+      <input formControlName="model" matInput placeholder="model">
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Driver</mat-label>
+      <input formControlName="driver" matInput placeholder="driver">
     </mat-form-field>
     <div class="actions">
       <button type="submit" (click)="submit()" class="form_submit" mat-raised-button color="primary">Submit</button>

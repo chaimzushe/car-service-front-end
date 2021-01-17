@@ -55,8 +55,11 @@ export class CarFormComponent implements OnInit, OnDestroy {
   setupForm(car) {
     this.form = this.fb.group({
       vin: [car.vin, [Validators.required]],
-      miles: [car.miles || 0],
-      carNumber: [car.carNumber, Validators.required]
+      model: [car.model , [Validators.required] ],
+      carNumber: [car.car_id, Validators.required],
+      color: [car.color, Validators.required],
+      year: [car.year, Validators.required],
+      driver: [car.driver],
     });
   }
 

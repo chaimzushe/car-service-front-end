@@ -6,14 +6,13 @@
   box-sizing: border-box;
   padding-top: 4px;
   justify-items: center;
-  max-width: 1900px;
+  max-width: 1600px;
   margin: auto;
   margin-top: 36px;
   padding: 8px;
 }
 .card {
   width: 100%;
-  max-width: 1800px;
   padding: 32px;
   margin: 12px;
   display: flex;
@@ -118,10 +117,14 @@ button {
 }
 .nav-filter{
   padding: 22px;
+  max-width: 1600px;
+  margin:auto;
+  margin-top: 36px;
   .link{
     margin: 0 22px;
     font-weight: 400;
     cursor: pointer;
+    font-size: 20px;
     &--active{
       font-weight: bold;
       border-bottom: 1px solid;
