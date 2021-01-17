@@ -43,7 +43,7 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['edit', car._id], { relativeTo: this.route });
   }
 
-  deleteItem(car, i){
+  deleteItem(user, i){
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '250px',
       data: { msg: 'Are you sure you would like to delete this user?' },
@@ -52,8 +52,9 @@ export class UserListComponent implements OnInit {
 
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
-      this.users.splice(i, 1);
-      let removeSub = this.userService.removeUser(car._id).subscribe(x => {
+      this.users = this.users.filter(u => u.name !== user.name)
+      this.filteredUsers = this.filteredUsers.filter(u => u.name !== user.name)
+      let removeSub = this.userService.removeUser(user._id).subscribe(x => {
         //this.users.splice(i, 1);
       });
       this.subs.push(removeSub);

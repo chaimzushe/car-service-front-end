@@ -42,7 +42,7 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
     this.router.navigate(['edit', car._id], { relativeTo: this.route });
   }
 
-  deleteItem(car, i){
+  deleteItem(rep, i){
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '250px',
       data: { msg: 'Are you sure you would like to delete this repair?' },
@@ -51,8 +51,9 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
 
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
-      this.repairs.splice(i, 1);
-      let removeSub = this.repairService.removeRepair(car._id).subscribe(x => {
+      this.repairs = this.repairs.filter(r => r.name !== rep.name)
+      this.filteredRepairs = this.filteredRepairs.filter(r => r.name !== rep.name)
+      let removeSub = this.repairService.removeRepair(rep._id).subscribe(x => {
         //this.repairs.splice(i, 1);
       });
       this.subs.push(removeSub);
