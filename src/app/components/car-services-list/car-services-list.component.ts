@@ -25,6 +25,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   users: any[] =[];
   searchWord: any;
   filter: any = {};
+  links = [
+    {name: '', active: true},
+    {name: 'IN PROGRESS', active: false},
+    {name: 'COMPLETED', active: false},
+    {name: 'APPROVED', active: false},
+  ];
   constructor(private carServiceService: CarServiceService ,
     private router: Router,
     private userService: UserService,
@@ -40,6 +46,14 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.subs.forEach(s => s.unsubscribe());
+  }
+
+  setActive(link, idx){
+    this.links.forEach( (l, i)=> l.active = i === idx);
+    this.filter.status = link.name;
+    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
+      this.services = f;
+    });
   }
 
   getFields(service: Service){
@@ -97,7 +111,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       if (!filter) {
         return;
       }
-      this.filter = filter;
+      this.filter = {...this.filter,...filter};
       this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
             this.services = f;
       });

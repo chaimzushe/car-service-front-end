@@ -10,13 +10,6 @@
   </mat-select>
 </mat-form-field>
 
-<mat-form-field>
-  <mat-select [(ngModel)]="statusSelected"  class="input" placeholder="Statuses">
-    <mat-option *ngFor="let status of statuses" [value]="status">
-      {{status}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
 <mat-form-field appearance="fill">
   <mat-label>From Date</mat-label>
   <input [(ngModel)]="startDateSelected" matInput [matDatepicker]="startDate">

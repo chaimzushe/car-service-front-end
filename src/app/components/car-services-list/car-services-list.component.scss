@@ -116,3 +116,15 @@ button {
   font-size: 42px;
   margin: 32px auto;
 }
+.nav-filter{
+  padding: 22px;
+  .link{
+    margin: 0 22px;
+    font-weight: 400;
+    cursor: pointer;
+    &--active{
+      font-weight: bold;
+      border-bottom: 1px solid;
+    }
+  }
+}

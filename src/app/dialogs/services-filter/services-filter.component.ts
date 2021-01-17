@@ -8,8 +8,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ServicesFilterComponent implements OnInit {
   selectedUser = null;
-  statusSelected = null;
-  statuses = ['COMPLETED', 'IN PROGRESS']
   startDateSelected = null;
   endDateSelected = null;
   mechanics = [];
@@ -24,7 +22,7 @@ export class ServicesFilterComponent implements OnInit {
   }
 
   setFilter() {
-    this.dialogRef.close({ user: this.selectedUser, status: this.statusSelected,
+    this.dialogRef.close({ user: this.selectedUser,
       startDate: this.startDateSelected, endDate: this.endDateSelected });
   }
 
