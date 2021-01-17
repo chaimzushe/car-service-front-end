@@ -41,6 +41,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoginErrorComponent } from './components/login-error/login-error.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
   declarations: [
@@ -85,6 +87,7 @@ ModuleRegistry.registerModules(AllModules);
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinnerModule,
+    InfiniteScrollModule,
     AgGridModule.withComponents([]),
   ],
   providers: [DatePipe,

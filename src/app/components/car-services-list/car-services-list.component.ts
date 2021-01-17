@@ -21,17 +21,17 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     backLink: '/home'
   }
   services: Service[] = [];
-  subs: Subscription [] = [];
-  users: any[] =[];
+  subs: Subscription[] = [];
+  users: any[] = [];
   searchWord: any;
-  filter: any = {};
+  filter: any = { limit: 10, skip: 0 };
   links = [
-    {name: '', active: true},
-    {name: 'IN PROGRESS', active: false},
-    {name: 'COMPLETED', active: false},
-    {name: 'APPROVED', active: false},
+    { name: '', active: true },
+    { name: 'IN PROGRESS', active: false },
+    { name: 'COMPLETED', active: false },
+    { name: 'APPROVED', active: false },
   ];
-  constructor(private carServiceService: CarServiceService ,
+  constructor(private carServiceService: CarServiceService,
     private router: Router,
     private userService: UserService,
     private route: ActivatedRoute,
@@ -39,38 +39,45 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog) { }
 
   async ngOnInit() {
-    this.services = await this.carServiceService.getAllServices().toPromise() as Service[];
+    this.services = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
     this.users = await this.userService.getAllUsers().toPromise() as [];
-    this.users = this.users.map( u => u.name);
+    this.users = this.users.map(u => u.name);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
   }
 
-  setActive(link, idx){
-    this.links.forEach( (l, i)=> l.active = i === idx);
+  setActive(link, idx) {
+    this.links.forEach((l, i) => l.active = i === idx);
     this.filter.status = link.name;
-    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
+    this.filter.skip = 0;
+    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
     });
   }
 
-  getFields(service: Service){
+  getFields(service: Service) {
     return [
-      {name: 'Miles', value: service.milesAtService},
-      {name: 'Status', value: service.status},
-      {name: 'Visit type', value: service.visitType},
-      {name: 'Serviced', value: this.datePipe.transform(service.serviceTime,'short')},
-      {name: 'Updated', value: this.datePipe.transform(service.updatedAt,'short')},
+      { name: 'Miles', value: service.milesAtService },
+      { name: 'Status', value: service.status },
+      { name: 'Visit type', value: service.visitType },
+      { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
+      { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
   }
 
-  toggleExpand(service: Service){
+  async onScroll() {
+    this.filter.skip += 10;
+    const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
+    this.services.push(...mewServices);
+  }
+
+  toggleExpand(service: Service) {
     service.expanded = !service.expanded
   }
 
-  deleteService(service, i){
+  deleteService(service, i) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '250px',
       data: { msg: 'Are you sure you would like to delete this service?' },
@@ -81,22 +88,23 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       if (!result) return;
       this.services.splice(i, 1);
       let removeSub = this.carServiceService.removeService(service._id).subscribe(x => {
-      //alert();
+        //alert();
       });
       this.subs.push(removeSub);
     });
     this.subs.push(dialogSub);
   }
 
-  search(e){
+  search(e) {
     this.searchWord = e;
-    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
+    this.filter.skip = 0;
+    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
     });
   }
 
-  editService(service, i){
-    this.router.navigate([service._id], {relativeTo: this.route})
+  editService(service, i) {
+    this.router.navigate([service._id], { relativeTo: this.route })
   }
 
   openFilter() {
@@ -111,9 +119,9 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       if (!filter) {
         return;
       }
-      this.filter = {...this.filter,...filter};
-      this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe( (f: any) => {
-            this.services = f;
+      this.filter = { ...this.filter, ...filter, skip: 0 };
+      this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
+        this.services = f;
       });
     });
   }

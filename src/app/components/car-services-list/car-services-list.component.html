@@ -3,7 +3,18 @@
   <span class="link" (click)="setActive(link, i)" [class.link--active]="link.active"
     *ngFor="let link of links; index as i"> {{link.name || 'ALL'}}</span>
 </div>
-<div class="list">
+
+
+
+
+<div
+
+    infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      (scrolled)="onScroll()"
+
+class="list">
   <h3 class="text-header">Car Services</h3>
   <mat-card style="padding: 16px;" class="card" *ngFor="let service of services; index as i;">
 

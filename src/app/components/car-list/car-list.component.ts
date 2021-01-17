@@ -17,7 +17,7 @@ export class CarListComponent implements OnInit, OnDestroy {
     actionText: 'New Car',
     actionLink: ['edit', 'new'],
     backLink: '/home',
-    gridView: true
+    hideFilter: true
   }
   girdView =true;
   rowData: any;
