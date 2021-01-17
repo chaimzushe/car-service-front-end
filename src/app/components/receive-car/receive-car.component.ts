@@ -120,7 +120,7 @@ export class ReceiveCarComponent implements OnInit {
       visitType: [this.serviceObj.visitType, Validators.required]
     });
     this.mechanicFormGroup = this.fb.group({
-      mechanic: [this.serviceObj.mechanic, Validators.required],
+      mechanic: [this.serviceObj.mechanic],
     });
     this.repairListFormGroup = this.fb.group({
       selectedFirstRepair: [null],
@@ -175,10 +175,58 @@ export class ReceiveCarComponent implements OnInit {
     });
   }
 
-  addCar(event) {
-    this.snackbar.open('Calculating tasks needed for this car', 'Dismiss', {
-      duration: 3000,
-    });
+  async addCar() {
+    let currentMiles = this.carGroupControl.value.miles;
+    let carId = this.carGroupControl.value.carNumber.car_id
+    let allServices = await this.carServiceService.applyFilters({}, carId).toPromise();
+    this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles))
+  }
+
+  stripNonNumbers(input) {
+    return Number(String(input).replace(/\D/g, ''));
+  }
+
+  checkIfAutoAddRepair(r, allServices, currentMiles) {
+    let passedMilesCheck = r.checkWhenMilageIsAt == 0;
+    let passedDateLapsCheck = r.intervalCheck == 0;
+    let milesToStpCheckAt = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(r.checkWhenMilageIsAt);
+    let i = 0;
+
+    if (!passedMilesCheck) {
+      while (this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
+        if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name)) {
+          passedMilesCheck = true;
+          // repair was done already
+          break;
+        }
+        i++;
+      }
+    }
+    // only check for dat lapse if passed checked for miles
+    if (passedMilesCheck && !passedDateLapsCheck ) {
+      var today = new Date()
+      var checkUntilDate = new Date().setDate(today.getDate() - r.intervalCheck)
+      let i = 0;
+      while (new Date(allServices[i].serviceTime) >= new Date(checkUntilDate)) {
+        if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name)) {
+          passedDateLapsCheck = true;
+          // repair was done already
+          break;
+        }
+        i++;
+      }
+    }
+
+    if (!passedMilesCheck || !passedDateLapsCheck) {
+      let msg;
+      if (!passedMilesCheck) {
+        msg = `Added due to ${this.stripNonNumbers(r.checkWhenMilageIsAt)} miles added since last check`
+      } else {
+        msg = `Added due to ${r.intervalCheck} days passed since last check`
+      }
+      this.repairsNeeded.push({ name: r.name, qty: 1, note: msg })
+    }
+
   }
 
   addUser(event) {
@@ -220,11 +268,11 @@ export class ReceiveCarComponent implements OnInit {
       completed: false,
       repair: this.getRepairId(r)
     }));
-
+     let {mechanic} = this.mechanicFormGroup.value;
     const newCarService = {
-      mechanic: this.mechanicFormGroup.value.mechanic._id,
-      mechanicName:this.mechanicFormGroup.value.mechanic.name,
-      carNumber:this.carGroupControl.value.carNumber.car_id,
+      mechanic: (mechanic && mechanic._id || null),
+      mechanicName: (mechanic && mechanic.name || null),
+      carNumber: this.carGroupControl.value.carNumber.car_id,
       car: this.carGroupControl.value.carNumber._id,
       milesAtService: this.carGroupControl.value.miles,
       note: this.repairListFormGroup.value.note,

@@ -3,7 +3,7 @@
     <i (click)="navigateBack()" class="far fa-long-arrow-left"></i>
   </span>
   <span *ngIf="subNavInfo.actionText" class="actions">
-    <span (click)="filter()" class="icon filter">
+    <span *ngIf="!hideFilter" (click)="filter()" class="icon filter">
       <i class="fal fa-filter"></i>
     </span>
     <span   class="icon search">

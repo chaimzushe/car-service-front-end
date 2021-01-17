@@ -26,6 +26,7 @@ export interface subNavInfo {
   backLink: string;
   actionLink: string[];
   gridView?: boolean;
+  hideFilter?: boolean;
 }
 
 export interface Service {

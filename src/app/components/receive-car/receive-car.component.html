@@ -19,7 +19,6 @@
             />
             <mat-autocomplete
             [displayWith]="carDisplayFunc"
-              (optionSelected)="addCar($event)"
               autoActiveFirstOption
               #autoCars="matAutocomplete"
             >
@@ -42,40 +41,11 @@
         </mat-form-field>
 
           <div>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button (click)="addCar()" matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="mechanicFormGroup">
-        <form [formGroup]="mechanicFormGroup">
-          <ng-template matStepLabel>Mechanic</ng-template>
-          <mat-form-field>
-            <mat-label>Mechanic</mat-label>
-            <input
-              type="text"
-              placeholder="Name"
-              aria-label="Name"
-              matInput
-              (keyup)="filterUsers($event)"
-              formControlName="mechanic"
-              [matAutocomplete]="autoUsers"
-            />
-            <mat-autocomplete
-            [displayWith]="userDisplayFunc"
-              autoActiveFirstOption
-              #autoUsers="matAutocomplete"
-            >
-              <mat-option *ngFor="let user of filteredUsers" [value]="user">
-                {{ user.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
-          </div>
-        </form>
-      </mat-step>
+
 
       <mat-step [stepControl]="repairListFormGroup">
         <form [formGroup]="repairListFormGroup">
@@ -154,6 +124,37 @@
 
 
           <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="mechanicFormGroup">
+        <form [formGroup]="mechanicFormGroup">
+          <ng-template matStepLabel>Mechanic</ng-template>
+          <mat-form-field>
+            <mat-label>Mechanic</mat-label>
+            <input
+              type="text"
+              placeholder="Name"
+              aria-label="Name"
+              matInput
+              (keyup)="filterUsers($event)"
+              formControlName="mechanic"
+              [matAutocomplete]="autoUsers"
+            />
+            <mat-autocomplete
+            [displayWith]="userDisplayFunc"
+              autoActiveFirstOption
+              #autoUsers="matAutocomplete"
+            >
+              <mat-option *ngFor="let user of filteredUsers" [value]="user">
+                {{ user.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
             <button mat-button matStepperNext>Next</button>
           </div>
         </form>

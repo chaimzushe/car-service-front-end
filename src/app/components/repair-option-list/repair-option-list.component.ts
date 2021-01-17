@@ -15,17 +15,20 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
   subNavInfo: subNavInfo = {
     actionText: 'New Repair',
     actionLink: ['edit', 'new'],
-    backLink: '/home'
+    backLink: '/home',
+    hideFilter: true
   }
 
   subs: Subscription[] = [];
   noItemsText = "Loading...";
   repairs = [];
+  filteredRepairs = [];
   constructor(private repairService: RepairService , private router: Router, private route: ActivatedRoute, private dialog: MatDialog ) { }
 
   async ngOnInit() {
-    this.repairs = await this.repairService.getAllRepairs().toPromise() as [];
+    this.filteredRepairs = this.repairs = await this.repairService.getAllRepairs().toPromise() as [];
   }
+
 
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
@@ -55,6 +58,14 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
       this.subs.push(removeSub);
     });
     this.subs.push(dialogSub);
+  }
+
+  search(e){
+    this.filteredRepairs = this.repairs.filter( r => r.name.toLowerCase().startsWith(e.toLowerCase()));
+    if(this.filteredRepairs.length === 0){
+      this.noItemsText = "No Repairs found";
+    }
+
   }
 
 }
