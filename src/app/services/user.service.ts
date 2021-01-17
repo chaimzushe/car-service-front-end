@@ -14,8 +14,8 @@ export class UserService {
   getUserDetail(userId: any) {
     return this.http.get(`${baseApi}/user/${userId}`);
   }
-  getAllUsers() {
-    return this.http.get(`${baseApi}/users`);
+  getAllUsers(roleType = '') {
+    return this.http.get(`${baseApi}/users?role=${roleType}`);
   }
 
   addUser(user: any) {

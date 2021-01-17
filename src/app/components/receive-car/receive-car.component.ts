@@ -106,7 +106,7 @@ export class ReceiveCarComponent implements OnInit {
         .getAllRepairs()
         .toPromise()) as [];
       this.users = this.filteredUsers = (await this.userService
-        .getAllUsers()
+        .getAllUsers('Mechanic')
         .toPromise()) as [];
       this.setupForms();
       this.loading = false;

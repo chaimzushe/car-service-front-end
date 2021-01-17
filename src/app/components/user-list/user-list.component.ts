@@ -15,18 +15,20 @@ export class UserListComponent implements OnInit {
   subNavInfo: subNavInfo = {
     actionText: 'New User',
     actionLink: ['edit', 'new'],
-    backLink: '/home'
+    backLink: '/home',
+    hideFilter: true
   }
   subs: Subscription[] = [];
   noItemsText = "Loading...";
   users = [];
+  filteredUsers = [];
   constructor(private userService: UserService ,
               private router: Router,
               private route: ActivatedRoute,
               private dialog: MatDialog) { }
 
   async ngOnInit() {
-    this.users = await this.userService.getAllUsers().toPromise() as [];
+    this.filteredUsers = this.users = await this.userService.getAllUsers().toPromise() as [];
   }
 
   ngOnDestroy(): void {
@@ -57,6 +59,14 @@ export class UserListComponent implements OnInit {
       this.subs.push(removeSub);
     });
     this.subs.push(dialogSub);
+  }
+
+  search(e){
+    this.filteredUsers = this.users.filter( r => r.name.toLowerCase().startsWith(e.toLowerCase()));
+    if(this.filteredUsers.length === 0){
+      this.noItemsText = "No users found";
+    }
+
   }
 
 }
