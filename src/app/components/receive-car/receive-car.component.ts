@@ -56,6 +56,7 @@ export class ReceiveCarComponent implements OnInit {
   loading = true;
   serviceId: any;
   serviceObj: any = {};
+  LoadingText = "Loading...";
   constructor(
     private carService: CarService,
     private repairService: RepairService,
@@ -176,10 +177,14 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async addCar() {
+    this.loading = true;
+    this.LoadingText = "Calculating repairs to add";
     let currentMiles = this.carGroupControl.value.miles;
     let carId = this.carGroupControl.value.carNumber.car_id
     let allServices = await this.carServiceService.applyFilters({}, carId).toPromise();
     this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles))
+    this.loading = false;
+    this.LoadingText = "";
   }
 
   stripNonNumbers(input) {
