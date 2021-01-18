@@ -43,6 +43,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoginErrorComponent } from './components/login-error/login-error.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CarHistoryComponent } from './components/car-history/car-history.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -90,6 +91,7 @@ ModuleRegistry.registerModules(AllModules);
     MatNativeDateModule,
     MatProgressSpinnerModule,
     InfiniteScrollModule,
+    MatChipsModule,
     AgGridModule.withComponents([]),
   ],
   providers: [DatePipe,

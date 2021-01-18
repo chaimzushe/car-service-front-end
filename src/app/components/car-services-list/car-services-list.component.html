@@ -5,10 +5,18 @@
 </div>
 
 
-
-
+<div *ngIf="currentFilters?.length" class="current-filters">
+  <mat-chip-list #chipList>
+    <b>Current filters: </b>
+    <mat-chip *ngFor="let filter of currentFilters" [removable]="true" (removed)="removeFilter(filter)">
+      {{filter}}
+      <span matChipRemove>
+        <i class="fal fa-trash-alt"></i>
+      </span>
+    </mat-chip>
+  </mat-chip-list>
+</div>
 <div
-
     infiniteScroll
       [infiniteScrollDistance]="2"
       [infiniteScrollThrottle]="50"

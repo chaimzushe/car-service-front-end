@@ -31,6 +31,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     { name: 'COMPLETED', active: false },
     { name: 'APPROVED', active: false },
   ];
+
+  get currentFilters(){
+    return Object.keys(this.filter).filter( k => {
+      return !['status', 'skip', 'limit', 'searchWord'].includes(k) && this.filter[k]
+    });
+  }
   constructor(private carServiceService: CarServiceService,
     private router: Router,
     private userService: UserService,
@@ -65,6 +71,13 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
+  }
+
+  removeFilter(f){
+    this.filter[f] = null;
+    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
+      this.services = f;
+    });
   }
 
   async onScroll() {

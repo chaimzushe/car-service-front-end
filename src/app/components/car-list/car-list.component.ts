@@ -38,9 +38,7 @@ export class CarListComponent implements OnInit, OnDestroy {
 
   };
 
-  toggleGridView(){
-    this.girdView = !this.girdView;
-  }
+
 
   columnDefs = [
     { field: 'car_id' , width: 100},
