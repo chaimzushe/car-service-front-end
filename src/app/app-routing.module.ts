@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CarFormComponent } from './components/car-form/car-form.component';
+import { CarHistoryComponent } from './components/car-history/car-history.component';
 import { CarListComponent } from './components/car-list/car-list.component';
 import { CarServicesListComponent } from './components/car-services-list/car-services-list.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -41,6 +42,10 @@ const routes: Routes = [
       {
         path: ":id",
         component: ReceiveCarComponent,
+      },
+      {
+        path: "history/:id",
+        component: CarHistoryComponent,
       }
     ]
   },

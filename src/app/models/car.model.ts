@@ -24,9 +24,10 @@ interface workRepair{
 export interface subNavInfo {
   actionText: string;
   backLink: string;
-  actionLink: string[];
+  actionLink?: string[];
   gridView?: boolean;
   hideFilter?: boolean;
+  hideSearch?: boolean;
 }
 
 export interface Service {

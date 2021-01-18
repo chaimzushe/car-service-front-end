@@ -42,6 +42,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoginErrorComponent } from './components/login-error/login-error.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { CarHistoryComponent } from './components/car-history/car-history.component';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -65,7 +66,8 @@ ModuleRegistry.registerModules(AllModules);
     UserFormComponent,
     CarServicesListComponent,
     ServicesFilterComponent,
-    LoginErrorComponent
+    LoginErrorComponent,
+    CarHistoryComponent
   ],
   imports: [
     BrowserModule,

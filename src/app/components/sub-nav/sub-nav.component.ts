@@ -34,6 +34,9 @@ export class SubNavComponent implements OnInit {
   }
 
   navigateToAction() {
+    if(!this.subNavInfo.actionLink){
+      return this.snackbar.open("Work in progress. Thank you for your patience 😊 ", "dismiss", { duration: 3000, panelClass: "err-panel" })
+    }
     this.router.navigate(this.subNavInfo.actionLink, { relativeTo: this.route })
   }
 

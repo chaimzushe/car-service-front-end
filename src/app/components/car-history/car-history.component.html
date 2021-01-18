@@ -1,7 +1,9 @@
 <app-sub-nav (gridViewToggle)="toggleGridView()" [subNavInfo]="subNavInfo"></app-sub-nav>
-
-<div>
+<h3 class="text-header">History for car  #{{carNumber}}</h3>
+<div  [hidden]="loading">
   <ag-grid-angular
+  #gridOptions
+  (gridReady)="onReady($event)"
   style="width: 100%; height: calc(100vh - 170px);"
       class="ag-theme-alpine"
       [rowData]="rowData"
@@ -11,5 +13,8 @@
   </ag-grid-angular>
 </div>
 
-<!--
-<app-no-items-found [text]="noItemsText" *ngIf="cars.length ===0"></app-no-items-found> -->
+<div *ngIf="loading" class="spinner">
+  <mat-spinner></mat-spinner>
+</div>
+
+

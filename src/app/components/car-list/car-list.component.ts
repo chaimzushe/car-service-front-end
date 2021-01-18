@@ -17,7 +17,8 @@ export class CarListComponent implements OnInit, OnDestroy {
     actionText: 'New Car',
     actionLink: ['edit', 'new'],
     backLink: '/home',
-    hideFilter: true
+    hideFilter: true,
+     hideSearch: true
   }
   girdView =true;
   rowData: any;
@@ -34,6 +35,7 @@ export class CarListComponent implements OnInit, OnDestroy {
     enableRowGroup: true,
     headerCheckboxSelectionFilteredOnly: true,
     suppressPaste: true,
+
   };
 
   toggleGridView(){

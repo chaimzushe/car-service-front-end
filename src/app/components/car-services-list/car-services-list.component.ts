@@ -126,5 +126,9 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     });
   }
 
+  goToHistory(service){
+    this.router.navigate(['history',service.carNumber], {relativeTo: this.route})
+  }
+
 
 }
