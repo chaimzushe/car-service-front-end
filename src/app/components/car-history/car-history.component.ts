@@ -92,6 +92,9 @@ export class CarHistoryComponent implements OnInit {
     });
     return row;
   }
+  exportToCvs(){
+    this.gridApi.exportDataAsCsv()
+  }
 
 
 

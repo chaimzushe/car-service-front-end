@@ -13,6 +13,7 @@ export class SubNavComponent implements OnInit {
   @Output() gridViewToggle = new EventEmitter()
   @Output() searched = new EventEmitter();
   @Output() dialogOpened = new EventEmitter();
+  @Output() actionBtnClicked = new EventEmitter();
 
   isGrid = false;
   searchTerm: any;
@@ -35,9 +36,10 @@ export class SubNavComponent implements OnInit {
 
   navigateToAction() {
     if(!this.subNavInfo.actionLink){
-      return this.snackbar.open("Work in progress. Thank you for your patience 😊 ", "dismiss", { duration: 3000, panelClass: "err-panel" })
+      return this.actionBtnClicked.emit();
+    } else {
+        this.router.navigate(this.subNavInfo.actionLink, { relativeTo: this.route })
     }
-    this.router.navigate(this.subNavInfo.actionLink, { relativeTo: this.route })
   }
 
   setGridView(){
