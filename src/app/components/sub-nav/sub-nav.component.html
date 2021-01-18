@@ -3,6 +3,10 @@
     <i (click)="navigateBack()" class="far fa-long-arrow-left"></i>
   </span>
   <span *ngIf="subNavInfo.actionText" class="actions">
+
+    <span *ngIf="subNavInfo.sync" (click)="sync()" class="icon sync">
+      <i class="fal fa-sync"></i>
+    </span>
     <span *ngIf="!subNavInfo.hideFilter" (click)="filter()" class="icon filter">
       <i class="fal fa-filter"></i>
     </span>

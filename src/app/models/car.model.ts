@@ -28,6 +28,7 @@ export interface subNavInfo {
   gridView?: boolean;
   hideFilter?: boolean;
   hideSearch?: boolean;
+  sync?: boolean;
 }
 
 export interface Service {

@@ -8,6 +8,7 @@ import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-a
 import { Subscription } from 'rxjs';
 import { ServicesFilterComponent } from 'src/app/dialogs/services-filter/services-filter.component';
 import { UserService } from 'src/app/services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-car-services-list',
   templateUrl: './car-services-list.component.html',
@@ -18,7 +19,8 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   subNavInfo: subNavInfo = {
     actionText: 'Receive Car',
     actionLink: ['new'],
-    backLink: '/home'
+    backLink: '/home',
+    sync: true
   }
   services: Service[] = [];
   subs: Subscription[] = [];
@@ -40,6 +42,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   constructor(private carServiceService: CarServiceService,
     private router: Router,
     private userService: UserService,
+    private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private dialog: MatDialog) { }
@@ -52,6 +55,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
+  }
+
+  sync(){
+    return this.snackbar.open("sync with google sheets in progress", "dismiss", { duration: 3000, panelClass: "err-panel" })
   }
 
   setActive(link, idx) {

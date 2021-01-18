@@ -14,6 +14,7 @@ export class SubNavComponent implements OnInit {
   @Output() searched = new EventEmitter();
   @Output() dialogOpened = new EventEmitter();
   @Output() actionBtnClicked = new EventEmitter();
+  @Output() syncClicked = new EventEmitter();
 
   isGrid = false;
   searchTerm: any;
@@ -24,6 +25,10 @@ export class SubNavComponent implements OnInit {
 
   search(){
     this.searched.emit(this.searchTerm);
+  }
+
+  sync(){
+    this.syncClicked.emit(this.searchTerm);
   }
 
   filter(){
