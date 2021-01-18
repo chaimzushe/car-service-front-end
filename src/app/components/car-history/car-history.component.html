@@ -3,6 +3,7 @@
 <div  [hidden]="loading">
   <ag-grid-angular
   #gridOptions
+  (cellValueChanged)="onCellValueChanged($event)"
   (gridReady)="onReady($event)"
   style="width: 100%; height: calc(100vh - 170px);"
       class="ag-theme-alpine"

@@ -30,6 +30,7 @@ export class CarHistoryComponent implements OnInit {
 
   gridApi: GridApi;
   columnApi: ColumnApi;
+  allServices: any[] = [];
   constructor(private carServiceService: CarServiceService, private route: ActivatedRoute, private datePipe: DatePipe) { }
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
@@ -57,8 +58,8 @@ export class CarHistoryComponent implements OnInit {
   async ngOnInit() {
     this.route.params.subscribe(async p => {
       this.carNumber = p.id;
-      let allServices = await this.carServiceService.applyFilters({}, this.carNumber).toPromise();
-      this.setupRowColData(allServices)
+      this.allServices = await this.carServiceService.applyFilters({}, this.carNumber).toPromise() as any[];
+      this.setupRowColData(this.allServices)
     })
 
   }
@@ -92,8 +93,15 @@ export class CarHistoryComponent implements OnInit {
     });
     return row;
   }
-  exportToCvs(){
+  exportToCvs() {
     this.gridApi.exportDataAsCsv()
+  }
+
+  onCellValueChanged(e) {
+    debugger
+    console.log(this.allServices[e.rowIndex])
+    console.log(e.data)
+    // save to backend
   }
 
 
