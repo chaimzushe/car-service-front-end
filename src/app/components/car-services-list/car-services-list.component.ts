@@ -26,6 +26,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
   users: any[] = [];
   searchWord: any;
+  noItemText = 'Loading...';
   filter: any = { limit: 10, skip: 0 };
   links = [
     { name: '', active: true },
@@ -48,7 +49,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog) { }
 
   async ngOnInit() {
-    this.services = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
+    this.getList();
     this.users = await this.userService.getAllUsers().toPromise() as [];
     this.users = this.users.map(u => u.name);
   }
@@ -65,9 +66,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.links.forEach((l, i) => l.active = i === idx);
     this.filter.status = link.name;
     this.filter.skip = 0;
-    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
-      this.services = f;
-    });
+   this.getList();
   }
 
   getFields(service: Service) {
@@ -97,6 +96,14 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     service.expanded = !service.expanded
   }
 
+  getList(){
+   let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
+      this.services = f;
+      if(f.length === 0) this.noItemText = "No services found";
+    });
+    this.subs.push(sub)
+  }
+
   deleteService(service, i) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '250px',
@@ -118,9 +125,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   search(e) {
     this.searchWord = e;
     this.filter.skip = 0;
-    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
-      this.services = f;
-    });
+    this.getList();
   }
 
   editService(service, i) {
@@ -129,21 +134,20 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   openFilter() {
 
-    let dialogRef = this.dialog.open(ServicesFilterComponent, {
+    let  dialogRef = this.dialog.open(ServicesFilterComponent, {
       width: "400px",
       autoFocus: false,
       data: { mechanics: this.users }
     });
 
-    dialogRef.afterClosed().subscribe(filter => {
+    let closedSub = dialogRef.afterClosed().subscribe(filter => {
       if (!filter) {
         return;
       }
       this.filter = { ...this.filter, ...filter, skip: 0 };
-      this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
-        this.services = f;
-      });
+      this.getList();
     });
+    this.subs.push(closedSub);
   }
 
   goToHistory(service){
