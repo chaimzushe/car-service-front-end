@@ -94,11 +94,10 @@ export class CarHistoryComponent implements OnInit {
     return row;
   }
   exportToCvs() {
-    this.gridApi.exportDataAsCsv()
+    this.gridApi.exportDataAsCsv({fileName: `car-#${this.carNumber}-history`});
   }
 
   onCellValueChanged(e) {
-    debugger
     console.log(this.allServices[e.rowIndex])
     console.log(e.data)
     // save to backend
