@@ -198,7 +198,8 @@ export class ReceiveCarComponent implements OnInit {
     let i = 0;
 
     if (!passedMilesCheck) {
-      while (this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
+      if(!allServices[i]) debugger
+      while (allServices[i] && this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
         if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name)) {
           passedMilesCheck = true;
           // repair was done already
@@ -212,7 +213,7 @@ export class ReceiveCarComponent implements OnInit {
       var today = new Date()
       var checkUntilDate = new Date().setDate(today.getDate() - r.intervalCheck)
       let i = 0;
-      while (new Date(allServices[i].serviceTime) >= new Date(checkUntilDate)) {
+      while (allServices[i] && new Date(allServices[i].serviceTime) >= new Date(checkUntilDate)) {
         if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name)) {
           passedDateLapsCheck = true;
           // repair was done already
@@ -288,12 +289,18 @@ export class ReceiveCarComponent implements OnInit {
     if (this.serviceId) {
       return this.updateService(newCarService)
     }
+    this.loading = true;
+    this.LoadingText = "Generating pdf file";
     this.carService.createService(newCarService).subscribe(x => {
       var blob = new Blob([x], { type: 'application/pdf' });
       var blobURL = URL.createObjectURL(blob);
       window.open(blobURL);
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
       this.router.navigate(['/services'])
+      this.loading = false;
+      this.LoadingText = "";
+    }, err => {
+      this.loading = false;
     });
   }
   updateService(newCarService) {

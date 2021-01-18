@@ -26,11 +26,15 @@ mat-form-field {
 
 .spinner{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
+  p {
+    margin-top: 22px;
+    font-weight: bold;
+  }
 }
