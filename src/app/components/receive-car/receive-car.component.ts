@@ -129,6 +129,9 @@ export class ReceiveCarComponent implements OnInit {
       price: [this.serviceObj.priceOfOtherWork || 0]
     });
     let searchWord;
+    if(this.serviceId){
+      this.carGroupControl.controls['carNumber'].disable();
+    } else {
     this.carGroupControl.controls['carNumber'].valueChanges.pipe(
       debounceTime(200),
       map((e: any) => {
@@ -141,6 +144,7 @@ export class ReceiveCarComponent implements OnInit {
       .subscribe((res: []) => {
         this.filteredCars = res;
       });
+    }
     this.loading = false;
   }
 
@@ -176,8 +180,10 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async addCar() {
+    if(this.serviceId) return;
     this.loading = true;
     this.LoadingText = "Calculating repairs to add";
+
     let currentMiles = this.carGroupControl.value.miles;
     let carId = this.carGroupControl.value.carNumber.car_id
     let allServices = await this.carServiceService.applyFilters({}, carId).toPromise();
@@ -188,6 +194,10 @@ export class ReceiveCarComponent implements OnInit {
 
   stripNonNumbers(input) {
     return Number(String(input).replace(/\D/g, ''));
+  }
+
+  clearCurRepairs(){
+    this.repairsNeeded = [];
   }
 
   checkIfAutoAddRepair(r, allServices, currentMiles) {
@@ -278,8 +288,8 @@ export class ReceiveCarComponent implements OnInit {
     const newCarService = {
       mechanic: (mechanic && mechanic._id || null),
       mechanicName: (mechanic && mechanic.name || null),
-      carNumber: this.carGroupControl.value.carNumber.car_id,
-      car: this.carGroupControl.value.carNumber._id,
+      carNumber: (this.carGroupControl.value.carNumber && this.carGroupControl.value.carNumber.car_id),
+      car: (this.carGroupControl.value.carNumber && this.carGroupControl.value.carNumber._id),
       milesAtService: this.carGroupControl.value.miles,
       note: this.repairListFormGroup.value.note,
       visitType: this.carGroupControl.value.visitType,

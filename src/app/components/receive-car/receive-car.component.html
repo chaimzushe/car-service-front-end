@@ -20,6 +20,7 @@
             <mat-autocomplete
             [displayWith]="carDisplayFunc"
               autoActiveFirstOption
+              (optionSelected)="clearCurRepairs()"
               #autoCars="matAutocomplete"
             >
               <mat-option *ngFor="let car of filteredCars" [value]="car">
@@ -59,7 +60,7 @@
 
                   <select  [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.qty" name="car">
                     <option value="" selected></option>
-                    <option *ngFor="let qty of [1,2,3,4]" [value]="qty">
+                    <option *ngFor="let qty of [1,2,3,4,5,6,7,8,9,10,11,12,13]" [value]="qty">
                       {{qty}}
                     </option>
                   </select>
