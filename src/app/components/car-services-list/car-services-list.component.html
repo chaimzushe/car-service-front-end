@@ -45,9 +45,10 @@ class="list">
       </span>
     </span>
     <mat-menu class="menu" #menu="matMenu">
-      <button mat-menu-item>
-        <i class="fas fa-check-circle"></i>
-        <span>Approve</span>
+      <button (click)="toggleApprove(service)" mat-menu-item>
+        <i *ngIf="service.status === 'APPROVED'" class="fal fa-thumbs-down"></i>
+        <i *ngIf="service.status !== 'APPROVED'" class="fal fa-thumbs-up"></i>
+        <span>{{service.status === 'APPROVED' ? 'Disapprove' : 'Approve'}}</span>
       </button>
       <button (click)="editService(service, i)" mat-menu-item>
         <i class="fal fa-edit"></i>

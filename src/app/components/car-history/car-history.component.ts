@@ -53,6 +53,7 @@ export class CarHistoryComponent implements OnInit {
     { field: 'serviceTime', pinned: 'left' },
     { field: 'milesAtService' },
     { field: 'mechanicName' },
+    { field: 'status' },
     { field: 'visitType' },
   ];
   async ngOnInit() {
@@ -66,7 +67,6 @@ export class CarHistoryComponent implements OnInit {
   setupRowColData(allServices) {
 
     this.rowData = allServices.map(s => this.addRowCol(s));
-    console.log(this.rowData)
     this.gridOptions.api.setColumnDefs(this.columnDefs);
     this.gridOptions.api.setRowData(this.rowData);
     this.loading = false;
@@ -83,11 +83,12 @@ export class CarHistoryComponent implements OnInit {
       milesAtService: s.milesAtService,
       mechanicName: s.mechanicName,
       visitType: s.visitType,
+      status: s.status
     }
     s.repairs.forEach(r => {
       if (!this.seenRepairs[r.repair.name]) {
         this.seenRepairs[r.repair.name] = true;
-        this.columnDefs.push({ field: r.repair.name, default: '-' })
+        this.columnDefs.push({ field: r.repair.name, width: 150 })
       };
       row[r.repair.name] = `${(r.qty || '-')}`;
     });

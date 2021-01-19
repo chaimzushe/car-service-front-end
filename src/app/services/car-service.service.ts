@@ -32,6 +32,11 @@ export class CarServiceService {
     return this.http.post(`${baseApi}/update-cars-service/${id}`, service);
   }
 
+  editUServiceStatus(status: any, id: number) {
+    return this.http.post(`${baseApi}/update-cars-service-status/${id}`, {status});
+  }
+
+
   getServiceDetail(id: any) {
     return this.http.get(`${baseApi}/car-service/${id}`);
   }

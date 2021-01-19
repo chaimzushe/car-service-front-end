@@ -101,7 +101,7 @@ export class ReceiveCarComponent implements OnInit {
           name: r.repair.name,
           note: r.note
         }));
-        console.log(this.serviceObj)
+
       }
       this.filteredRepairs = this.allRepairs = (await this.repairService
         .getAllRepairs()
@@ -157,7 +157,6 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   filterCars(value) {
-    console.log(value)
     return this.carService.getCarTypeAhead(value)
   }
 
@@ -266,6 +265,7 @@ export class ReceiveCarComponent implements OnInit {
     let curRepair = this.allRepairs.find(r => r.name === repair.name);
     return curRepair._id;
   }
+
   createLabel() {
 
     const repairs = this.repairsNeeded.map(r => ({
@@ -304,12 +304,11 @@ export class ReceiveCarComponent implements OnInit {
     });
   }
   updateService(newCarService) {
-    this.snackbar.open('not ready yet', 'Dismiss', {
-      duration: 3000, panelClass: 'err-panel'
+    this.loading = true;
+    this.LoadingText = "Updating service info";
+    this.carServiceService.editUService(newCarService, this.serviceId).subscribe(x => {
+      this.snackbar.open("Success", "Dismiss", { duration: 3000 });
+      this.router.navigate(['/services'])
     });
-    // this.carServiceService.editUService(newCarService, this.serviceId).subscribe(x => {
-    //   this.snackbar.open("Success", "Dismiss", { duration: 3000 });
-    //   this.router.navigate(['/services'])
-    // });
   }
 }

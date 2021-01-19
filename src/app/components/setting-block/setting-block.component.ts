@@ -12,7 +12,7 @@ export class SettingBlockComponent implements OnInit {
   constructor(private snackbar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
-    console.log(this.setting)
+
   }
 
   navigate() {
