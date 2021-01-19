@@ -8,8 +8,8 @@
 <div *ngIf="currentFilters?.length" class="current-filters">
   <mat-chip-list #chipList>
     <b>Current filters: </b>
-    <mat-chip *ngFor="let filter of currentFilters" [removable]="true" (removed)="removeFilter(filter)">
-      {{filter}}
+    <mat-chip *ngFor="let filter of currentFilters; index as i" [removable]="true" (removed)="removeFilter(filter, i)">
+      <b> {{filter.name}}:</b>  <span class="chip-value">{{filter.value}}</span>
       <span matChipRemove>
         <i class="fal fa-trash-alt"></i>
       </span>

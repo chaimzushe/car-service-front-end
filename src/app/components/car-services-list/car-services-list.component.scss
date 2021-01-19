@@ -140,8 +140,16 @@ button {
   margin-top: 12px;
   width: 100%;
   padding: 22px;
+
+  b {
+    margin-right:6px;
+  }
   i {
     color: red;
+  }
+
+  .chip-value {
+    font-weight: 300;
   }
 }
 .price{

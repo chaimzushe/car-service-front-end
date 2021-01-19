@@ -35,11 +35,15 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     { name: 'APPROVED', active: false },
   ];
 
-  get currentFilters(){
-    return Object.keys(this.filter).filter( k => {
-      return !['status', 'skip', 'limit', 'searchWord'].includes(k) && this.filter[k]
-    });
+  filterNameMap = {
+    user: 'Mechanic',
+    startDate: 'From Date',
+    endDate: 'Till Date',
   }
+
+
+  currentFilters = [];
+
   constructor(private carServiceService: CarServiceService,
     private router: Router,
     private userService: UserService,
@@ -69,11 +73,22 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
    this.getList();
   }
 
+  setCurrentFilters(){
+    this.currentFilters = Object.keys(this.filter).filter( k => {
+      return !['status', 'skip', 'limit', 'searchWord'].includes(k) && this.filter[k]
+    }).map( k => {
+      let value = this.filter[k];
+      debugger
+      if((value instanceof Date)) value = this.datePipe.transform(new Date(value), 'longDate')
+      return {name: this.filterNameMap[k], value, realName: k}
+    } );
+  }
+
   getPrice(service){
     return 20;
   }
   stripNonNumbers(input) {
-    return Number(String(input).replace(/[^0-9.,]/g, ""));
+    return Number(String(input).replace(/[^0-9.]/g, ""));
   }
   getFields(service: Service) {
     return [
@@ -85,8 +100,9 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     ]
   }
 
-  removeFilter(f){
-    this.filter[f] = null;
+  removeFilter(f, i){
+    this.filter[f.realName] = null;
+    debugger
     this.getList();
   }
 
@@ -121,7 +137,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
    let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
       this.services.forEach( s => s.totalPrice = this.getTotalPrice(s) )
+      this.setCurrentFilters();
       if(f.length === 0) this.noItemText = "No services found";
+
+
     });
     this.subs.push(sub)
   }
@@ -159,7 +178,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     let  dialogRef = this.dialog.open(ServicesFilterComponent, {
       width: "400px",
       autoFocus: false,
-      data: { mechanics: this.users }
+      data: { mechanics: this.users, filter: this.filter }
     });
 
     let closedSub = dialogRef.afterClosed().subscribe(filter => {
