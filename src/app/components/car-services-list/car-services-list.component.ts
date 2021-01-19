@@ -23,6 +23,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     sync: true
   }
   services: Service[] = [];
+  loading = true;
   subs: Subscription[] = [];
   users: any[] = [];
   searchWord: any;
@@ -78,7 +79,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       return !['status', 'skip', 'limit', 'searchWord'].includes(k) && this.filter[k]
     }).map( k => {
       let value = this.filter[k];
-      debugger
       if((value instanceof Date)) value = this.datePipe.transform(new Date(value), 'longDate')
       return {name: this.filterNameMap[k], value, realName: k}
     } );
@@ -102,7 +102,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   removeFilter(f, i){
     this.filter[f.realName] = null;
-    debugger
     this.getList();
   }
 
@@ -117,9 +116,11 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   async onScroll() {
     this.filter.skip += 10;
+    this.loading = true;
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
     mewServices.forEach( s => s.totalPrice = this.getTotalPrice(s))
     this.services.push(...mewServices);
+    this.loading = false;
   }
 
   async toggleApprove(service){
@@ -134,10 +135,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   getList(){
+    this.loading = true;
    let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
       this.services.forEach( s => s.totalPrice = this.getTotalPrice(s) )
       this.setCurrentFilters();
+      this.loading = false;
       if(f.length === 0) this.noItemText = "No services found";
 
 

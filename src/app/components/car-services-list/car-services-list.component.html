@@ -78,4 +78,8 @@ class="list">
   </mat-card>
 
 </div>
+
+<div *ngIf="loading" class="spinner">
+  <mat-spinner></mat-spinner>
+</div>
 <app-no-items-found [text]="noItemText" *ngIf="services.length ===0"></app-no-items-found>
