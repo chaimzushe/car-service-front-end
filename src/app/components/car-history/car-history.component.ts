@@ -6,6 +6,8 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { Subscription } from 'rxjs';
 import { subNavInfo } from 'src/app/models/car.model';
 import { CarServiceService } from 'src/app/services/car-service.service';
+import { EditRendererComponent } from '../edit-renderer/edit-renderer.component';
+import "ag-grid-enterprise";
 
 @Component({
   selector: 'app-car-history',
@@ -19,6 +21,7 @@ export class CarHistoryComponent implements OnInit {
   subs: Subscription[] = [];
   seenRepairs = {
   };
+
   subNavInfo: subNavInfo = {
     actionText: 'Export to excels',
     backLink: '/services',
@@ -31,6 +34,7 @@ export class CarHistoryComponent implements OnInit {
   gridApi: GridApi;
   columnApi: ColumnApi;
   allServices: any[] = [];
+  frameworkComponents: { editRenderer: typeof EditRendererComponent; };
   constructor(private carServiceService: CarServiceService, private route: ActivatedRoute, private datePipe: DatePipe) { }
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
@@ -50,18 +54,55 @@ export class CarHistoryComponent implements OnInit {
 
 
   columnDefs: any[] = [
-    { field: 'serviceTime', pinned: 'left' },
+    {
+      pinned: 'left',
+      order: 1,
+      visible: true,
+      width: 40,
+      lockPosition: true,
+      cellRenderer: "editRenderer",
+      suppressToolPanel: "true",
+      filter: false,
+    },
+    { field: 'serviceTime', pinned: 'left' ,  order: 2,},
     { field: 'milesAtService' },
     { field: 'mechanicName' },
     { field: 'status' },
     { field: 'visitType' },
+    { field: 'id' , hide: true },
   ];
+
+
+
+  sideBar = {
+    toolPanels: [
+      {
+        id: "columns",
+        labelDefault: "Columns",
+        labelKey: "columns",
+        iconKey: "columns",
+        toolPanel: "agColumnsToolPanel",
+        toolPanelParams: {
+          suppressRowGroups: true,
+          suppressValues: true,
+          suppressPivots: true,
+          suppressPivotMode: true,
+        },
+      },
+      "filters",
+    ],
+    defaultToolPanel: "",
+  };
+
   async ngOnInit() {
     this.route.params.subscribe(async p => {
       this.carNumber = p.id;
       this.allServices = await this.carServiceService.applyFilters({}, this.carNumber).toPromise() as any[];
       this.setupRowColData(this.allServices)
-    })
+    });
+    this.frameworkComponents = {
+      editRenderer: EditRendererComponent,
+    };
 
   }
   setupRowColData(allServices) {
@@ -83,7 +124,8 @@ export class CarHistoryComponent implements OnInit {
       milesAtService: s.milesAtService,
       mechanicName: s.mechanicName,
       visitType: s.visitType,
-      status: s.status
+      status: s.status,
+      id: s._id
     }
     s.repairs.forEach(r => {
       if (!this.seenRepairs[r.repair.name]) {

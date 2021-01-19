@@ -44,6 +44,7 @@ import { LoginErrorComponent } from './components/login-error/login-error.compon
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CarHistoryComponent } from './components/car-history/car-history.component';
 import {MatChipsModule} from '@angular/material/chips';
+import { EditRendererComponent } from './components/edit-renderer/edit-renderer.component';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -68,7 +69,8 @@ ModuleRegistry.registerModules(AllModules);
     CarServicesListComponent,
     ServicesFilterComponent,
     LoginErrorComponent,
-    CarHistoryComponent
+    CarHistoryComponent,
+    EditRendererComponent
   ],
   imports: [
     BrowserModule,

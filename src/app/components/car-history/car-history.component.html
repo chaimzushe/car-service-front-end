@@ -5,7 +5,9 @@
   #gridOptions
   (cellValueChanged)="onCellValueChanged($event)"
   (gridReady)="onReady($event)"
-  style="width: 100%; height: calc(100vh - 170px);"
+  [sideBar]="sideBar"
+  [frameworkComponents]="frameworkComponents"
+  style="width: 100%; height: calc(100vh - 270px);"
       class="ag-theme-alpine"
       [rowData]="rowData"
       [columnDefs]="columnDefs"
