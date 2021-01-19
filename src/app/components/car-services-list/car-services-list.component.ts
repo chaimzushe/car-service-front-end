@@ -69,6 +69,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
    this.getList();
   }
 
+  getPrice(service){
+    return 20;
+  }
+  stripNonNumbers(input) {
+    return Number(String(input).replace(/[^0-9.,]/g, ""));
+  }
   getFields(service: Service) {
     return [
       { name: 'Miles', value: service.milesAtService },
@@ -81,14 +87,22 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   removeFilter(f){
     this.filter[f] = null;
-    this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
-      this.services = f;
+    this.getList();
+  }
+
+  getTotalPrice(s){
+    let sum = 0
+    s.repairs.forEach(r => {
+      sum += r.qty * r.repair.price;
     });
+    sum += this.stripNonNumbers(s.priceOfOtherWork);
+    return sum;
   }
 
   async onScroll() {
     this.filter.skip += 10;
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
+    mewServices.forEach( s => s.totalPrice = this.getTotalPrice(s))
     this.services.push(...mewServices);
   }
 
@@ -106,6 +120,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   getList(){
    let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
+      this.services.forEach( s => s.totalPrice = this.getTotalPrice(s) )
       if(f.length === 0) this.noItemText = "No services found";
     });
     this.subs.push(sub)

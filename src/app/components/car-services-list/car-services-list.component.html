@@ -34,8 +34,11 @@ class="list">
 
     </span>
     <span class="user-expand">
-      <span class="user">
-        {{(service.mechanic?.name || 'NA').slice(0, 2) | uppercase }}
+      <span [matTooltip]="'Total price'" class="price">
+        {{ (service.totalPrice )| currency: 0 }}
+      </span>
+      <span [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
+        {{(service.mechanic?.name || 'N/A').slice(0, 3) | uppercase }}
       </span>
       <span [matMenuTriggerFor]="menu" class="action-icon">
         <i class="fal fa-cog"></i>

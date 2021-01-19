@@ -209,7 +209,8 @@ export class ReceiveCarComponent implements OnInit {
     if (!passedMilesCheck) {
       if(!allServices[i]) debugger
       while (allServices[i] && this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
-        if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name)) {
+        let hasRep = allServices[i].repairs.find(curRep => curRep.repair.name === r.name && curRep.qty > 0);
+        if (hasRep) {
           passedMilesCheck = true;
           // repair was done already
           break;
@@ -223,7 +224,7 @@ export class ReceiveCarComponent implements OnInit {
       var checkUntilDate = new Date().setDate(today.getDate() - r.intervalCheck)
       let i = 0;
       while (allServices[i] && new Date(allServices[i].serviceTime) >= new Date(checkUntilDate)) {
-        if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name)) {
+        if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name && curRep.qty > 0)) {
           passedDateLapsCheck = true;
           // repair was done already
           break;

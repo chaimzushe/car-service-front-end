@@ -47,6 +47,7 @@ export interface Service {
   _id: string;
   expanded?: boolean;
   serviceTime: Date;
+  totalPrice: number;
 }
 
 

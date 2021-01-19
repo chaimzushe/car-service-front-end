@@ -51,8 +51,9 @@
 
 .user {
   width: 30px;
+  font-size: 11px;
   height: 30px;
-  background-color: #e28585;
+  background-color: #015673;
   color: white;
   display: inline-block;
   text-align: center;
@@ -143,6 +144,13 @@ button {
     color: red;
   }
 }
-
+.price{
+  border: 1px solid #4b8400;
+  margin-right: 8px;
+  background-color: #4b8400;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: white;
+}
 
 
