@@ -118,7 +118,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.filter.skip += 10;
     this.loading = true;
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
-    mewServices.forEach( s => s.totalPrice = this.getTotalPrice(s))
+    mewServices.forEach( s =>{
+       s.totalPrice = this.getTotalPrice(s);
+       s.expanded = true;
+    })
     this.services.push(...mewServices);
     this.loading = false;
   }
@@ -138,7 +141,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.loading = true;
    let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
-      this.services.forEach( s => s.totalPrice = this.getTotalPrice(s) )
+      this.services.forEach( s =>{
+        s.totalPrice = this.getTotalPrice(s);
+        s.expanded = true;
+     })
       this.setCurrentFilters();
       this.loading = false;
       if(f.length === 0) this.noItemText = "No services found";

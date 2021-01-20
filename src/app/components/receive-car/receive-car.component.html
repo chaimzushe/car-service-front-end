@@ -6,9 +6,9 @@
     <mat-vertical-stepper *ngIf="carGroupControl" [linear]="!serviceId" #stepper>
       <mat-step [stepControl]="carGroupControl">
         <form [formGroup]="carGroupControl">
-          <ng-template matStepLabel>Enter Car Number</ng-template>
+          <ng-template matStepLabel>Enter Car or VIN Number</ng-template>
           <mat-form-field>
-            <mat-label>Car Number</mat-label>
+            <mat-label>Car or VIN Number </mat-label>
             <input
               type="text"
               placeholder="Car#"
@@ -24,7 +24,7 @@
               #autoCars="matAutocomplete"
             >
               <mat-option *ngFor="let car of filteredCars" [value]="car">
-                {{ car.car_id }}
+                #{{ car.car_id }} - VIN:{{car.vin}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>

@@ -180,7 +180,7 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async addCar() {
-    if(this.serviceId) return;
+    if(this.serviceId || !this.carGroupControl.valid) return;
     this.loading = true;
     this.LoadingText = "Calculating repairs to add";
 
