@@ -21,6 +21,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
   subscription: any = [];
   form: any;
   isSubmitting: any;
+  visitTypes = ['Maintenance', 'Accident', 'Inspection', 'TLC Other', 'Scheduled'];
   constructor(private route: ActivatedRoute,
     private repairService: RepairService, private fb: FormBuilder,
     private snackbar: MatSnackBar,
@@ -49,6 +50,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
       name: [repair.name, [Validators.required]],
       intervalCheck: [repair.intervalCheck],
       checkWhenMilageIsAt: [repair.checkWhenMilageIsAt],
+      forVisit: [repair.forVisit],
       price: [repair.price],
     });
   }

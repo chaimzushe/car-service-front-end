@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ServicesFilterComponent } from 'src/app/dialogs/services-filter/services-filter.component';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 @Component({
   selector: 'app-car-services-list',
   templateUrl: './car-services-list.component.html',
@@ -131,6 +132,21 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     service.status = newStatus;
     await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
     this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
+    if(newStatus === "APPROVED" && service.repairs.length > 6 ) {
+      let desc = "This work was not fully added to google spreadsheets as it had more then 6 jobs. Please make sure to fix the spreadsheet. An email has beed sent out to you to remind you";
+      const data = { status: 'Warning', desc, icon: "fal fa-exclamation-circle" };
+      this.openSuccessDialog(data)
+    }
+  }
+
+  openSuccessDialog(data: { status: string; desc: string; icon: string; }) {
+    const dialog = this.dialog.open(GoogleSpreadsheetWarnComponent,
+      {
+        data,
+        width: "500px"
+      }
+    )
+    return dialog;
   }
 
   toggleExpand(service: Service) {

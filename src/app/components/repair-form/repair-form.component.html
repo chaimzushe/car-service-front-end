@@ -17,6 +17,13 @@
       <input formControlName="checkWhenMilageIsAt"  matInput placeholder="Miles">
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Visit Reason</mat-label>
+      <mat-select formControlName="forVisit">
+        <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field appearance="standard">
       <mat-label>Price</mat-label>
       <input formControlName="price"  matInput placeholder="Price">

@@ -23,3 +23,10 @@
 .actions {
   margin-top: 22px;
 }
+
+::ng-deep {
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: transparent;
+    padding-left: 0 !important;
+  }
+}

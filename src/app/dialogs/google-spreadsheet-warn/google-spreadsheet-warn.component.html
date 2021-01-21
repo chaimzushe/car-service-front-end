@@ -1,0 +1,13 @@
+<div class="model">
+
+  <div [class.check--success]="status === 'Success'" class="check">
+    <i [class]="'fal ' + icon"></i>
+  </div>
+  <div class="info">
+    <h3 class="info_header">{{status}} </h3>
+    <P>{{desc}}</P>
+    <div class="action">
+      <button [class.button--success]="status === 'Success'" id="button" (click)="continue()" class="action_text">Close</button>
+    </div>
+  </div>
+</div>

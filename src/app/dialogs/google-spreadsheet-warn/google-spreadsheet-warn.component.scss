@@ -1,0 +1,40 @@
+@import "../../../vars.scss";
+.check {
+  background-color: $warning-red;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  i {
+    font-size: 56px;
+    padding: 32px;
+    color: white;
+  }
+  &--success{
+    background-color: $success-green;
+  }
+}
+
+.info {
+  text-align: center;
+  padding: 12px;
+  &_header{
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+}
+#button{
+  outline: none;
+  color: white;
+  background-color: $warning-red;
+  border-radius: 12px;
+  padding: 8px;
+  border: none;
+  width: 100px;
+  margin-top: 20px;
+
+}
+
+.button--success{
+  background-color: $success-green!important;
+}

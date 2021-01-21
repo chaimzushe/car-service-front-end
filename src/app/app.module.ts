@@ -32,6 +32,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CarHistoryComponent } from './components/car-history/car-history.component';
 import { EditRendererComponent } from './components/edit-renderer/edit-renderer.component';
 import { MaterialModule } from './material/material.module';
+import { GoogleSpreadsheetWarnComponent } from './dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 
 
 ModuleRegistry.registerModules(AllModules);
@@ -58,7 +59,8 @@ ModuleRegistry.registerModules(AllModules);
     ServicesFilterComponent,
     LoginErrorComponent,
     CarHistoryComponent,
-    EditRendererComponent
+    EditRendererComponent,
+    GoogleSpreadsheetWarnComponent
   ],
   imports: [
     BrowserModule,
