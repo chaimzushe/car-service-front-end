@@ -61,6 +61,10 @@ class="list">
         <i class="fal fa-history"></i>
         <span>View Full History</span>
       </button>
+      <button *ngIf="service.status === 'IN PROGRESS'" (click)="toggleApprove(service, 'COMPLETED')"mat-menu-item>
+        <i class="fal fa-check-circle"></i>
+        <span>VMark completed</span>
+      </button>
       <button (click)="deleteService(service, i)" mat-menu-item>
         <i class="fal fa-trash-alt"></i>
         <span>Delete</span>

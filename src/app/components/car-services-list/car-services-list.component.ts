@@ -126,11 +126,11 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  async toggleApprove(service){
-    let newStatus = service.status === "APPROVED" ? 'COMPLETED' : 'APPROVED';
+  async toggleApprove(service, status?){
+    let newStatus = status || (service.status === "APPROVED" ? 'COMPLETED' : 'APPROVED');
     service.status = newStatus;
     await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
-    this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 })
+    this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
   }
 
   toggleExpand(service: Service) {
