@@ -130,16 +130,20 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   async toggleApprove(service, status?){
     let newStatus = status || (service.status === "APPROVED" ? 'COMPLETED' : 'APPROVED');
     service.status = newStatus;
-    await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
-    this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
-    if(newStatus === "APPROVED" && service.repairs.length > 6 ) {
-      let desc = "This work was not fully added to google spreadsheets as it had more then 6 jobs. Please make sure to fix the spreadsheet. An email has beed sent out to you to remind you";
-      const data = { status: 'Warning', desc, icon: "fal fa-exclamation-circle" };
-      this.openSuccessDialog(data)
+    try{
+      await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
+      this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
+    } catch(err){
+      if(newStatus === "APPROVED") {
+        let desc = "This work was not added to google spreadsheets. Please make sure add manually. An email has beed sent out to you to remind you";
+        const data = { status: 'An Error Occurred', desc, icon: "fal fa-exclamation-circle" };
+        this.openErrDialog(data)
+      }
     }
+
   }
 
-  openSuccessDialog(data: { status: string; desc: string; icon: string; }) {
+  openErrDialog(data: { status: string; desc: string; icon: string; }) {
     const dialog = this.dialog.open(GoogleSpreadsheetWarnComponent,
       {
         data,
