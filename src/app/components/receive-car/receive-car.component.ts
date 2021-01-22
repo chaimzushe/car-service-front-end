@@ -129,21 +129,21 @@ export class ReceiveCarComponent implements OnInit {
       price: [this.serviceObj.priceOfOtherWork || 0]
     });
     let searchWord;
-    if(this.serviceId){
+    if (this.serviceId) {
       this.carGroupControl.controls['carNumber'].disable();
     } else {
-    this.carGroupControl.controls['carNumber'].valueChanges.pipe(
-      debounceTime(200),
-      map((e: any) => {
-        searchWord = e;
-        return e;
-      }),
-      distinctUntilChanged(),
-      switchMap(_ => this.filterCars(searchWord))
-    )
-      .subscribe((res: []) => {
-        this.filteredCars = res;
-      });
+      this.carGroupControl.controls['carNumber'].valueChanges.pipe(
+        debounceTime(200),
+        map((e: any) => {
+          searchWord = e;
+          return e;
+        }),
+        distinctUntilChanged(),
+        switchMap(_ => this.filterCars(searchWord))
+      )
+        .subscribe((res: []) => {
+          this.filteredCars = res;
+        });
     }
     this.loading = false;
   }
@@ -180,14 +180,15 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async addCar() {
-    if(this.serviceId || !this.carGroupControl.valid) return;
+    if (this.serviceId || !this.carGroupControl.valid) return;
     this.loading = true;
     this.LoadingText = "Calculating repairs to add";
 
     let currentMiles = this.carGroupControl.value.miles;
-    let carId = this.carGroupControl.value.carNumber.car_id
+    let carId = this.carGroupControl.value.carNumber.car_id;
+    let visitType = this.carGroupControl.value.visitType;
     let allServices = await this.carServiceService.applyFilters({}, carId).toPromise();
-    this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles))
+    this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles, visitType))
     this.loading = false;
     this.LoadingText = "";
   }
@@ -196,18 +197,24 @@ export class ReceiveCarComponent implements OnInit {
     return Number(String(input).replace(/\D/g, ''));
   }
 
-  clearCurRepairs(){
+  clearCurRepairs() {
     this.repairsNeeded = [];
   }
 
-  checkIfAutoAddRepair(r, allServices, currentMiles) {
+  checkIfAutoAddRepair(r, allServices, currentMiles, visitType) {
+    if(this.repairsNeeded.find( rep => rep.name === r.name)) return;
+    if (r.forVisit === visitType) {
+      let msg = `System added because ${visitType} visits recommended this service`;
+
+      this.repairsNeeded.push({ name: r.name, qty: 1, note: msg })
+      return
+    }
     let passedMilesCheck = r.checkWhenMilageIsAt == 0;
     let passedDateLapsCheck = r.intervalCheck == 0;
     let milesToStpCheckAt = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(r.checkWhenMilageIsAt);
     let i = 0;
 
     if (!passedMilesCheck) {
-      if(!allServices[i]) debugger
       while (allServices[i] && this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
         let hasRep = allServices[i].repairs.find(curRep => curRep.repair.name === r.name && curRep.qty > 0);
         if (hasRep) {
@@ -219,7 +226,7 @@ export class ReceiveCarComponent implements OnInit {
       }
     }
     // only check for dat lapse if passed checked for miles
-    if (passedMilesCheck && !passedDateLapsCheck ) {
+    if (passedMilesCheck && !passedDateLapsCheck) {
       var today = new Date()
       var checkUntilDate = new Date().setDate(today.getDate() - r.intervalCheck)
       let i = 0;
@@ -285,7 +292,7 @@ export class ReceiveCarComponent implements OnInit {
       completed: false,
       repair: this.getRepairId(r)
     }));
-     let {mechanic} = this.mechanicFormGroup.value;
+    let { mechanic } = this.mechanicFormGroup.value;
     const newCarService = {
       mechanic: (mechanic && mechanic._id || null),
       mechanicName: (mechanic && mechanic.name || null),
