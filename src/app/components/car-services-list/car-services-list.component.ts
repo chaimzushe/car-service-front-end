@@ -29,7 +29,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   users: any[] = [];
   searchWord: any;
   noItemText = 'Loading...';
-  filter: any = { limit: 10, skip: 0 };
+  filter: any = { limit: 4, skip: 0 };
   links = [
     { name: '', active: true },
     { name: 'IN PROGRESS', active: false },
@@ -116,7 +116,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   async onScroll() {
-    this.filter.skip += 10;
+    this.filter.skip += 4;
     this.loading = true;
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
     mewServices.forEach( s =>{
