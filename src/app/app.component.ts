@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private snackbar: MatSnackBar) {
     FullStory.init({
       orgId: '10KCHC',
-      // devMode: !environment.production
+      devMode: !environment.production
     });
   }
 
