@@ -72,7 +72,7 @@ class="list">
     </mat-menu>
     <div *ngIf="service.expanded" class="expanded">
       <li [class.service-note--last]="isLast" *ngFor="let repair of service.repairs; last as isLast;">
-        <span> fixed: {{repair.qty}} {{repair.repair?.name}}</span> <span class="repair-note" *ngIf="repair.note">
+        <span> fixed: {{repair.qty}} {{repair.repair?.name}} <span class="rep-price"> ({{(repair.repair?.price || 0) | currency }}) </span> </span> <span class="repair-note" *ngIf="repair.note">
           *{{repair.note}}</span>
       </li>
       <div class="service-note" *ngIf="service.note">
