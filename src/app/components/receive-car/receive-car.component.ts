@@ -21,6 +21,7 @@ import {
 import { pipe } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarServiceService } from 'src/app/services/car-service.service';
+import { DatePipe } from '@angular/common';
 
 interface IRepair {
   name: String;
@@ -64,6 +65,7 @@ export class ReceiveCarComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private route: ActivatedRoute,
+    private datePipe: DatePipe,
     private carServiceService: CarServiceService,
     private router: Router
   ) { }
@@ -201,62 +203,53 @@ export class ReceiveCarComponent implements OnInit {
     this.repairsNeeded = [];
   }
 
+  repairDone(service, repair) {
+    return service.repairs.find(curRep => (curRep.repair && curRep.repair.name) === repair.name && curRep.qty > 0);
+  }
+
+  getLastTimeRepDone(r, services) {
+    return services.find(s => this.repairDone(s, r));
+  }
+
+  neverAutoAddRep(r) {
+    return r.checkWhenMilageIsAt === 0 && r.intervalCheck === 0 && !r.forVisit;
+  }
+
+  autoAdRepair(r, note) {
+    this.repairsNeeded.push({ name: r.name, qty: 1, note })
+  }
+
+  getTimeDiff(service){
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    const today = new Date() as any
+    const then = new Date(service.serviceTime);
+    const utc1 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+    const utc2 = Date.UTC(then.getFullYear(), then.getMonth(), then.getDate());
+    return Math.floor(( utc1 - utc2) / _MS_PER_DAY);
+  }
+
   checkIfAutoAddRepair(r, allServices, currentMiles, visitType) {
-    if(this.repairsNeeded.find( rep => rep.name === r.name)) return;
+    if (this.alreadySelected(r) || this.neverAutoAddRep(r)) return;
     if (r.forVisit === visitType) {
-      let msg = `System added because ${visitType} visits recommended this service`;
-
-      this.repairsNeeded.push({ name: r.name, qty: 1, note: msg })
-      return
+      return this.autoAdRepair(r, `System added because ${visitType} visits recommended this check`);
     }
-    let passedMilesCheck = r.checkWhenMilageIsAt == 0;
-    let passedDateLapsCheck = r.intervalCheck == 0;
-    let milesToStpCheckAt = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(r.checkWhenMilageIsAt);
-    let i = 0;
-
-    if (!passedMilesCheck) {
-      while (allServices[i] && this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
-        let hasRep = allServices[i].repairs.find(curRep => (curRep.repair && curRep.repair.name) === r.name && curRep.qty > 0);
-        if (hasRep) {
-          passedMilesCheck = true;
-          // repair was done already
-          break;
-        }
-        i++;
-      }
+    const lastTimeRepairDone = this.getLastTimeRepDone(r, allServices);
+    if (!lastTimeRepairDone) {
+      return this.autoAdRepair(r, 'we never did this service to the car yet. Please check if needed');
     }
-    // only check for dat lapse if passed checked for miles
-    if (passedMilesCheck && !passedDateLapsCheck) {
-      var today = new Date()
-      var checkUntilDate = new Date().setDate(today.getDate() - r.intervalCheck)
-      let i = 0;
-      while (allServices[i] && new Date(allServices[i].serviceTime) >= new Date(checkUntilDate)) {
-        if (allServices[i].repairs.find(curRep => (curRep.repair && curRep.repair.name) === r.name && curRep.qty > 0)) {
-          passedDateLapsCheck = true;
-          // repair was done already
-          break;
-        }
-        i++;
-      }
+    let milesTravelledSinceRepair = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(lastTimeRepairDone.milesAtService);
+    if (r.checkWhenMilageIsAt != 0 && milesTravelledSinceRepair >= this.stripNonNumbers(r.checkWhenMilageIsAt)) {
+      let msg = `Last time this service was done to car was ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'longDate')}. At that time the car was at ${this.stripNonNumbers(lastTimeRepairDone.milesAtService)} miles. Since then the car exceeded ${r.checkWhenMilageIsAt} miles. System recommends to check ${r.name}`;
+      return this.autoAdRepair(r, msg);
     }
-
-    if (!passedMilesCheck || !passedDateLapsCheck) {
-      let msg;
-      if (!passedMilesCheck) {
-        msg = `Added due to ${this.stripNonNumbers(r.checkWhenMilageIsAt)} miles added since last check`
-      } else {
-        msg = `Added due to ${r.intervalCheck} days passed since last check`
-      }
-      this.repairsNeeded.push({ name: r.name, qty: 1, note: msg })
+    const daysSinceLatVisit = this.getTimeDiff(lastTimeRepairDone);
+    if (r.intervalCheck != 0 && daysSinceLatVisit >= this.stripNonNumbers(r.intervalCheck)) {
+      let msg = `Last time this service was done to car was ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'longDate')}. System recommends to check every ${r.intervalCheck} days`;
+      return this.autoAdRepair(r, msg);
     }
 
   }
 
-  addUser(event) {
-    this.snackbar.open('Calculating tasks needed for this car', 'Dismiss', {
-      duration: 3000,
-    });
-  }
 
   addRepair(event) {
     setTimeout((x) => {
