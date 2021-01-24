@@ -95,7 +95,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     return [
       { name: 'Miles', value: service.milesAtService },
       { name: 'Status', value: service.status },
-      { name: 'Visit type', value: service.visitType },
+      { name: 'Visit type', value: (service.visitType || 'N/A') },
       { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
@@ -109,6 +109,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   getTotalPrice(s){
     let sum = 0
     s.repairs.forEach(r => {
+      if(!r.repair) return;
       sum += r.qty * r.repair.price;
     });
     sum += this.stripNonNumbers(s.priceOfOtherWork);

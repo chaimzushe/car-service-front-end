@@ -128,6 +128,7 @@ export class CarHistoryComponent implements OnInit {
       id: s._id
     }
     s.repairs.forEach(r => {
+     if(!r.repair) return;
       if (!this.seenRepairs[r.repair.name]) {
         this.seenRepairs[r.repair.name] = true;
         this.columnDefs.push({ field: r.repair.name, width: 150 })

@@ -98,7 +98,7 @@ export class ReceiveCarComponent implements OnInit {
         this.serviceObj = await this.carServiceService.getServiceDetail(p.id).toPromise();
         this.repairsNeeded = this.serviceObj.repairs.map(r => ({
           qty: r.qty,
-          name: r.repair.name,
+          name: (r.repair && r.repair.name),
           note: r.note
         }));
 
@@ -216,7 +216,7 @@ export class ReceiveCarComponent implements OnInit {
 
     if (!passedMilesCheck) {
       while (allServices[i] && this.stripNonNumbers(allServices[i].milesAtService) >= milesToStpCheckAt) {
-        let hasRep = allServices[i].repairs.find(curRep => curRep.repair.name === r.name && curRep.qty > 0);
+        let hasRep = allServices[i].repairs.find(curRep => (curRep.repair && curRep.repair.name) === r.name && curRep.qty > 0);
         if (hasRep) {
           passedMilesCheck = true;
           // repair was done already
@@ -231,7 +231,7 @@ export class ReceiveCarComponent implements OnInit {
       var checkUntilDate = new Date().setDate(today.getDate() - r.intervalCheck)
       let i = 0;
       while (allServices[i] && new Date(allServices[i].serviceTime) >= new Date(checkUntilDate)) {
-        if (allServices[i].repairs.find(curRep => curRep.repair.name === r.name && curRep.qty > 0)) {
+        if (allServices[i].repairs.find(curRep => (curRep.repair && curRep.repair.name) === r.name && curRep.qty > 0)) {
           passedDateLapsCheck = true;
           // repair was done already
           break;
