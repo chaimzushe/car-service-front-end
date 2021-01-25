@@ -225,7 +225,9 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   neverAutoAddRep(r) {
-    return r.checkWhenMilageIsAt === 0 && r.intervalCheck === 0 && !r.forVisit;
+    return (!r.checkWhenMilageIsAt || r.checkWhenMilageIsAt == 0) &&
+           (!r.intervalCheck  || r.intervalCheck  == 0)
+           && !r.forVisit;
   }
 
   autoAdRepair(r, note) {
@@ -246,18 +248,21 @@ export class ReceiveCarComponent implements OnInit {
     if (r.forVisit === visitType) {
       return this.autoAdRepair(r, `System added because ${visitType} visits recommended this check`);
     }
-    const lastTimeRepairDone = this.getLastTimeRepDone(r, allServices);
-    if (!lastTimeRepairDone) {
-      return this.autoAdRepair(r, 'we never did this service to the car yet. Please check if needed');
-    }
+    const lastTimeRepairDone = this.getLastTimeRepDone(r, allServices)  || {milesAtService: 0, serviceTime: new Date('1700, 1, ,1')};
     let milesTravelledSinceRepair = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(lastTimeRepairDone.milesAtService);
-    if (r.checkWhenMilageIsAt != 0 && milesTravelledSinceRepair >= this.stripNonNumbers(r.checkWhenMilageIsAt)) {
-      let msg = `Last time this service was done to car was ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'longDate')}. At that time the car was at ${this.stripNonNumbers(lastTimeRepairDone.milesAtService)} miles. Since then the car exceeded ${r.checkWhenMilageIsAt} miles. System recommends to check ${r.name}`;
+    if (r.checkWhenMilageIsAt && r.checkWhenMilageIsAt != 0 && milesTravelledSinceRepair >= this.stripNonNumbers(r.checkWhenMilageIsAt)) {
+      let msg = `LTS on ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'shortDate')}. Car was at ${this.stripNonNumbers(lastTimeRepairDone.milesAtService)} miles. Check when passing ${r.checkWhenMilageIsAt}`;
+      if(lastTimeRepairDone.milesAtService ==0){
+        msg = `Never done this repair to car. Recommended to check when passing ${r.checkWhenMilageIsAt}`;
+      }
       return this.autoAdRepair(r, msg);
     }
     const daysSinceLatVisit = this.getTimeDiff(lastTimeRepairDone);
-    if (r.intervalCheck != 0 && daysSinceLatVisit >= this.stripNonNumbers(r.intervalCheck)) {
-      let msg = `Last time this service was done to car was ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'longDate')}. System recommends to check every ${r.intervalCheck} days`;
+    if (r.intervalCheck && r.intervalCheck != 0 && daysSinceLatVisit >= this.stripNonNumbers(r.intervalCheck)) {
+      let msg = `LTS on ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'shortDate')}. Recommended to check every ${r.intervalCheck} days`;
+      if(daysSinceLatVisit > 5000) {
+        msg = `Never done before. Recommended to check every ${r.intervalCheck} days`;
+      }
       return this.autoAdRepair(r, msg);
     }
 
