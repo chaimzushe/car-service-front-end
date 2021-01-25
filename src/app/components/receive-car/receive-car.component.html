@@ -3,8 +3,8 @@
 <div [class.open]="serviceId" class="wrapper">
   <h3 class="header-text">Receive {{selectedCarNumber || 'Car'}}</h3>
   <ng-container>
-    <mat-vertical-stepper *ngIf="carGroupControl" [linear]="!serviceId" #stepper>
-      <mat-step [stepControl]="carGroupControl">
+    <mat-vertical-stepper (selectionChange)="selectionsChanged($event)" *ngIf="carGroupControl" [linear]="!serviceId" #stepper>
+      <mat-step  [stepControl]="carGroupControl">
         <form [formGroup]="carGroupControl">
           <ng-template matStepLabel>Enter Car or VIN Number</ng-template>
           <mat-form-field>
@@ -20,7 +20,7 @@
             <mat-autocomplete
             [displayWith]="carDisplayFunc"
               autoActiveFirstOption
-              (optionSelected)="clearCurRepairs()"
+              (optionSelected)="clearCurRepairs($event)"
               #autoCars="matAutocomplete"
             >
               <mat-option *ngFor="let car of filteredCars" [value]="car">
@@ -42,7 +42,7 @@
         </mat-form-field>
 
           <div>
-            <button mat-button (click)="addCar()" matStepperNext>Next</button>
+            <button mat-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>

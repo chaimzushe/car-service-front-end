@@ -58,6 +58,7 @@ export class ReceiveCarComponent implements OnInit {
   serviceId: any;
   serviceObj: any = {};
   LoadingText = "Loading...";
+  allServices: any[] = [];
   constructor(
     private carService: CarService,
     private repairService: RepairService,
@@ -189,7 +190,7 @@ export class ReceiveCarComponent implements OnInit {
     let currentMiles = this.carGroupControl.value.miles;
     let carId = this.carGroupControl.value.carNumber.car_id;
     let visitType = this.carGroupControl.value.visitType;
-    let allServices = await this.carServiceService.applyFilters({}, carId).toPromise();
+    let allServices = this.allServices || await this.carServiceService.applyFilters({}, carId).toPromise();
     this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles, visitType))
     this.loading = false;
     this.LoadingText = "";
@@ -199,8 +200,20 @@ export class ReceiveCarComponent implements OnInit {
     return Number(String(input).replace(/\D/g, ''));
   }
 
-  clearCurRepairs() {
+  async clearCurRepairs(e) {
     this.repairsNeeded = [];
+   let carId = e.option.value.car_id;
+   this.loading = true;
+    this.allServices = await this.carServiceService.applyFilters({}, carId).toPromise() as any[];
+    this.loading = false;
+    let curMiles =  this.carGroupControl.value.miles;
+    let lastMiles = this.stripNonNumbers( (this.allServices[0] && this.allServices[0].milesAtService));
+    if(!curMiles || lastMiles >  curMiles){
+      this.carGroupControl.patchValue({
+        miles: lastMiles
+      });
+    }
+
   }
 
   repairDone(service, repair) {
@@ -219,13 +232,13 @@ export class ReceiveCarComponent implements OnInit {
     this.repairsNeeded.push({ name: r.name, qty: 1, note })
   }
 
-  getTimeDiff(service){
+  getTimeDiff(service) {
     const _MS_PER_DAY = 1000 * 60 * 60 * 24;
     const today = new Date() as any
     const then = new Date(service.serviceTime);
     const utc1 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
     const utc2 = Date.UTC(then.getFullYear(), then.getMonth(), then.getDate());
-    return Math.floor(( utc1 - utc2) / _MS_PER_DAY);
+    return Math.floor((utc1 - utc2) / _MS_PER_DAY);
   }
 
   checkIfAutoAddRepair(r, allServices, currentMiles, visitType) {
@@ -249,7 +262,11 @@ export class ReceiveCarComponent implements OnInit {
     }
 
   }
-
+  selectionsChanged(e) {
+    if (e.previouslySelectedIndex === 0 && e.selectedIndex === 1) {
+      this.addCar();
+    }
+  }
 
   addRepair(event) {
     setTimeout((x) => {
