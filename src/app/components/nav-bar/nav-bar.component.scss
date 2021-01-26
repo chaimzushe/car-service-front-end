@@ -10,6 +10,10 @@
   font-size: 22px;
   .logo{
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 14px;
+    padding: 4px;
   }
 }
 a {
@@ -19,7 +23,6 @@ a {
 .logout {
   cursor: pointer;
   padding: 0 12px;
-  margin: 0 12px;
    i{
      margin-left: 4px;
    }
@@ -31,4 +34,27 @@ a {
   .fa-user{
     margin-right: 12px;
   }
+}
+
+.link{
+  padding: 0 12px;
+  cursor: pointer;
+  outline: none !important;
+  &--active{
+    color: #50affe;
+  }
+}
+
+.user-ball{
+  background: #8910b1;
+  padding: 6px;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
 }

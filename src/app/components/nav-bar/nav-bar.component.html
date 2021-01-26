@@ -3,14 +3,14 @@
     Car Repair
   </span>
   <span class="links">
- <a [routerLink]="'/home'">  <i class="fal fa-home"></i></a>
+     <span [routerLink]="link.route" routerLinkActive="link--active"  *ngFor="let link of links" class="link"> {{link.name}}</span>
   </span>
   <span class="user">
 
-    <i class="fal fa-user"></i>
-
-      <span class="logout" (click)="logout()">logout <i class="far fa-sign-out-alt"></i></span>
-
+    <span class="user-ball">
+     <span>  {{user.name.slice(0, 2)}}</span>
+    </span>
+    <span class="logout" (click)="logout()"> <i class="far fa-sign-out-alt"></i></span>
   </span>
 </div>
 
