@@ -128,7 +128,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
     mewServices.forEach( s =>{
        s.totalPrice = this.getTotalPrice(s);
-       s.expanded = true;
+       s.expanded = !this.isCollapsed;
     })
     this.services.push(...mewServices);
     this.loading = false;
@@ -170,7 +170,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       this.services = f;
       this.services.forEach( s =>{
         s.totalPrice = this.getTotalPrice(s);
-        s.expanded = true;
+        s.expanded = !this.isCollapsed;
      })
       this.setCurrentFilters();
       this.loading = false;
