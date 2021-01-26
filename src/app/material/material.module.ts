@@ -15,7 +15,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 @NgModule({
   declarations: [],
   imports: [
@@ -35,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatTooltipModule,
+    MatSlideToggleModule
   ],
   exports:[
     CommonModule,
@@ -53,6 +54,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatTooltipModule,
+    MatSlideToggleModule
   ]
 })
 export class MaterialModule { }

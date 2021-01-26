@@ -36,7 +36,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     { name: 'COMPLETED', active: false },
     { name: 'APPROVED', active: false },
   ];
-
+  isCollapsed = false;
   filterNameMap = {
     user: 'Mechanic',
     startDate: 'From Date',
@@ -66,6 +66,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   sync(){
     return this.snackbar.open("sync with google sheets in progress", "dismiss", { duration: 3000, panelClass: "err-panel" })
+  }
+
+  toggleCollapseAll(event){
+    this.services.forEach(s => {
+      s.expanded = !this.isCollapsed;
+    })
   }
 
   setActive(link, idx) {

@@ -24,6 +24,9 @@
 
 class="list">
   <h3 class="text-header">Car Services</h3>
+  <span class="toggle-expand-all">
+  <mat-slide-toggle [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed">  Collapse all</mat-slide-toggle>
+</span>
   <mat-card style="padding: 16px;" class="card" *ngFor="let service of services; index as i;">
 
     <span class="header"> Car# {{service.car?.car_id}} </span>

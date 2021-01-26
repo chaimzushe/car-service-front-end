@@ -1,4 +1,3 @@
-
 <app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
 <div class="wrapper">
   <h3 class="form_header"> {{(repairId && repairEditing) ? 'Edit ' + repairEditing?.name : 'New Repair'}} </h3>
@@ -9,12 +8,12 @@
     </mat-form-field>
     <mat-form-field appearance="standard">
       <mat-label>Check when days passed</mat-label>
-      <input formControlName="intervalCheck"  matInput placeholder="Days">
+      <input formControlName="intervalCheck" matInput placeholder="Days">
     </mat-form-field>
 
     <mat-form-field appearance="standard">
       <mat-label>Check when miles traveled </mat-label>
-      <input formControlName="checkWhenMilageIsAt"  matInput placeholder="Miles">
+      <input formControlName="checkWhenMilageIsAt" matInput placeholder="Miles">
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -26,13 +25,15 @@
 
     <mat-form-field appearance="standard">
       <mat-label>Price</mat-label>
-      <input formControlName="price"  matInput placeholder="Price">
+      <input formControlName="price" matInput placeholder="Price">
     </mat-form-field>
+    <div class="active-toggle">
+      <mat-slide-toggle labelPosition="before" color="primary" formControlName="active">Active</mat-slide-toggle>
 
+    </div>
 
     <div class="actions">
       <button type="submit" (click)="submit()" class="form_submit" mat-raised-button color="primary">Submit</button>
     </div>
   </form>
 </div>
-

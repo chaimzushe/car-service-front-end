@@ -225,9 +225,10 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   neverAutoAddRep(r) {
-    return (!r.checkWhenMilageIsAt || r.checkWhenMilageIsAt == 0) &&
-           (!r.intervalCheck  || r.intervalCheck  == 0)
-           && !r.forVisit;
+    let hasNoMileCheck = !r.checkWhenMilageIsAt || r.checkWhenMilageIsAt == 0;
+    let hasNoDateCheck = !r.intervalCheck || r.intervalCheck == 0;
+    let hasNoChecksFor = hasNoMileCheck && hasNoDateCheck && !r.forVisit
+    return !r.active ||  hasNoChecksFor;
   }
 
   autoAdRepair(r, note) {
@@ -246,12 +247,12 @@ export class ReceiveCarComponent implements OnInit {
   checkIfAutoAddRepair(r, allServices, currentMiles, visitType) {
     if (this.alreadySelected(r) || this.neverAutoAddRep(r)) return;
     if (r.forVisit === visitType) {
-      return this.autoAdRepair(r, `System added because ${visitType} visits recommended this check`);
+      return this.autoAdRepair(r, `System added because visit reason is ${visitType}`);
     }
     const lastTimeRepairDone = this.getLastTimeRepDone(r, allServices)  || {milesAtService: 0, serviceTime: new Date('1700, 1, ,1')};
     let milesTravelledSinceRepair = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(lastTimeRepairDone.milesAtService);
     if (r.checkWhenMilageIsAt && r.checkWhenMilageIsAt != 0 && milesTravelledSinceRepair >= this.stripNonNumbers(r.checkWhenMilageIsAt)) {
-      let msg = `LTS on ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'shortDate')}. Car was at ${this.stripNonNumbers(lastTimeRepairDone.milesAtService)} miles. Check when passing ${r.checkWhenMilageIsAt}`;
+      let msg = `LTS on ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'shortDate')}. Car was at ${this.stripNonNumbers(lastTimeRepairDone.milesAtService)} miles. Check when passing ${r.checkWhenMilageIsAt} miles`;
       if(lastTimeRepairDone.milesAtService ==0){
         msg = `Never done this repair to car. Recommended to check when passing ${r.checkWhenMilageIsAt}`;
       }

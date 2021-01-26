@@ -1,3 +1,6 @@
+
+@import "../../../vars.scss";
+
 .wrapper {
   max-width: 500px;
   margin: 70px auto;
@@ -24,9 +27,22 @@
   margin-top: 22px;
 }
 
+
 ::ng-deep {
   .mat-form-field-appearance-fill .mat-form-field-flex {
     background-color: transparent;
     padding-left: 0 !important;
   }
 }
+
+.active-toggle{
+  text-align: left;
+  margin: 20px 0;
+  font-size: 18px;
+
+}
+
+
+
+
+

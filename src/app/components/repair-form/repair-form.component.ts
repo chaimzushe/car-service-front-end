@@ -52,6 +52,7 @@ export class RepairFormComponent implements OnInit, OnDestroy {
       checkWhenMilageIsAt: [repair.checkWhenMilageIsAt],
       forVisit: [repair.forVisit],
       price: [repair.price],
+      active: [repair.active]
     });
   }
 
