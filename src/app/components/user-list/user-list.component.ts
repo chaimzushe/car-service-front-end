@@ -22,28 +22,41 @@ export class UserListComponent implements OnInit {
   noItemsText = "Loading...";
   users = [];
   filteredUsers = [];
-  constructor(private userService: UserService ,
-              private router: Router,
-              private route: ActivatedRoute,
-              private dialog: MatDialog) { }
+  constructor(private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private dialog: MatDialog) { }
+
+
 
   async ngOnInit() {
-    this.filteredUsers = this.users = await this.userService.getAllUsers().toPromise() as [];
+    this.users = await this.userService.getAllUsers().toPromise() as [];
+    this.filteredUsers = this.mapUserToCard(this.users);
   }
 
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
   }
 
+  mapUserToCard(users) {
+    return users.map(u => {
+      return ({
+        _id: u._id,
+        header: u.name,
+        middles: [
+          { key: 'Email', value: `${u.email}` },
+        ],
+        bottom: u.role,
+        warn: false
+      })
+    });
+  }
+
   navigateToEdit(car) {
     this.router.navigate(['edit', car._id], { relativeTo: this.route });
   }
 
-  viewItem(car){
-    this.router.navigate(['edit', car._id], { relativeTo: this.route });
-  }
-
-  deleteItem(user, i){
+  deleteItem(user, i) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '250px',
       data: { msg: 'Are you sure you would like to delete this user?' },
@@ -53,7 +66,7 @@ export class UserListComponent implements OnInit {
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.users = this.users.filter(u => u.name !== user.name)
-      this.filteredUsers = this.filteredUsers.filter(u => u.name !== user.name)
+      this.filteredUsers = this.filteredUsers.filter(u => u.header !== user.header)
       let removeSub = this.userService.removeUser(user._id).subscribe(x => {
         //this.users.splice(i, 1);
       });
@@ -62,12 +75,14 @@ export class UserListComponent implements OnInit {
     this.subs.push(dialogSub);
   }
 
-  search(e){
-    this.filteredUsers = this.users.filter( r => r.name.toLowerCase().startsWith(e.toLowerCase()));
-    if(this.filteredUsers.length === 0){
+  search(e) {
+    this.filteredUsers = this.users.filter(r => r.name.toLowerCase().startsWith(e.toLowerCase()));
+    this.filteredUsers = this.mapUserToCard(this.filteredUsers);
+    if (this.filteredUsers.length === 0) {
       this.noItemsText = "No users found";
     }
 
   }
 
 }
+
