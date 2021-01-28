@@ -1,35 +1,9 @@
 <app-sub-nav (searched)="search($event)" [subNavInfo]="subNavInfo"></app-sub-nav>
 <h3 class="text-header">Repairs</h3>
 <div class="list">
-  <mat-card  [matMenuTriggerFor]="menu" class="card" *ngFor="let repair of filteredRepairs; index as i">
-    <div class="top">
-      <h3> <span>   {{repair.name}}   </span>  <span class="price">   {{repair.price | currency: '$'}} </span></h3>
-      <span class="menu" > <i class="fal fa-ellipsis-v"></i> </span>
-    </div>
-    <div class="middle">
-      <p><b>Check after interval of</b> {{repair.intervalCheck}} days</p>
-      <p><b>Check after traveled</b> {{repair.checkWhenMilageIsAt}} miles</p>
-      <p><b>Check if visit is</b> {{repair.forVisit || 'N/A'}}</p>
-    </div>
-
-    <div class="bottom">
-      <span [class.badge--warn]="!repair.active" class="badge">{{repair.active ? 'Active' : 'Inactive'}}</span>
-     </div>
-
-
-
-    <mat-menu [yPosition]="'above'" [xPosition]="'before'" #menu="matMenu">
-      <button (click)="navigateToEdit(repair)" mat-menu-item>
-        <span>Edit</span>
-      </button>
-      <button (click)="viewItem(repair)" disabled mat-menu-item>
-        <span>View</span>
-      </button>
-      <button (click)="deleteItem(repair, i)" mat-menu-item>
-        <span>Delete</span>
-      </button>
-    </mat-menu>
-  </mat-card>
+    <app-item-card (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [item]="repair" [index]="i"
+    *ngFor="let repair of filteredRepairs; index as i">
+  </app-item-card>
 
 </div>
 <app-no-items-found [text]="noItemsText" *ngIf="filteredRepairs.length ===0"></app-no-items-found>

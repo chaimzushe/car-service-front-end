@@ -33,6 +33,7 @@ import { CarHistoryComponent } from './components/car-history/car-history.compon
 import { EditRendererComponent } from './components/edit-renderer/edit-renderer.component';
 import { MaterialModule } from './material/material.module';
 import { GoogleSpreadsheetWarnComponent } from './dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
+import { ItemCardComponent } from './components/item-card/item-card.component';
 
 
 ModuleRegistry.registerModules(AllModules);
@@ -60,7 +61,8 @@ ModuleRegistry.registerModules(AllModules);
     LoginErrorComponent,
     CarHistoryComponent,
     EditRendererComponent,
-    GoogleSpreadsheetWarnComponent
+    GoogleSpreadsheetWarnComponent,
+    ItemCardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,68 @@
+@import "../../../vars.scss";
+
+.card {
+  width: 300px;
+  margin: 12px;
+  cursor: pointer;
+}
+
+.middle-key {
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.top {
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-header {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-right: 22px;
+  margin-bottom: 0;
+  font-size: 18px;
+}
+
+.price {
+  color: #4b8400;
+}
+.menu-icon {
+  font-size: 20px;
+}
+
+.middle {
+  margin-bottom: 16px;
+}
+
+.bottom {
+  text-align: right;
+}
+
+.badge {
+  text-align: center;
+  border: 1px solid;
+  display: inline-block;
+  padding: 6px;
+  border-radius: 16px;
+  font-size: 13px;
+  color: #65d865;
+  width: 100px;
+
+  &--warn {
+    color: $warning-red;
+  }
+}
+
+.icon {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+
+
+

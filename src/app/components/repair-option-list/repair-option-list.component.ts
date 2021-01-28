@@ -26,21 +26,35 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
   constructor(private repairService: RepairService , private router: Router, private route: ActivatedRoute, private dialog: MatDialog ) { }
 
   async ngOnInit() {
-    this.filteredRepairs = this.repairs = await this.repairService.getAllRepairs().toPromise() as [];
+     this.repairs = await this.repairService.getAllRepairs().toPromise() as [];
+     this.filteredRepairs = this.mapRepairsToCard(this.repairs);
   }
-
-
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
   }
 
-  navigateToEdit(car) {
-    this.router.navigate(['edit', car._id], { relativeTo: this.route });
+  mapRepairsToCard(repairs) {
+    return repairs.map( r => {
+      return ({
+        _id: r._id,
+        header:  r.name,
+        price: r.price,
+        middles: [
+          {key: 'Check after interval of', value: `${r.intervalCheck} days` },
+          {key: 'Check after traveled', value: `${r.checkWhenMilageIsAt} miles` },
+          {key: 'Check if visit is', value: `${(r.forVisit || 'N/A')}` },
+        ],
+        bottom: (r.active ? 'Active' : 'Inactive'),
+        warn: !r.active
+      })
+    });
   }
 
-  viewItem(car){
-    this.router.navigate(['edit', car._id], { relativeTo: this.route });
+  navigateToEdit(reapir) {
+    this.router.navigate(['edit', reapir._id], { relativeTo: this.route });
   }
+
+
 
   deleteItem(rep, i){
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
@@ -52,10 +66,8 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.repairs = this.repairs.filter(r => r.name !== rep.name)
-      this.filteredRepairs = this.filteredRepairs.filter(r => r.name !== rep.name)
-      let removeSub = this.repairService.removeRepair(rep._id).subscribe(x => {
-        //this.repairs.splice(i, 1);
-      });
+      this.filteredRepairs = this.filteredRepairs.filter(r => r.header !== rep.header)
+      let removeSub = this.repairService.removeRepair(rep._id).subscribe(x => {});
       this.subs.push(removeSub);
     });
     this.subs.push(dialogSub);
@@ -63,6 +75,7 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
 
   search(e){
     this.filteredRepairs = this.repairs.filter( r => r.name.toLowerCase().startsWith(e.toLowerCase()));
+    this.filteredRepairs = this.mapRepairsToCard(this.filteredRepairs);
     if(this.filteredRepairs.length === 0){
       this.noItemsText = "No Repairs found";
     }
