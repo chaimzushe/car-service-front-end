@@ -16,8 +16,9 @@ export class CarService {
     return this.http.get(`${baseApi}/car/${carId}`);
   }
 
-  getCarTypeAhead(searchWord) {
-    return this.http.post(`${baseApi}/car-typeahead`, { searchWord })
+  getCarTypeAhead(searchWord, filter : any= {}) {
+    filter.searchWord = searchWord;
+    return this.http.post(`${baseApi}/car-typeahead`, filter)
   }
 
 

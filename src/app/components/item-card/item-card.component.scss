@@ -51,7 +51,7 @@
   border-radius: 16px;
   font-size: 13px;
   color: #65d865;
-  width: 100px;
+  min-width: 100px;
 
   &--warn {
     color: $warning-red;
