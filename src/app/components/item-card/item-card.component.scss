@@ -4,13 +4,19 @@
   width: 300px;
   margin: 12px;
   cursor: pointer;
+  &--highlighted{
+    background-color: #e2f5fb;
+  }
 }
 
 .middle-key {
   display: inline-block;
   margin-right: 6px;
 }
-
+.middle-val {
+  font-weight: 300;
+  color: gray;
+}
 .top {
   margin-bottom: 22px;
   display: flex;
@@ -47,7 +53,7 @@
   text-align: center;
   border: 1px solid;
   display: inline-block;
-  padding: 6px;
+  padding: 3px;
   border-radius: 16px;
   font-size: 13px;
   color: #65d865;

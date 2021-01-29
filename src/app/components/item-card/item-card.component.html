@@ -1,29 +1,32 @@
-<mat-card  [matMenuTriggerFor]="menu" class="card">
-  <div class="top">
-    <h4 class="top-header"> <span>   {{item.header}}   </span>
-      <span *ngIf="item.price" class="price">   {{item.price | currency: '$'}} </span>
-    </h4>
-     <i class="fal fa-ellipsis-v menu-icon"></i>
-  </div>
-  <div class="middle">
-    <p *ngFor="let middle of item.middles"><b class="middle-key">{{middle.key}}</b> {{middle.value}}</p>
-  </div>
+<div #host class="host">
+  <mat-card  [class.card--highlighted]="highlight" [matMenuTriggerFor]="menu" class="card">
+    <div  class="top">
+      <h4 class="top-header"> <span>   {{item.header}}   </span>
+        <span *ngIf="item.price" class="price">   {{item.price | currency: '$'}} </span>
+      </h4>
+       <i class="fal fa-ellipsis-v menu-icon"></i>
+    </div>
+    <div class="middle">
+      <p *ngFor="let middle of item.middles"><b class="middle-key">{{middle.key}}</b> {{middle.value}}</p>
+    </div>
 
-  <div class="bottom">
+    <div  class="bottom">
 
-    <span [class.badge--warn]="item.warn" class="badge">{{item.bottom}}</span>
-   </div>
+      <span [class.badge--warn]="item.warn" class="badge">{{item.bottom}}</span>
+     </div>
 
 
 
-  <mat-menu [yPosition]="'above'" [xPosition]="'before'" #menu="matMenu">
-    <button (click)="navigateToEdit()" mat-menu-item>
-      <i class="fal fa-edit icon"></i>
-      <span>Edit</span>
-    </button>
-    <button (click)="deleteItem()" mat-menu-item>
-      <i class="fal fa-trash-alt icon"></i>
-      <span>Delete</span>
-    </button>
-  </mat-menu>
-</mat-card>
+    <mat-menu [yPosition]="'above'" [xPosition]="'before'" #menu="matMenu">
+      <button (click)="navigateToEdit()" mat-menu-item>
+        <i class="fal fa-edit icon"></i>
+        <span>Edit</span>
+      </button>
+      <button (click)="deleteItem()" mat-menu-item>
+        <i class="fal fa-trash-alt icon"></i>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card>
+
+</div>
