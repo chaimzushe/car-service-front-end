@@ -49,7 +49,7 @@ export class CarListComponent implements OnInit, OnDestroy {
     return cars.map(c=> {
       return ({
         _id: c._id,
-        header: c.car_id,
+        header: `Car Number: ${c.car_id}`,
         middles: [
           { key: 'VIN', value: `${c.vin}` },
           { key: 'Model', value: `${c.model}` },
