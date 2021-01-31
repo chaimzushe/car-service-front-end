@@ -10,6 +10,9 @@ import { ServicesFilterComponent } from 'src/app/dialogs/services-filter/service
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
+import { AssignToBayComponent } from 'src/app/dialogs/assign-to-bay/assign-to-bay.component';
+import {baseApi} from './../../util/global-config';
+import {EventSourcePolyfill} from 'ng-event-source';
 @Component({
   selector: 'app-car-services-list',
   templateUrl: './car-services-list.component.html',
@@ -17,6 +20,10 @@ import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadshe
 })
 
 export class CarServicesListComponent implements OnInit, OnDestroy {
+  getAuthToken() {
+    const idToken = localStorage.getItem('id_token');
+    return ('Bearer ' + idToken);
+  }
   subNavInfo: subNavInfo = {
     actionText: 'Receive Car',
     actionLink: ['new'],
@@ -29,13 +36,16 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   users: any[] = [];
   searchWord: any;
   noItemText = 'Loading...';
-  filter: any = { limit: 4, skip: 0 };
+  filter: any = { limit: 4, skip: 0, status: 'IN QUEUE' };
+  authorizationToken = "";
+  bayUpdatesSSe = new EventSourcePolyfill((`${baseApi}/stream-services-updates`),  {headers: { Authorization: this.getAuthToken()}});
   links = [
-    { name: '', active: true },
+    { name: 'IN QUEUE', active: true },
     { name: 'IN PROGRESS', active: false },
     { name: 'COMPLETED', active: false },
     { name: 'APPROVED', active: false },
   ];
+  actionMenu = [];
   isCollapsed = false;
   filterNameMap = {
     user: 'Mechanic',
@@ -45,6 +55,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
 
   currentFilters = [];
+  usedBays: any[] = [];
 
   constructor(private carServiceService: CarServiceService,
     private router: Router,
@@ -52,23 +63,33 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog) {
+
+    }
 
   async ngOnInit() {
     this.getList();
-    this.users = await this.userService.getAllUsers().toPromise() as [];
-    this.users = this.users.map(u => u.name);
+    this.users = (await this.userService.getAllUsers().toPromise() as any[]).map(u => u.name);
+    this.getUsedBays()
+    this.bayUpdatesSSe.onmessage = this.bayUpdated;
+  }
+  bayUpdated(e){
+    console.log('Updated' , {e});
+  }
+  async getUsedBays() {
+    let inProgress = await this.carServiceService.applyFilters({status: 'IN PROGRESS'}, '').toPromise() as any[];
+    this.usedBays = inProgress.filter(s => s.bayNumber).map( s => s.bayNumber);
   }
 
   ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
   }
 
-  sync(){
+  sync() {
     return this.snackbar.open("sync with google sheets in progress", "dismiss", { duration: 3000, panelClass: "err-panel" })
   }
 
-  toggleCollapseAll(event){
+  toggleCollapseAll(event) {
     this.services.forEach(s => {
       s.expanded = !this.isCollapsed;
     })
@@ -78,20 +99,20 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.links.forEach((l, i) => l.active = i === idx);
     this.filter.status = link.name;
     this.filter.skip = 0;
-   this.getList();
+    this.getList();
   }
 
-  setCurrentFilters(){
-    this.currentFilters = Object.keys(this.filter).filter( k => {
+  setCurrentFilters() {
+    this.currentFilters = Object.keys(this.filter).filter(k => {
       return !['status', 'skip', 'limit', 'searchWord'].includes(k) && this.filter[k]
-    }).map( k => {
+    }).map(k => {
       let value = this.filter[k];
-      if((value instanceof Date)) value = this.datePipe.transform(new Date(value), 'longDate')
-      return {name: this.filterNameMap[k], value, realName: k}
-    } );
+      if ((value instanceof Date)) value = this.datePipe.transform(new Date(value), 'longDate')
+      return { name: this.filterNameMap[k], value, realName: k }
+    });
   }
 
-  getPrice(service){
+  getPrice(service) {
     return 20;
   }
   stripNonNumbers(input) {
@@ -107,15 +128,15 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     ]
   }
 
-  removeFilter(f, i){
+  removeFilter(f, i) {
     this.filter[f.realName] = null;
     this.getList();
   }
 
-  getTotalPrice(s){
+  getTotalPrice(s) {
     let sum = 0
     s.repairs.forEach(r => {
-      if(!r.repair) return;
+      if (!r.repair) return;
       sum += r.qty * r.repair.price;
     });
     sum += this.stripNonNumbers(s.priceOfOtherWork);
@@ -126,22 +147,23 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.filter.skip += 4;
     this.loading = true;
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
-    mewServices.forEach( s =>{
-       s.totalPrice = this.getTotalPrice(s);
-       s.expanded = !this.isCollapsed;
+    mewServices.forEach(s => {
+      s.totalPrice = this.getTotalPrice(s);
+      s.expanded = !this.isCollapsed;
     })
     this.services.push(...mewServices);
     this.loading = false;
   }
 
-  async toggleApprove(service, status?){
-    let newStatus = status || (service.status === "APPROVED" ? 'COMPLETED' : 'APPROVED');
+  async toggleApprove(status, service, index) {
+
+    let newStatus = status;
     service.status = newStatus;
-    try{
+    try {
       await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
       this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
-    } catch(err){
-      if(newStatus === "APPROVED") {
+    } catch (err) {
+      if (newStatus === "APPROVED") {
         let desc = "This work was not added to google spreadsheets. Please make sure add manually. An email has beed sent out to you to remind you";
         const data = { status: 'An Error Occurred', desc, icon: "fal fa-exclamation-circle" };
         this.openErrDialog(data)
@@ -164,21 +186,92 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     service.expanded = !service.expanded
   }
 
-  getList(){
+  getList() {
     this.loading = true;
-   let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
+    let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       this.services = f;
-      this.services.forEach( s =>{
+      this.services.forEach(s => {
         s.totalPrice = this.getTotalPrice(s);
         s.expanded = !this.isCollapsed;
-     })
+      })
       this.setCurrentFilters();
       this.loading = false;
-      if(f.length === 0) this.noItemText = "No services found";
-
+      if (f.length === 0) this.noItemText = "No services found";
+      else this.setUpActionMenu()
 
     });
     this.subs.push(sub)
+  }
+  assignToBay(service, i) {
+    if (i !== 0) {
+      return this.snackbar.open(`Only item on top of the list can be assigned to a bay`, "dismiss", { panelClass: 'err-panel', duration: 3000 });
+    }
+    let dialogRef = this.dialog.open(AssignToBayComponent, {
+      width: "400px",
+      autoFocus: false,
+      data: {usedBays: this.usedBays}
+    });
+
+    let closedSub = dialogRef.afterClosed().subscribe(async bay => {
+      if (!bay) {
+        return;
+      }
+      await this.carServiceService.assignBay(bay, service._id).toPromise();
+      this.snackbar.open(`Successfully added to bay number ${bay}`, "dismiss", { duration: 3000 });
+      this.filter.skip = 0;
+      this.getList();
+    });
+    this.subs.push(closedSub);
+  }
+
+  reOrder(e) {
+    this.services.splice(e.currentIndex, 0, this.services.splice(e.previousIndex, 1)[0]);
+  }
+
+  setUpActionMenu() {
+    this.actionMenu = [
+      { name: 'Delete', icon: 'fal fa-trash-alt', actionFunction: this.deleteService.bind(this) }
+    ]
+
+    switch (this.filter.status) {
+      case "IN QUEUE": {
+        this.actionMenu.unshift(
+          { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
+          { name: 'Assign To Bay', icon: 'fal fa-plug', actionFunction: this.assignToBay.bind(this) }
+        )
+        return;
+      }
+
+      case "IN PROGRESS": {
+        this.actionMenu.unshift(
+          { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
+          { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
+          { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
+          { name: 'Mark Completed', icon: 'fal fa-check-circle', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
+        )
+        return;
+      }
+      case "COMPLETED": {
+        this.actionMenu.unshift(
+          { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
+          { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
+          { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
+          { name: 'Approve', icon: 'fal fa-thumbs-up', actionFunction: this.toggleApprove.bind(this, 'APPROVED') },
+        )
+        return;
+      }
+
+      case "APPROVED": {
+        this.actionMenu.unshift(
+          { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
+          { name: 'Disapprove', icon: 'fal fa-thumbs-down', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
+        )
+        return;
+      }
+    }
+
+
+
   }
 
   deleteService(service, i) {
@@ -211,7 +304,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   openFilter() {
 
-    let  dialogRef = this.dialog.open(ServicesFilterComponent, {
+    let dialogRef = this.dialog.open(ServicesFilterComponent, {
       width: "400px",
       autoFocus: false,
       data: { mechanics: this.users, filter: this.filter }
@@ -227,8 +320,8 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.subs.push(closedSub);
   }
 
-  goToHistory(service){
-    this.router.navigate(['history',service.carNumber], {relativeTo: this.route})
+  goToHistory(service, i) {
+    this.router.navigate(['history', service.carNumber], { relativeTo: this.route })
   }
 
 

@@ -318,6 +318,7 @@ export class ReceiveCarComponent implements OnInit {
       note: this.repairListFormGroup.value.note,
       visitType: this.carGroupControl.value.visitType,
       priceOfOtherWork: this.repairListFormGroup.value.price,
+      status: 'IN QUEUE',
       repairs,
     }
     if (this.serviceId) {

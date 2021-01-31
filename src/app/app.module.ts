@@ -34,7 +34,8 @@ import { EditRendererComponent } from './components/edit-renderer/edit-renderer.
 import { MaterialModule } from './material/material.module';
 import { GoogleSpreadsheetWarnComponent } from './dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 import { ItemCardComponent } from './components/item-card/item-card.component';
-
+import { AssignToBayComponent } from './dialogs/assign-to-bay/assign-to-bay.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -62,7 +63,8 @@ ModuleRegistry.registerModules(AllModules);
     CarHistoryComponent,
     EditRendererComponent,
     GoogleSpreadsheetWarnComponent,
-    ItemCardComponent
+    ItemCardComponent,
+    AssignToBayComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +75,7 @@ ModuleRegistry.registerModules(AllModules);
     HttpClientModule,
     InfiniteScrollModule,
     MaterialModule,
+    DragDropModule,
     AgGridModule.withComponents([]),
   ],
   providers: [DatePipe,

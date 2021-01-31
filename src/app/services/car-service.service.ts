@@ -9,6 +9,7 @@ export class CarServiceService {
 
 
 
+
   constructor(private http : HttpClient) { }
 
   getAllServices() {
@@ -34,6 +35,10 @@ export class CarServiceService {
 
   editUServiceStatus(status: any, id: number) {
     return this.http.post(`${baseApi}/update-cars-service-status/${id}`, {status});
+  }
+
+  assignBay(bay: any, id: any) {
+    return this.http.post(`${baseApi}/assign-bay/${id}`, {bay} );
   }
 
 

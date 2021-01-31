@@ -27,7 +27,15 @@ class="list">
   <span class="toggle-expand-all">
   <mat-slide-toggle [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed">  Collapse all</mat-slide-toggle>
 </span>
-  <mat-card style="padding: 16px;" class="card" *ngFor="let service of services; index as i;">
+<div
+cdkDropList
+[cdkDropListDisabled]="filter.status  !== 'IN QUEUE'"
+[cdkDropListData]="services"
+(cdkDropListDropped)="reOrder($event)"
+>
+
+
+  <mat-card cdkDrag style="padding: 16px;" class="card" *ngFor="let service of services; index as i;">
 
     <span class="header"> Car# {{service.car?.car_id}} </span>
     <span class="fields">
@@ -51,26 +59,9 @@ class="list">
       </span>
     </span>
     <mat-menu class="menu" #menu="matMenu">
-      <button (click)="toggleApprove(service)" mat-menu-item>
-        <i *ngIf="service.status === 'APPROVED'" class="fal fa-thumbs-down"></i>
-        <i *ngIf="service.status !== 'APPROVED'" class="fal fa-thumbs-up"></i>
-        <span>{{service.status === 'APPROVED' ? 'Disapprove' : 'Approve'}}</span>
-      </button>
-      <button (click)="editService(service, i)" mat-menu-item>
-        <i class="fal fa-edit"></i>
-        <span>Edit</span>
-      </button>
-      <button (click)="goToHistory(service)" mat-menu-item>
-        <i class="fal fa-history"></i>
-        <span>View Full History</span>
-      </button>
-      <button *ngIf="service.status === 'IN PROGRESS'" (click)="toggleApprove(service, 'COMPLETED')"mat-menu-item>
-        <i class="fal fa-check-circle"></i>
-        <span>VMark completed</span>
-      </button>
-      <button (click)="deleteService(service, i)" mat-menu-item>
-        <i class="fal fa-trash-alt"></i>
-        <span>Delete</span>
+      <button *ngFor="let action of actionMenu" (click)="action.actionFunction(service, i)" mat-menu-item>
+        <i  [class]="action.icon"></i>
+        <span>{{action.name}}</span>
       </button>
     </mat-menu>
     <div *ngIf="service.expanded" class="expanded">
@@ -83,7 +74,7 @@ class="list">
       </div>
     </div>
   </mat-card>
-
+</div>
 </div>
 
 <div *ngIf="loading" class="spinner">
