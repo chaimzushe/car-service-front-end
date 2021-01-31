@@ -12,7 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 import { AssignToBayComponent } from 'src/app/dialogs/assign-to-bay/assign-to-bay.component';
 import {baseApi} from './../../util/global-config';
-import {EventSourcePolyfill} from 'ng-event-source';
+import { EventSourcePolyfill } from 'ng-event-source';
+
 @Component({
   selector: 'app-car-services-list',
   templateUrl: './car-services-list.component.html',
@@ -158,9 +159,15 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   async toggleApprove(status, service, index) {
 
     let newStatus = status;
+
     service.status = newStatus;
     try {
       await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
+      if(newStatus === 'IN QUEUE' && service.bayNumber){
+        this.usedBays = this.usedBays.filter(b => b != service.bayNumber);
+      }
+      let newTabIndex = this.links.findIndex(l => l.name === newStatus);
+      this.setActive(this.links[newTabIndex], newTabIndex);
       this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
     } catch (err) {
       if (newStatus === "APPROVED") {
@@ -218,6 +225,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       }
       await this.carServiceService.assignBay(bay, service._id).toPromise();
       this.snackbar.open(`Successfully added to bay number ${bay}`, "dismiss", { duration: 3000 });
+      this.usedBays.push(bay);
       this.filter.skip = 0;
       this.getList();
     });
