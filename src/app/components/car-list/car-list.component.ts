@@ -27,7 +27,7 @@ export class CarListComponent implements OnInit, OnDestroy {
   }
   cars: CarFullInfo[] = [];
   noItemsText = "Loading...";
-  searchWord = ""
+  searchWord = "";
 
 
 
