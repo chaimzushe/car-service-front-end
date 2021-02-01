@@ -1,16 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {baseApi} from '../util/global-config';
+import { baseApi, socketIo } from '../util/global-config';
+import {io} from 'socket.io-client';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarServiceService {
+  socket: any;
+  declare io: any;
 
-
-
-
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) {
+      this.socket = io(socketIo);
+   }
 
   getAllServices() {
     return this.http.get(`${baseApi}/car-services`);
@@ -20,7 +23,21 @@ export class CarServiceService {
     return this.http.post(`${baseApi}/delete-car-service`, { id: _id });
   }
 
-  getFilteredServices(searchWord){
+
+  sendMessage(eventName, data) {
+    this.socket.emit(eventName, data);
+  }
+
+
+  listen(eventName) {
+    return new Observable((subscriber) => {
+      this.socket.on(eventName, (data) => {
+        subscriber.next(data);
+      })
+    });
+  }
+
+  getFilteredServices(searchWord) {
     return this.http.post(`${baseApi}/car-service-filter`, { searchWord });
   }
 
@@ -34,11 +51,11 @@ export class CarServiceService {
   }
 
   editUServiceStatus(status: any, id: number) {
-    return this.http.post(`${baseApi}/update-cars-service-status/${id}`, {status});
+    return this.http.post(`${baseApi}/update-cars-service-status/${id}`, { status });
   }
 
   assignBay(bay: any, id: any) {
-    return this.http.post(`${baseApi}/assign-bay/${id}`, {bay} );
+    return this.http.post(`${baseApi}/assign-bay/${id}`, { bay });
   }
 
 

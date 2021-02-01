@@ -11,8 +11,6 @@ import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 import { AssignToBayComponent } from 'src/app/dialogs/assign-to-bay/assign-to-bay.component';
-import {baseApi} from './../../util/global-config';
-import { EventSourcePolyfill } from 'ng-event-source';
 
 @Component({
   selector: 'app-car-services-list',
@@ -39,7 +37,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   noItemText = 'Loading...';
   filter: any = { limit: 4, skip: 0, status: 'IN QUEUE' };
   authorizationToken = "";
-  bayUpdatesSSe = new EventSourcePolyfill((`${baseApi}/stream-services-updates`),  {headers: { Authorization: this.getAuthToken()}});
   links = [
     { name: 'IN QUEUE', active: true },
     { name: 'IN PROGRESS', active: false },
@@ -72,7 +69,18 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.getList();
     this.users = (await this.userService.getAllUsers().toPromise() as any[]).map(u => u.name);
     this.getUsedBays()
-    this.bayUpdatesSSe.onmessage = this.bayUpdated;
+    this.setupSocketIo()
+  }
+  setupSocketIo() {
+    let sub = this.carServiceService.listen('bay-change').subscribe(x => {
+      this.getUsedBays();
+      if(this.filter.status === "IN QUEUE"){
+        this.snackbar.open('Item IN QUEUE recently updated', 'Dismiss', {duration: 2000});
+        this.filter.skip = 0;
+        this.getList();
+      }
+    });
+    this.subs.push(sub);
   }
   bayUpdated(e){
     console.log('Updated' , {e});

@@ -27,6 +27,7 @@
     "@fortawesome/fontawesome-pro": "^5.15.1",
     "@fullstory/browser": "^1.4.6",
     "@types/auth0-js": "^9.14.2",
+    "@types/socket.io-client": "^1.4.35",
     "ag-grid-angular": "^25.0.0",
     "ag-grid-community": "^25.0.0",
     "ag-grid-enterprise": "^25.0.0",
@@ -34,6 +35,7 @@
     "ng-event-source": "^1.0.14",
     "ngx-infinite-scroll": "^10.0.1",
     "rxjs": "~6.6.0",
+    "socket.io-client": "^3.1.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },
