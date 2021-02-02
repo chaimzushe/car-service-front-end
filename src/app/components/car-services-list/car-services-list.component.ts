@@ -127,14 +127,18 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   stripNonNumbers(input) {
     return Number(String(input).replace(/[^0-9.]/g, ""));
   }
-  getFields(service: Service) {
-    return [
+  getFields(service) {
+    let fields = [
       { name: 'Miles', value: service.milesAtService },
       { name: 'Status', value: service.status },
       { name: 'Visit type', value: (service.visitType || 'N/A') },
       { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
+    if(this.filter.status === "IN PROGRESS" && service.bayNumber){
+      fields.unshift( { name: 'Bay Number', value:  service.bayNumber})
+    }
+    return fields;
   }
 
   removeFilter(f, i) {
