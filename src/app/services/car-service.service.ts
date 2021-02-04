@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseApi, socketIo } from '../util/global-config';
-import {io} from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,11 +9,18 @@ import { Observable } from 'rxjs';
 })
 export class CarServiceService {
   socket: any;
-  declare io: any;
+
+  currentBays = Array.from({ length: 10 }, (k, i) => {
+    return { name: `Bay ${i + 1}`, value: (i + 1), inUse: false }
+  });
+
+  bayInUse(bay) {
+    return this.currentBays.find(b => b.name === bay.name && b.inUse);
+  }
 
   constructor(private http: HttpClient) {
-      this.socket = io(socketIo);
-   }
+    this.socket = io(socketIo);
+  }
 
   getAllServices() {
     return this.http.get(`${baseApi}/car-services`);
@@ -29,12 +36,17 @@ export class CarServiceService {
   }
 
 
+
   listen(eventName) {
     return new Observable((subscriber) => {
       this.socket.on(eventName, (data) => {
         subscriber.next(data);
       })
     });
+  }
+
+  downloadPDF(id: any) {
+    return this.http.get(`${baseApi}/car-service-pdf/${id}`, { responseType: 'blob' });
   }
 
   getFilteredServices(searchWord) {

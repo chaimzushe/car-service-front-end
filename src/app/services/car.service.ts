@@ -42,6 +42,6 @@ export class CarService {
   }
 
   createService(newCarService) {
-       return this.http.post(`${baseApi}/add-carService`, newCarService, { responseType: 'blob' })
+       return this.http.post(`${baseApi}/add-carService`, newCarService)
   }
 }

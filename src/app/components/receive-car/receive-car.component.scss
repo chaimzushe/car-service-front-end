@@ -36,8 +36,17 @@ h3 {
 
 .actions {
   margin: 22px 0;
-  button {
-    width: 100%;
+  text-align: center;
+  .button {
+    width: 200px;
+    &--cancel{
+      border: 1px solid;
+      margin-left: 22px;
+      &:hover{
+        background-color: black;
+        color: white;
+      }
+    }
   }
 }
 

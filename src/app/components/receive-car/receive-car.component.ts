@@ -59,6 +59,8 @@ export class ReceiveCarComponent implements OnInit {
   serviceObj: any = {};
   LoadingText = "Loading...";
   allServices: any[] = [];
+  currentBays: { name: string; value: number; inUse: boolean; }[];
+  completed = false;
   constructor(
     private carService: CarService,
     private repairService: RepairService,
@@ -69,7 +71,9 @@ export class ReceiveCarComponent implements OnInit {
     private datePipe: DatePipe,
     private carServiceService: CarServiceService,
     private router: Router
-  ) { }
+  ) {
+    this.currentBays = carServiceService.currentBays;
+  }
 
 
 
@@ -125,6 +129,7 @@ export class ReceiveCarComponent implements OnInit {
     });
     this.mechanicFormGroup = this.fb.group({
       mechanic: [this.serviceObj.mechanic],
+      bayNumber: [this.serviceObj.bayNumber],
     });
     this.repairListFormGroup = this.fb.group({
       selectedFirstRepair: [null],
@@ -271,6 +276,8 @@ export class ReceiveCarComponent implements OnInit {
   selectionsChanged(e) {
     if (e.previouslySelectedIndex === 0 && e.selectedIndex === 1) {
       this.addCar();
+    } else if(e.previouslySelectedIndex === 1 && e.selectedIndex === 2){
+      this.completed = true;
     }
   }
 
@@ -301,7 +308,6 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   createLabel() {
-
     const repairs = this.repairsNeeded.map(r => ({
       qty: r.qty,
       note: r.note,
@@ -320,16 +326,18 @@ export class ReceiveCarComponent implements OnInit {
       priceOfOtherWork: this.repairListFormGroup.value.price,
       status: 'IN QUEUE',
       repairs,
+      bayNumber: (this.mechanicFormGroup.value.bayNumber),
     }
+    if(newCarService.bayNumber){
+      newCarService.status = "IN PROGRESS";
+    }
+
     if (this.serviceId) {
       return this.updateService(newCarService)
     }
     this.loading = true;
-    this.LoadingText = "Generating pdf file";
+    this.LoadingText = "Saving";
     this.carService.createService(newCarService).subscribe(x => {
-      var blob = new Blob([x], { type: 'application/pdf' });
-      var blobURL = URL.createObjectURL(blob);
-      window.open(blobURL);
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
       this.router.navigate(['/services'])
       this.loading = false;
@@ -338,6 +346,7 @@ export class ReceiveCarComponent implements OnInit {
       this.loading = false;
     });
   }
+
   updateService(newCarService) {
     this.loading = true;
     this.LoadingText = "Updating service info";

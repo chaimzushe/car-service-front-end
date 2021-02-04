@@ -3,43 +3,34 @@
 <div [class.open]="serviceId" class="wrapper">
   <h3 class="header-text">Receive {{selectedCarNumber || 'Car'}}</h3>
   <ng-container>
-    <mat-vertical-stepper (selectionChange)="selectionsChanged($event)" *ngIf="carGroupControl" [linear]="!serviceId" #stepper>
-      <mat-step  [stepControl]="carGroupControl">
+    <mat-vertical-stepper (selectionChange)="selectionsChanged($event)" *ngIf="carGroupControl" [linear]="!serviceId"
+      #stepper>
+      <mat-step [stepControl]="carGroupControl">
         <form [formGroup]="carGroupControl">
           <ng-template matStepLabel>Enter Car or VIN Number</ng-template>
           <mat-form-field>
             <mat-label>Car or VIN Number </mat-label>
-            <input
-              type="text"
-              placeholder="Car#"
-              aria-label="Number"
-              matInput
-              formControlName="carNumber"
-              [matAutocomplete]="autoCars"
-            />
-            <mat-autocomplete
-            [displayWith]="carDisplayFunc"
-              autoActiveFirstOption
-              (optionSelected)="clearCurRepairs($event)"
-              #autoCars="matAutocomplete"
-            >
+            <input type="text" placeholder="Car#" aria-label="Number" matInput formControlName="carNumber"
+              [matAutocomplete]="autoCars" />
+            <mat-autocomplete [displayWith]="carDisplayFunc" autoActiveFirstOption
+              (optionSelected)="clearCurRepairs($event)" #autoCars="matAutocomplete">
               <mat-option *ngFor="let car of filteredCars" [value]="car">
                 #{{ car.car_id }} - VIN:{{car.vin}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
 
-        <mat-form-field >
-          <mat-label>Current Car Miles</mat-label>
-          <input matInput  formControlName="miles" placeholder="Miles" >
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Current Car Miles</mat-label>
+            <input matInput formControlName="miles" placeholder="Miles">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Visit Reason</mat-label>
-          <mat-select formControlName="visitType">
-            <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Visit Reason</mat-label>
+            <mat-select formControlName="visitType">
+              <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
           <div>
             <button mat-button matStepperNext>Next</button>
@@ -58,7 +49,7 @@
               <span class="text-qty">
                 <span>
 
-                  <select  [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.qty" name="car">
+                  <select [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.qty" name="car">
                     <option value="" selected></option>
                     <option *ngFor="let qty of [1,2,3,4,5,6,7,8,9,10,11,12,13]" [value]="qty">
                       {{qty}}
@@ -71,15 +62,17 @@
 
               </span>
               <span class="repair-actions">
-                <span (click)="editNote(repair, i)"  class="note-icon">
-                  <i [ngClass]="{'fa-comment-alt-lines': !repair.isEditing, 'fa-save': repair.isEditing}" class="fal"></i>
+                <span (click)="editNote(repair, i)" class="note-icon">
+                  <i [ngClass]="{'fa-comment-alt-lines': !repair.isEditing, 'fa-save': repair.isEditing}"
+                    class="fal"></i>
                 </span>
                 <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
               </span>
 
               <div *ngIf="repair.note || repair.isEditing" class="note">
 
-                <textarea [disabled]="!repair.isEditing" [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.note" matInput placeholder="Note for mechanic">
+                <textarea [disabled]="!repair.isEditing" [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.note"
+                  matInput placeholder="Note for mechanic">
                   <span *ngIf="repair.note">*</span> {{repair.note}}
                 </textarea>
               </div>
@@ -87,18 +80,12 @@
           </div>
 
 
-          <mat-form-field >
-            <input type="text"
-                   [placeholder]="'Select Repair'"
-                   aria-label="Repairs"
-                   matInput
-                    class="repair-input"
-                   (keyup)="filterRepairs($event)"
-                   formControlName="selectedFirstRepair"
-                   [matAutocomplete]="autoRepairs">
-            <mat-autocomplete   (optionSelected)="addRepair($event)" autoActiveFirstOption #autoRepairs="matAutocomplete">
+          <mat-form-field>
+            <input type="text" [placeholder]="'Select Repair'" aria-label="Repairs" matInput class="repair-input"
+              (keyup)="filterRepairs($event)" formControlName="selectedFirstRepair" [matAutocomplete]="autoRepairs">
+            <mat-autocomplete (optionSelected)="addRepair($event)" autoActiveFirstOption #autoRepairs="matAutocomplete">
               <mat-option *ngFor="let repair of filteredRepairs" [value]="repair.name">
-                 {{repair.name}}
+                {{repair.name}}
               </mat-option>
             </mat-autocomplete>
 
@@ -111,17 +98,17 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="repairListFormGroup">
+      <mat-step [optional]="true" [stepControl]="repairListFormGroup">
         <form [formGroup]="repairListFormGroup">
           <ng-template matStepLabel>Other Notes</ng-template>
-          <mat-form-field >
+          <mat-form-field>
             <mat-label>Leave a note</mat-label>
             <textarea formControlName="note" matInput placeholder="Note for mechanic"></textarea>
           </mat-form-field>
-        <mat-form-field >
-        <mat-label>Price of other repairs </mat-label>
-        <input matInput  formControlName="price" placeholder="Price" >
-      </mat-form-field>
+          <mat-form-field>
+            <mat-label>Price of other repairs </mat-label>
+            <input matInput formControlName="price" placeholder="Price">
+          </mat-form-field>
 
 
           <div>
@@ -130,29 +117,23 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="mechanicFormGroup">
+      <mat-step [optional]="true"  [stepControl]="mechanicFormGroup">
         <form [formGroup]="mechanicFormGroup">
-          <ng-template matStepLabel>Mechanic</ng-template>
+          <ng-template matStepLabel>Assign Mechanic and Bay</ng-template>
           <mat-form-field>
             <mat-label>Mechanic</mat-label>
-            <input
-              type="text"
-              placeholder="Name"
-              aria-label="Name"
-              matInput
-              (keyup)="filterUsers($event)"
-              formControlName="mechanic"
-              [matAutocomplete]="autoUsers"
-            />
-            <mat-autocomplete
-            [displayWith]="userDisplayFunc"
-              autoActiveFirstOption
-              #autoUsers="matAutocomplete"
-            >
+            <input type="text" placeholder="Name" aria-label="Name" matInput (keyup)="filterUsers($event)"
+              formControlName="mechanic" [matAutocomplete]="autoUsers" />
+            <mat-autocomplete [displayWith]="userDisplayFunc" autoActiveFirstOption #autoUsers="matAutocomplete">
               <mat-option *ngFor="let user of filteredUsers" [value]="user">
                 {{ user.name }}
               </mat-option>
             </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select formControlName="bayNumber" class="input" placeholder="Bay Number">
+              <mat-option *ngFor="let bay of currentBays" [value]="bay.value">{{bay.name}}</mat-option>
+            </mat-select>
           </mat-form-field>
           <div>
             <button mat-button matStepperPrevious>Back</button>
@@ -164,10 +145,6 @@
 
       <mat-step>
         <ng-template matStepLabel>Done</ng-template>
-        <div class="actions">
-          <button (click)="createLabel()" mat-raised-button color="primary">{{!serviceId ? 'Create Label' : 'Update Service'}}</button>
-        </div>
-
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button (click)="stepper.reset()">Reset</button>
@@ -175,6 +152,11 @@
       </mat-step>
     </mat-vertical-stepper>
   </ng-container>
+
+  <div class="actions">
+    <button class="button" (click)="createLabel()" [disabled]="!completed" mat-raised-button color="primary">Confirm</button>
+    <button class="button button--cancel"mat-button  [routerLink]="['/services']">Cancel</button>
+  </div>
 
   <div *ngIf="loading" class="spinner">
     <mat-spinner></mat-spinner>

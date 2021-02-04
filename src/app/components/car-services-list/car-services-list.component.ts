@@ -35,7 +35,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   users: any[] = [];
   searchWord: any;
   noItemText = 'Loading...';
-  filter: any = { limit: 4, skip: 0, status: 'IN QUEUE' };
+  filter: any = { limit: 6, skip: 0, status: 'IN QUEUE' };
   authorizationToken = "";
   links = [
     { name: 'IN QUEUE', active: true },
@@ -63,7 +63,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private dialog: MatDialog) {
 
-    }
+  }
 
   async ngOnInit() {
     this.getList();
@@ -74,20 +74,20 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   setupSocketIo() {
     let sub = this.carServiceService.listen('bay-change').subscribe(x => {
       this.getUsedBays();
-      if(this.filter.status === "IN QUEUE"){
-        this.snackbar.open('Item IN QUEUE recently updated', 'Dismiss', {duration: 2000});
+      if (this.filter.status === "IN QUEUE") {
+        this.snackbar.open('Item IN QUEUE recently updated', 'Dismiss', { duration: 2000 });
         this.filter.skip = 0;
         this.getList();
       }
     });
     this.subs.push(sub);
   }
-  bayUpdated(e){
-    console.log('Updated' , {e});
+  bayUpdated(e) {
+    console.log('Updated', { e });
   }
   async getUsedBays() {
-    let inProgress = await this.carServiceService.applyFilters({status: 'IN PROGRESS'}, '').toPromise() as any[];
-    this.usedBays = inProgress.filter(s => s.bayNumber).map( s => s.bayNumber);
+    let inProgress = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any[];
+    this.usedBays = inProgress.filter(s => s.bayNumber).map(s => s.bayNumber);
   }
 
   ngOnDestroy() {
@@ -135,8 +135,8 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
-    if(this.filter.status === "IN PROGRESS" && service.bayNumber){
-      fields.unshift( { name: 'Bay Number', value:  service.bayNumber})
+    if (this.filter.status === "IN PROGRESS" && service.bayNumber) {
+      fields.unshift({ name: 'Bay Number', value: service.bayNumber })
     }
     return fields;
   }
@@ -175,11 +175,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     service.status = newStatus;
     try {
       await this.carServiceService.editUServiceStatus(newStatus, service._id).toPromise();
-      if(newStatus === 'IN QUEUE' && service.bayNumber){
+      if (newStatus === 'IN QUEUE' && service.bayNumber) {
         this.usedBays = this.usedBays.filter(b => b != service.bayNumber);
       }
       let newTabIndex = this.links.findIndex(l => l.name === newStatus);
-      this.setActive(this.links[newTabIndex], newTabIndex);
       this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
     } catch (err) {
       if (newStatus === "APPROVED") {
@@ -228,7 +227,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     let dialogRef = this.dialog.open(AssignToBayComponent, {
       width: "400px",
       autoFocus: false,
-      data: {usedBays: this.usedBays}
+      data: { usedBays: this.usedBays }
     });
 
     let closedSub = dialogRef.afterClosed().subscribe(async bay => {
@@ -265,6 +264,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       case "IN PROGRESS": {
         this.actionMenu.unshift(
           { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
+          { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
           { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
           { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
           { name: 'Mark Completed', icon: 'fal fa-check-circle', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
@@ -289,9 +289,13 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         return;
       }
     }
+  }
 
-
-
+  async downloadODF(service, i) {
+    let data = await this.carServiceService.downloadPDF(service._id).toPromise() as any;
+    var blob = new Blob([data], { type: 'application/pdf' });
+    var blobURL = URL.createObjectURL(blob);
+    window.open(blobURL);
   }
 
   deleteService(service, i) {
