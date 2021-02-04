@@ -1,4 +1,5 @@
-<app-sub-nav (syncClicked)="sync()" (dialogOpened)="openFilter()" (searched)="search($event)" [subNavInfo]="subNavInfo"></app-sub-nav>
+<app-sub-nav (syncClicked)="sync()" (dialogOpened)="openFilter()" (searched)="search($event)" [subNavInfo]="subNavInfo">
+</app-sub-nav>
 <div class="nav-filter">
   <span class="link" (click)="setActive(link, i)" [class.link--active]="link.active"
     *ngFor="let link of links; index as i"> {{link.name || 'ALL'}}</span>
@@ -9,73 +10,74 @@
   <mat-chip-list #chipList>
     <b>Current filters: </b>
     <mat-chip *ngFor="let filter of currentFilters; index as i" [removable]="true" (removed)="removeFilter(filter, i)">
-      <b> {{filter.name}}:</b>  <span class="chip-value">{{filter.value}}</span>
+      <b> {{filter.name}}:</b> <span class="chip-value">{{filter.value}}</span>
       <span matChipRemove>
         <i class="fal fa-trash-alt"></i>
       </span>
     </mat-chip>
   </mat-chip-list>
 </div>
-<div
-    infiniteScroll
-      [infiniteScrollDistance]="3"
-      [infiniteScrollThrottle]="50"
-      (scrolled)="onScroll()"
-
-class="list">
+<div infiniteScroll [infiniteScrollDistance]="3" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="list">
   <h3 class="text-header">Car Services</h3>
   <span class="toggle-expand-all">
-  <mat-slide-toggle [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed">  Collapse all</mat-slide-toggle>
-</span>
-<div
-cdkDropList
-[cdkDropListDisabled]="filter.status  !== 'IN QUEUE'"
-[cdkDropListData]="services"
-(cdkDropListDropped)="reOrder($event)"
-class="list-wrap"
->
+    <mat-slide-toggle [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed"> Collapse all
+    </mat-slide-toggle>
+  </span>
+  <div cdkDropList [cdkDropListDisabled]="filter.status  !== 'IN QUEUE'" [cdkDropListData]="services"
+    (cdkDropListDropped)="reOrder($event)" class="list-wrap">
 
 
-  <mat-card cdkDrag style="padding: 16px;" class="card" *ngFor="let service of services; index as i;">
+    <mat-card cdkDrag style="padding: 16px;" class="card" *ngFor="let service of services; index as i;">
 
-    <span class="header"> Car# {{service.car?.car_id}} </span>
-    <span class="fields">
-      <span class="field" *ngFor="let field of getFields(service)">
-        <b>{{field.name}}: </b> <span class="value">{{field.value}}</span>
-      </span>
+      <span class="header"> Car# {{service.car?.car_id}} </span>
+      <span class="fields">
 
-    </span>
-    <span class="user-expand">
-      <span [matTooltip]="'Total price'" class="price">
-        {{ (service.totalPrice )| currency: 0 }}
+        <span class="field" *ngFor="let field of getFields(service)">
+          <b>{{field.name}}: </b> <span class="value">{{field.value}}</span>
+        </span>
+
+
+
+
+
       </span>
-      <span [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
-        {{(service.mechanic?.name || 'N/A').slice(0, 3) | uppercase }}
+      <span class="user-expand">
+        <span [ngStyle]="{'background-color': visitTypesColor[service.visitType]}" class="visit">
+          <span>{{service.visitType}}</span>
+        </span>
+
+        <span [matTooltip]="'Total price'" class="price">
+          {{ (service.totalPrice )| currency: 0 }}
+        </span>
+
+        <span [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
+          {{(service.mechanic?.name || 'N/A').slice(0, 3) | uppercase }}
+        </span>
+        <span [matMenuTriggerFor]="menu" class="action-icon">
+          <i class="fal fa-cog"></i>
+        </span>
+        <span (click)="toggleExpand(service)" class="action-icon">
+          <i [class.expand-icon]="service.expanded" class="fal fa-chevron-down "></i>
+        </span>
       </span>
-      <span [matMenuTriggerFor]="menu" class="action-icon">
-        <i class="fal fa-cog"></i>
-      </span>
-      <span (click)="toggleExpand(service)" class="action-icon">
-        <i [class.expand-icon]="service.expanded" class="fal fa-chevron-down "></i>
-      </span>
-    </span>
-    <mat-menu class="menu" #menu="matMenu">
-      <button *ngFor="let action of actionMenu" (click)="action.actionFunction(service, i)" mat-menu-item>
-        <i  [class]="action.icon"></i>
-        <span>{{action.name}}</span>
-      </button>
-    </mat-menu>
-    <div *ngIf="service.expanded" class="expanded">
-      <li [class.service-note--last]="isLast" *ngFor="let repair of service.repairs; last as isLast;">
-        <span> fixed: {{repair.qty}} {{repair.repair?.name}} <span class="rep-price"> ({{(repair.repair?.price || 0) | currency }}) </span> </span> <span class="repair-note" *ngIf="repair.note">
-          *{{repair.note}}</span>
-      </li>
-      <div class="service-note" *ngIf="service.note">
-        *{{service.note}}
+      <mat-menu class="menu" #menu="matMenu">
+        <button *ngFor="let action of actionMenu" (click)="action.actionFunction(service, i)" mat-menu-item>
+          <i [class]="action.icon"></i>
+          <span>{{action.name}}</span>
+        </button>
+      </mat-menu>
+      <div *ngIf="service.expanded" class="expanded">
+        <li [class.service-note--last]="isLast" *ngFor="let repair of service.repairs; last as isLast;">
+          <span> fixed: {{repair.qty}} {{repair.repair?.name}} <span class="rep-price"> ({{(repair.repair?.price || 0) |
+              currency }}) </span> </span> <span class="repair-note" *ngIf="repair.note">
+            *{{repair.note}}</span>
+        </li>
+        <div class="service-note" *ngIf="service.note">
+          *{{service.note}}
+        </div>
       </div>
-    </div>
-  </mat-card>
-</div>
+    </mat-card>
+  </div>
 </div>
 
 <div *ngIf="loading" class="spinner">

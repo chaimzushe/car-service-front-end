@@ -29,6 +29,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     backLink: '/home',
     sync: true
   }
+  visitTypesColor = {};
   services: Service[] = [];
   loading = true;
   subs: Subscription[] = [];
@@ -63,6 +64,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private dialog: MatDialog) {
 
+    this.visitTypesColor = carServiceService.visitTypesColor;
   }
 
   async ngOnInit() {
@@ -131,7 +133,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     let fields = [
       { name: 'Miles', value: service.milesAtService },
       { name: 'Status', value: service.status },
-      { name: 'Visit type', value: (service.visitType || 'N/A') },
       { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]

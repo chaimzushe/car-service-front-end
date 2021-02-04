@@ -14,6 +14,14 @@ export class CarServiceService {
     return { name: `Bay ${i + 1}`, value: (i + 1), inUse: false }
   });
 
+  visitTypesColor = {
+    Maintenance: 'lightblue',
+    Inspection: 'rgb(193 144 185)',
+    Accident: '#fd7571f5',
+    'TLC Other': '#fff060f5',
+    Scheduled: '#60ff69f5',
+  }
+
   bayInUse(bay) {
     return this.currentBays.find(b => b.name === bay.name && b.inUse);
   }
