@@ -298,6 +298,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       case "IN QUEUE": {
         this.actionMenu.unshift(
           { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
+          { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
           { name: 'Assign To Bay', icon: 'fal fa-plug', actionFunction: this.assignToBay.bind(this) }
         )
         return;
@@ -317,6 +318,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         this.actionMenu.unshift(
           { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
           { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
+          { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
           { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
           { name: 'Approve', icon: 'fal fa-thumbs-up', actionFunction: this.toggleApprove.bind(this, 'APPROVED') },
         )
