@@ -102,6 +102,7 @@ export class ReceiveCarComponent implements OnInit {
     this.route.params.subscribe(async p => {
       if (p.id !== 'new') {
         this.serviceId = p.id;
+        this.completed = true;
         this.serviceObj = await this.carServiceService.getServiceDetail(p.id).toPromise();
         this.repairsNeeded = this.serviceObj.repairs.map(r => ({
           qty: r.qty,

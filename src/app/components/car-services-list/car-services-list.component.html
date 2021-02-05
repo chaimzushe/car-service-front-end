@@ -20,8 +20,13 @@
 <div infiniteScroll [infiniteScrollDistance]="3" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="list">
   <h3 class="text-header">Car Services</h3>
   <span class="toggle-expand-all">
-    <mat-slide-toggle [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed"> Collapse all
+    <mat-slide-toggle *ngIf="filter.status !== 'WAITING'" [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed"> Collapse all
     </mat-slide-toggle>
+    <span  *ngIf="filter.status === 'WAITING'" class="sub-filters">
+        <span  [class.sub-filter--active]="r.active" (click)="setWaitingFilterActive(r, i)" class="sub-filter" *ngFor="let r of waitingFilter; index as i">
+          {{r.name}}
+        </span>
+    </span>
   </span>
   <div cdkDropList [cdkDropListDisabled]="filter.status  !== 'IN QUEUE'" [cdkDropListData]="services"
     (cdkDropListDropped)="reOrder($event)" class="list-wrap">

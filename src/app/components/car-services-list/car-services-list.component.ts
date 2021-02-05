@@ -21,6 +21,7 @@ import { AddToWaitingComponent } from 'src/app/dialogs/add-to-waiting/add-to-wai
 })
 
 export class CarServicesListComponent implements OnInit, OnDestroy {
+  allWaitingServices: any;
   getAuthToken() {
     const idToken = localStorage.getItem('id_token');
     return ('Bearer ' + idToken);
@@ -39,6 +40,13 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   searchWord: any;
   noItemText = 'Loading...';
   filter: any = { limit: 6, skip: 0, status: 'IN QUEUE' };
+
+  waitingFilter = [
+    { name: 'All', active: true },
+    { name: 'Needs Buggy Approval', active: false },
+    { name: 'Missing Parts', active: false }
+  ];
+
   authorizationToken = "";
   bays = []
   links = [
@@ -84,8 +92,17 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.getList();
     this.users = (await this.userService.getAllUsers().toPromise() as any[]).map(u => u.name);
-    this.getUsedBays()
-    this.setupSocketIo()
+    this.getUsedBays();
+    this.setupSocketIo();
+  }
+
+  setWaitingFilterActive(r, i) {
+    this.waitingFilter.forEach((f, idx) => {
+      f.active = idx === i;
+    });
+    this.services = this.allWaitingServices.filter( s => {
+      return r.name === 'All' || s.waitingInfo.reason === r.name;
+    });
   }
 
   setupSocketIo() {
@@ -146,9 +163,11 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   getPrice(service) {
     return 20;
   }
+
   stripNonNumbers(input) {
     return Number(String(input).replace(/[^0-9.]/g, ""));
   }
+
   getFields(service) {
     let fields = [
       { name: 'Miles', value: service.milesAtService },
@@ -248,6 +267,9 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   getList() {
     this.loading = true;
     let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
+      if(this.filter.status === "WAITING") {
+        this.allWaitingServices = f;
+      }
       this.services = f;
       this.services.forEach(s => {
         s.totalPrice = this.getTotalPrice(s);

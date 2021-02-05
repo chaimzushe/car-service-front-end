@@ -14,7 +14,7 @@ export class AddToWaitingComponent implements OnInit {
     private dialogRef: MatDialogRef<AddToWaitingComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-
+    if(!data.info) data.info = {};
     this.selectedReason = data.info.reason;
     this.location = data.info.location;
     this.note = data.info.note;
