@@ -10,6 +10,12 @@
   </mat-select>
 </mat-form-field>
 
+<mat-form-field>
+  <mat-select [(ngModel)]="selectedVisitType" class="input" placeholder="Visit Type">
+    <mat-option *ngFor="let v of visitTypes" [value]="v">{{v}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
 <mat-form-field appearance="fill">
   <mat-label>From Date</mat-label>
   <input [(ngModel)]="startDateSelected" matInput [matDatepicker]="startDate">

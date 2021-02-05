@@ -45,6 +45,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     { name: 'IN PROGRESS', active: false },
     { name: 'COMPLETED', active: false },
     { name: 'APPROVED', active: false },
+    { name: 'WAITING', active: false },
   ];
   user = {};
   actionMenu = [];
@@ -53,6 +54,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     user: 'Mechanic',
     startDate: 'From Date',
     endDate: 'Till Date',
+    visitType: 'Visit Reason',
   }
 
 
