@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 import { AssignToBayComponent } from 'src/app/dialogs/assign-to-bay/assign-to-bay.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-car-services-list',
@@ -38,12 +39,14 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   noItemText = 'Loading...';
   filter: any = { limit: 6, skip: 0, status: 'IN QUEUE' };
   authorizationToken = "";
+  bays = []
   links = [
     { name: 'IN QUEUE', active: true },
     { name: 'IN PROGRESS', active: false },
     { name: 'COMPLETED', active: false },
     { name: 'APPROVED', active: false },
   ];
+  user = {};
   actionMenu = [];
   isCollapsed = false;
   filterNameMap = {
@@ -57,14 +60,22 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   usedBays: any[] = [];
 
   constructor(private carServiceService: CarServiceService,
+    private authService: AuthService,
     private router: Router,
     private userService: UserService,
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private dialog: MatDialog) {
-
+    this.bays = this.carServiceService.currentBays;
     this.visitTypesColor = carServiceService.visitTypesColor;
+    let userSub = this.authService.userSubject.subscribe(user => {
+      if (user) {
+        this.user = user;
+      }
+    });
+
+    this.subs.push(userSub);
   }
 
   async ngOnInit() {
@@ -73,6 +84,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.getUsedBays()
     this.setupSocketIo()
   }
+
   setupSocketIo() {
     let sub = this.carServiceService.listen('bay-change').subscribe(x => {
       this.getUsedBays();
@@ -84,12 +96,17 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     });
     this.subs.push(sub);
   }
+
   bayUpdated(e) {
     console.log('Updated', { e });
   }
+
   async getUsedBays() {
     let inProgress = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any[];
     this.usedBays = inProgress.filter(s => s.bayNumber).map(s => s.bayNumber);
+    this.carServiceService.currentBays.forEach(bay => {
+      bay.inUse = !!this.usedBays.find(b => b === bay.value);
+    });
   }
 
   ngOnDestroy() {
@@ -132,14 +149,25 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   getFields(service) {
     let fields = [
       { name: 'Miles', value: service.milesAtService },
-      { name: 'Status', value: service.status },
       { name: 'Serviced', value: this.datePipe.transform(service.serviceTime, 'short') },
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
     if (this.filter.status === "IN PROGRESS" && service.bayNumber) {
       fields.unshift({ name: 'Bay Number', value: service.bayNumber })
     }
+
+    if (["COMPLETED", "APPROVED"].includes(service.status) && service.visitType) {
+      fields.unshift({ name: 'Visit Reason', value: service.visitType })
+    }
     return fields;
+  }
+
+  showPrice(service) {
+    return ["COMPLETED", "APPROVED"].includes(service.status)
+  }
+
+  showVisit(service) {
+    return ["IN QUEUE", "IN PROGRESS"].includes(service.status)
   }
 
   removeFilter(f, i) {
@@ -158,7 +186,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   async onScroll() {
-    this.filter.skip += 4;
+    this.filter.skip += 6;
     this.loading = true;
     const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
     mewServices.forEach(s => {
@@ -234,6 +262,17 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     let closedSub = dialogRef.afterClosed().subscribe(async bay => {
       if (!bay) {
         return;
+      }
+      if (this.carServiceService.bayInUse(bay)) {
+        const dialogRef = this.dialog.open(ConfirmActionComponent, {
+          width: '250px',
+          data: { msg: 'This bay is already in use. Do you want to assign another car to it?' },
+          autoFocus: false
+        });
+
+        let result = await dialogRef.afterClosed().toPromise();
+        console.log(result)
+        if (!result) return;
       }
       await this.carServiceService.assignBay(bay, service._id).toPromise();
       this.snackbar.open(`Successfully added to bay number ${bay}`, "dismiss", { duration: 3000 });

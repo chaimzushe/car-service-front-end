@@ -153,10 +153,9 @@ button {
   }
 }
 .price {
-  border: 1px solid #4b8400;
   margin-right: 8px;
   background-color: #4b8400;
-  padding: 4px 8px;
+  padding: 6px 8px;
   border-radius: 8px;
   color: white;
   min-width: 80px;
@@ -176,12 +175,12 @@ button {
 }
 
 .visit {
-  padding: 8px;
+  padding: 6px 8px;
   width: 82px;
   text-align: center;
   margin-right: 12px;
-  width: 80px;
-  border-radius: 12px;
+  min-width: 100px;
+  border-radius: 8px;
 }
 
 .list-wrap {
@@ -241,3 +240,5 @@ button {
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+

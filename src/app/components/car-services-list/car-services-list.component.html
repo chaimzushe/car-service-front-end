@@ -42,15 +42,15 @@
 
       </span>
       <span class="user-expand">
-        <span [ngStyle]="{'background-color': visitTypesColor[service.visitType]}" class="visit">
+        <span *ngIf="showVisit(service)"  [ngStyle]="{'background-color': visitTypesColor[service.visitType]}" class="visit">
           <span>{{service.visitType}}</span>
         </span>
 
-        <span [matTooltip]="'Total price'" class="price">
+        <span *ngIf="showPrice(service)" [matTooltip]="'Total price'" class="price">
           {{ (service.totalPrice )| currency: 0 }}
         </span>
 
-        <span [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
+        <span  [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
           {{(service.mechanic?.name || 'N/A').slice(0, 3) | uppercase }}
         </span>
         <span [matMenuTriggerFor]="menu" class="action-icon">

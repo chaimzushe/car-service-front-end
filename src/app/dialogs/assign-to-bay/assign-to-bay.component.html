@@ -6,7 +6,7 @@
 
 <mat-form-field>
   <mat-select [(ngModel)]="selectedBay" class="input" placeholder="Bay Number">
-    <mat-option *ngFor="let bay of bays"  [disabled]="bay.disabled" [value]="bay.value">{{bay.name}} {{bay.disabled ? ' -- IN USE --' : ''}}</mat-option>
+    <mat-option *ngFor="let bay of bays"  [value]="bay.value">{{bay.name}}</mat-option>
   </mat-select>
 </mat-form-field>
 

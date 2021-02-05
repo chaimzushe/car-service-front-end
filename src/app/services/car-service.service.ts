@@ -23,7 +23,7 @@ export class CarServiceService {
   }
 
   bayInUse(bay) {
-    return this.currentBays.find(b => b.name === bay.name && b.inUse);
+    return this.currentBays.find(b => b.value === bay && b.inUse);
   }
 
   constructor(private http: HttpClient) {
