@@ -35,12 +35,8 @@
         <span class="field" *ngFor="let field of getFields(service)">
           <b>{{field.name}}: </b> <span class="value">{{field.value}}</span>
         </span>
-
-
-
-
-
       </span>
+
       <span class="user-expand">
         <span *ngIf="showVisit(service)"  [ngStyle]="{'background-color': visitTypesColor[service.visitType]}" class="visit">
           <span>{{service.visitType}}</span>
@@ -56,17 +52,21 @@
         <span [matMenuTriggerFor]="menu" class="action-icon">
           <i class="fal fa-cog"></i>
         </span>
-        <span (click)="toggleExpand(service)" class="action-icon">
+        <span *ngIf="service.status !== 'WAITING'" (click)="toggleExpand(service)" class="action-icon">
           <i [class.expand-icon]="service.expanded" class="fal fa-chevron-down "></i>
         </span>
       </span>
+
+      <div class="waiting-note" *ngIf="service.status === 'WAITING' && service.waitingInfo?.note">
+        *{{service.waitingInfo?.note}}
+      </div>
       <mat-menu class="menu" #menu="matMenu">
         <button *ngFor="let action of actionMenu" (click)="action.actionFunction(service, i)" mat-menu-item>
           <i [class]="action.icon"></i>
           <span>{{action.name}}</span>
         </button>
       </mat-menu>
-      <div *ngIf="service.expanded" class="expanded">
+      <div *ngIf="service.expanded && service.status !== 'WAITING'" class="expanded">
         <li [class.service-note--last]="isLast" *ngFor="let repair of service.repairs; last as isLast;">
           <span> fixed: {{repair.qty}} {{repair.repair?.name}} <span class="rep-price"> ({{(repair.repair?.price || 0) |
               currency }}) </span> </span> <span class="repair-note" *ngIf="repair.note">

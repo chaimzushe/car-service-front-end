@@ -1,0 +1,30 @@
+<div class="header">
+  <p><span>Add to waiting list</span> </p>
+</div>
+
+
+
+<mat-form-field>
+  <mat-select [(ngModel)]="selectedReason" class="input" placeholder="Reason">
+    <mat-option *ngFor="let r of ['Needs Buggy Approval', 'Missing Parts']" [value]="r">{{r}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="standard">
+  <mat-label>Car Waiting Location</mat-label>
+  <input [(ngModel)]="location" matInput placeholder="Car Parked at">
+</mat-form-field>
+
+<mat-form-field >
+  <mat-label>Leave a note</mat-label>
+  <textarea [(ngModel)]="note" matInput placeholder="Mre information about the delay"></textarea>
+</mat-form-field>
+
+
+
+
+
+
+<div style="width: 100%; margin: auto; text-align: center;">
+  <button style="width: 200px" (click)="apply()" mat-raised-button color="primary">Confirm</button>
+</div>
+

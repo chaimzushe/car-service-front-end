@@ -48,6 +48,7 @@ export interface Service {
   expanded?: boolean;
   serviceTime: Date;
   totalPrice: number;
+  waitingInfo: any;
 }
 
 

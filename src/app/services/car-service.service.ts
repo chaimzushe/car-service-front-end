@@ -78,6 +78,9 @@ export class CarServiceService {
     return this.http.post(`${baseApi}/assign-bay/${id}`, { bay });
   }
 
+  waiting(waitingInfo, id: any) {
+    return this.http.post(`${baseApi}/car-waiting/${id}`, waitingInfo);
+  }
 
   getServiceDetail(id: any) {
     return this.http.get(`${baseApi}/car-service/${id}`);

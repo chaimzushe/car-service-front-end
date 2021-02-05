@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 import { AssignToBayComponent } from 'src/app/dialogs/assign-to-bay/assign-to-bay.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { AddToWaitingComponent } from 'src/app/dialogs/add-to-waiting/add-to-waiting.component';
 
 @Component({
   selector: 'app-car-services-list',
@@ -161,6 +162,14 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     if (["COMPLETED", "APPROVED"].includes(service.status) && service.visitType) {
       fields.unshift({ name: 'Visit Reason', value: service.visitType })
     }
+
+    if (["WAITING"].includes(service.status) && service.visitType) {
+      fields = [
+        { name: "Reason", value: service.waitingInfo.reason },
+        { name: "Car Location", value: service.waitingInfo.location },
+        { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
+      ]
+    }
     return fields;
   }
 
@@ -209,7 +218,8 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       if (newStatus === 'IN QUEUE' && service.bayNumber) {
         this.usedBays = this.usedBays.filter(b => b != service.bayNumber);
       }
-      let newTabIndex = this.links.findIndex(l => l.name === newStatus);
+      this.filter.take = 0;
+      this.getList();
       this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
     } catch (err) {
       if (newStatus === "APPROVED") {
@@ -289,17 +299,38 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.services.splice(e.currentIndex, 0, this.services.splice(e.previousIndex, 1)[0]);
   }
 
+  addToWaitingList(service, i) {
+    let dialogRef = this.dialog.open(AddToWaitingComponent, {
+      width: "400px",
+      autoFocus: false,
+      data: { info: service.waitingInfo }
+    });
+
+    let closedSub = dialogRef.afterClosed().subscribe(async res => {
+      if (!res) {
+        return;
+      }
+      let data = await this.carServiceService.waiting(res, service._id).toPromise();
+      this.filter.skip = 0;
+      this.getList();
+      this.snackbar.open(`Successfully added to waiting area`, "dismiss", { duration: 3000 });
+    });
+    this.subs.push(closedSub);
+  }
+
   setUpActionMenu() {
     this.actionMenu = [
+      { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
       { name: 'Delete', icon: 'fal fa-trash-alt', actionFunction: this.deleteService.bind(this) }
     ]
 
     switch (this.filter.status) {
       case "IN QUEUE": {
         this.actionMenu.unshift(
-          { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
+          { name: 'Add to waiting list', icon: 'fal fa-exclamation-triangle', actionFunction: this.addToWaitingList.bind(this) },
           { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
-          { name: 'Assign To Bay', icon: 'fal fa-plug', actionFunction: this.assignToBay.bind(this) }
+          { name: 'Assign To Bay', icon: 'fal fa-plug', actionFunction: this.assignToBay.bind(this) },
+
         )
         return;
       }
@@ -308,16 +339,15 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         this.actionMenu.unshift(
           { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
           { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
-          { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
           { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
           { name: 'Mark Completed', icon: 'fal fa-check-circle', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
+          { name: 'Add to waiting list', icon: 'fal fa-exclamation-triangle', actionFunction: this.addToWaitingList.bind(this) },
         )
         return;
       }
       case "COMPLETED": {
         this.actionMenu.unshift(
           { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
-          { name: 'Edit', icon: 'fal fa-edit', actionFunction: this.editService.bind(this) },
           { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
           { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
           { name: 'Approve', icon: 'fal fa-thumbs-up', actionFunction: this.toggleApprove.bind(this, 'APPROVED') },
@@ -329,6 +359,14 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         this.actionMenu.unshift(
           { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
           { name: 'Disapprove', icon: 'fal fa-thumbs-down', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
+        )
+        return;
+      }
+
+      case "WAITING": {
+        this.actionMenu.unshift(
+          { name: 'Edit Waiting Info', icon: 'fal fa-exclamation-triangle', actionFunction: this.addToWaitingList.bind(this) },
+          { name: 'Back To Progress', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN PROGRESS') },
         )
         return;
       }
@@ -353,7 +391,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       if (!result) return;
       this.services.splice(i, 1);
       let removeSub = this.carServiceService.removeService(service._id).subscribe(x => {
-        //alert();
       });
       this.subs.push(removeSub);
     });

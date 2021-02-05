@@ -36,6 +36,7 @@ import { GoogleSpreadsheetWarnComponent } from './dialogs/google-spreadsheet-war
 import { ItemCardComponent } from './components/item-card/item-card.component';
 import { AssignToBayComponent } from './dialogs/assign-to-bay/assign-to-bay.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { AddToWaitingComponent } from './dialogs/add-to-waiting/add-to-waiting.component';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -64,7 +65,8 @@ ModuleRegistry.registerModules(AllModules);
     EditRendererComponent,
     GoogleSpreadsheetWarnComponent,
     ItemCardComponent,
-    AssignToBayComponent
+    AssignToBayComponent,
+    AddToWaitingComponent
   ],
   imports: [
     BrowserModule,
