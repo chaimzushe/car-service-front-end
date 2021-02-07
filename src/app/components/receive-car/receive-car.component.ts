@@ -345,7 +345,7 @@ export class ReceiveCarComponent implements OnInit {
     this.LoadingText = "Saving";
     this.carService.createService(newCarService).subscribe(x => {
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
-      this.router.navigate(['/services'])
+      this.router.navigate(['/services'] ,{queryParams: {link: newCarService.status}} )
       this.loading = false;
       this.LoadingText = "";
     }, err => {
@@ -358,7 +358,7 @@ export class ReceiveCarComponent implements OnInit {
     this.LoadingText = "Updating service info";
     this.carServiceService.editUService(newCarService, this.serviceId).subscribe(x => {
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
-      this.router.navigate(['/services'])
+      this.router.navigate(['/services'] ,{queryParams: {link: newCarService.status}} );
     });
   }
 }

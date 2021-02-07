@@ -94,6 +94,12 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.users = (await this.userService.getAllUsers().toPromise() as any[]).map(u => u.name);
     this.getUsedBays();
     this.setupSocketIo();
+    this.route.queryParams.subscribe(qp => {
+      if(qp.link){
+        let activeLinkIdx = this.links.findIndex(l => l.name === qp.link);
+        this.setActive(this.links[activeLinkIdx], activeLinkIdx)
+      }
+    });
   }
 
   setWaitingFilterActive(r, i) {
@@ -364,6 +370,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
           { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
           { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
           { name: 'Mark Completed', icon: 'fal fa-check-circle', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
+          { name: 'Work Page', icon: 'fal fa-wrench', actionFunction: this.goToWorkPage.bind(this) },
           { name: 'Add to waiting list', icon: 'fal fa-exclamation-triangle', actionFunction: this.addToWaitingList.bind(this) },
         )
         return;
@@ -450,6 +457,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   goToHistory(service, i) {
     this.router.navigate(['history', service.carNumber], { relativeTo: this.route })
+  }
+
+  goToWorkPage(service, i) {
+    this.router.navigate(['work-page', service._id])
   }
 
 

@@ -1,0 +1,34 @@
+.list-wrap{
+  margin: auto;
+  max-width: 800px;
+  margin-top: 60px;
+  background-color: white;
+  box-shadow: 1px 1px 1px 1px lightgray;
+}
+
+.text-header {
+  font-size: 42px;
+  margin: 52px auto;
+  text-align: center;
+}
+
+
+.actions {
+  margin: 22px 0;
+  text-align: center;
+  .button {
+    width: 200px;
+    &--cancel{
+      border: 1px solid;
+      margin-right: 22px;
+      &:hover{
+        background-color: black;
+        color: white;
+      }
+    }
+  }
+}
+input{
+  width: 50px;
+  margin-right: 12px;
+}

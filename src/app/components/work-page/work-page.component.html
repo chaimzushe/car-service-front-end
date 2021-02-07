@@ -1,0 +1,22 @@
+<app-sub-nav (actionBtnClicked)="markAsWaiting()" [subNavInfo]="subNavInfo">
+</app-sub-nav>
+<h3 class="text-header">Work Sheet </h3>
+<div class="list-wrap">
+  <mat-selection-list #shoes>
+    <mat-list-option *ngFor="let repair of service?.repairs">
+
+      <span>
+        <mat-form-field style="display: inline-block; width: 20px; margin-right: 12px; text-align: center;">
+          <input matInput [(ngModel)]="repair.qty"  />
+        </mat-form-field>
+        {{repair.repair.name}}
+      </span>
+
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div class="actions">
+  <button class="button button--cancel" mat-button [routerLink]="['/services']">Cancel</button>
+  <button class="button" (click)="markCompete()" mat-raised-button color="primary">Mark Done</button>
+
+</div>

@@ -149,13 +149,14 @@
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button (click)="stepper.reset()">Reset</button>
         </div>
-      </mat-step>
+    </mat-step>
     </mat-vertical-stepper>
   </ng-container>
 
   <div class="actions">
-    <button class="button" (click)="createLabel()" [disabled]="!completed" mat-raised-button color="primary">Confirm</button>
     <button class="button button--cancel"mat-button  [routerLink]="['/services']">Cancel</button>
+    <button class="button" (click)="createLabel()" [disabled]="!completed" mat-raised-button color="primary">Confirm</button>
+
   </div>
 
   <div *ngIf="loading" class="spinner">

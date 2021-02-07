@@ -17,7 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatBadgeModule} from '@angular/material/badge';
-
+import {MatListModule} from '@angular/material/list';
 @NgModule({
   declarations: [],
   imports: [
@@ -38,7 +38,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatChipsModule,
     MatTooltipModule,
     MatSlideToggleModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatListModule
   ],
   exports:[
     CommonModule,
@@ -58,7 +59,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatChipsModule,
     MatTooltipModule,
     MatSlideToggleModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatListModule
   ]
 })
 export class MaterialModule { }

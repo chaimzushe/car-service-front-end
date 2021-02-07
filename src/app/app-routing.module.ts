@@ -13,6 +13,7 @@ import { RepairOptionListComponent } from './components/repair-option-list/repai
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { VisitListComponent } from './components/visit-list/visit-list.component';
+import { WorkPageComponent } from './components/work-page/work-page.component';
 import { AuthGuardService } from './services/auth-guard.service';
 
 const routes: Routes = [
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: "entry-page",
     component: LoginErrorComponent
+  },
+  {
+    path: "work-page/:id",
+    component: WorkPageComponent
   },
   {
     path: "services",

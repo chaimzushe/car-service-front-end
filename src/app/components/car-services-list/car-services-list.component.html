@@ -1,8 +1,8 @@
-<app-sub-nav (syncClicked)="sync()" (dialogOpened)="openFilter()" (searched)="search($event)" [subNavInfo]="subNavInfo">
+<app-sub-nav (dialogOpened)="openFilter()" (searched)="search($event)" [subNavInfo]="subNavInfo">
 </app-sub-nav>
 <div class="nav-filter">
-  <span  [matBadge]="link.itemCount"  [matBadgeOverlap]="false" class="link" (click)="setActive(link, i)"  [class.link--active]="link.active"
-    *ngFor="let link of links; index as i"> {{link.name || 'ALL'}}</span>
+  <span [matBadge]="link.itemCount" [matBadgeHidden]="!link.active" [matBadgeOverlap]="false" class="link" (click)="setActive(link, i)"
+    [class.link--active]="link.active" *ngFor="let link of links; index as i"> {{link.name || 'ALL'}}</span>
 </div>
 
 
@@ -20,12 +20,14 @@
 <div infiniteScroll [infiniteScrollDistance]="3" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="list">
   <h3 class="text-header">Car Services</h3>
   <span class="toggle-expand-all">
-    <mat-slide-toggle *ngIf="filter.status !== 'WAITING'" [color]="'primary'" (change)="toggleCollapseAll($event)" [(ngModel)]="isCollapsed"> Collapse all
+    <mat-slide-toggle *ngIf="filter.status !== 'WAITING'" [color]="'primary'" (change)="toggleCollapseAll($event)"
+      [(ngModel)]="isCollapsed"> Collapse all
     </mat-slide-toggle>
-    <span  *ngIf="filter.status === 'WAITING'" class="sub-filters">
-        <span  [class.sub-filter--active]="r.active" (click)="setWaitingFilterActive(r, i)" class="sub-filter" *ngFor="let r of waitingFilter; index as i">
-          {{r.name}}
-        </span>
+    <span *ngIf="filter.status === 'WAITING'" class="sub-filters">
+      <span [class.sub-filter--active]="r.active" (click)="setWaitingFilterActive(r, i)" class="sub-filter"
+        *ngFor="let r of waitingFilter; index as i">
+        {{r.name}}
+      </span>
     </span>
   </span>
   <div cdkDropList [cdkDropListDisabled]="filter.status  !== 'IN QUEUE'" [cdkDropListData]="services"
@@ -43,7 +45,8 @@
       </span>
 
       <span class="user-expand">
-        <span *ngIf="showVisit(service)"  [ngStyle]="{'background-color': visitTypesColor[service.visitType]}" class="visit">
+        <span *ngIf="showVisit(service)" [ngStyle]="{'background-color': visitTypesColor[service.visitType]}"
+          class="visit">
           <span>{{service.visitType}}</span>
         </span>
 
@@ -51,7 +54,7 @@
           {{ (service.totalPrice )| currency: 0 }}
         </span>
 
-        <span  [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
+        <span [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
           {{(service.mechanic?.name || 'N/A').slice(0, 3) | uppercase }}
         </span>
         <span [matMenuTriggerFor]="menu" class="action-icon">
