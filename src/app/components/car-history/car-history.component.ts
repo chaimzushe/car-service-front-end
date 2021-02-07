@@ -97,7 +97,8 @@ export class CarHistoryComponent implements OnInit {
   async ngOnInit() {
     this.route.params.subscribe(async p => {
       this.carNumber = p.id;
-      this.allServices = await this.carServiceService.applyFilters({}, this.carNumber).toPromise() as any[];
+      let {allCarsIds} = await this.carServiceService.applyFilters({}, this.carNumber).toPromise() as any;
+       this.allServices = allCarsIds;
       this.setupRowColData(this.allServices)
     });
     this.frameworkComponents = {

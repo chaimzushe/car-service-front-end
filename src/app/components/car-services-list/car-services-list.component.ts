@@ -40,7 +40,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   searchWord: any;
   noItemText = 'Loading...';
   filter: any = { limit: 6, skip: 0, status: 'IN QUEUE' };
-
+  listCount = 0;
   waitingFilter = [
     { name: 'All', active: true },
     { name: 'Needs Buggy Approval', active: false },
@@ -49,7 +49,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   authorizationToken = "";
   bays = []
-  links = [
+  links: any[] = [
     { name: 'IN QUEUE', active: true },
     { name: 'IN PROGRESS', active: false },
     { name: 'COMPLETED', active: false },
@@ -122,7 +122,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   async getUsedBays() {
-    let inProgress = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any[];
+    let {allCarsIds : inProgress} = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any;
     this.usedBays = inProgress.filter(s => s.bayNumber).map(s => s.bayNumber);
     this.carServiceService.currentBays.forEach(bay => {
       bay.inUse = !!this.usedBays.find(b => b === bay.value);
@@ -218,7 +218,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   async onScroll() {
     this.filter.skip += 6;
     this.loading = true;
-    const mewServices = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as Service[];
+    let {allCarsIds : mewServices} = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as any;
     mewServices.forEach(s => {
       s.totalPrice = this.getTotalPrice(s);
       s.expanded = !this.isCollapsed;
@@ -268,16 +268,17 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.loading = true;
     let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
       if(this.filter.status === "WAITING") {
-        this.allWaitingServices = f;
+        this.allWaitingServices = f.allCarsIds;
       }
-      this.services = f;
+      this.services = f.allCarsIds;
+      this.links.find( l => l.name === this.filter.status).itemCount = (f.count >= 99 ? '99+' : f.count);
       this.services.forEach(s => {
         s.totalPrice = this.getTotalPrice(s);
         s.expanded = !this.isCollapsed;
       })
       this.setCurrentFilters();
       this.loading = false;
-      if (f.length === 0) this.noItemText = "No services found";
+      if (f.allCarsIds.length === 0) this.noItemText = "No services found";
       else this.setUpActionMenu()
 
     });

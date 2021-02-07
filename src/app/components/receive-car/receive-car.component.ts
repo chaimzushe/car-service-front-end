@@ -196,7 +196,11 @@ export class ReceiveCarComponent implements OnInit {
     let currentMiles = this.carGroupControl.value.miles;
     let carId = this.carGroupControl.value.carNumber.car_id;
     let visitType = this.carGroupControl.value.visitType;
-    let allServices = this.allServices || await this.carServiceService.applyFilters({}, carId).toPromise();
+    let allServices = this.allServices;
+    if(allServices) {
+       let {allCarsIds } = await this.carServiceService.applyFilters({}, carId).toPromise() as any;
+       allServices = allCarsIds;
+    }
     this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles, visitType))
     this.loading = false;
     this.LoadingText = "";
@@ -210,7 +214,8 @@ export class ReceiveCarComponent implements OnInit {
     this.repairsNeeded = [];
    let carId = e.option.value.car_id;
    this.loading = true;
-    this.allServices = await this.carServiceService.applyFilters({}, carId).toPromise() as any[];
+    const {allCarsIds} = await this.carServiceService.applyFilters({}, carId).toPromise() as any;
+    this.allServices = allCarsIds;
     this.loading = false;
     let curMiles =  this.carGroupControl.value.miles;
     let lastMiles = this.stripNonNumbers( (this.allServices[0] && this.allServices[0].milesAtService));
