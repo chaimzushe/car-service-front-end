@@ -1,34 +1,107 @@
-.list-wrap{
+@import "../../../vars.scss";
+:host {
+  ::ng-deep {
+    .mat-checkbox-layout .mat-checkbox-label {
+      line-height: 24px;
+      color: $warning-red;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+    }
+  }
+}
+
+
+
+
+
+.service-info{
   margin: auto;
   max-width: 800px;
-  margin-top: 60px;
-  background-color: white;
-  box-shadow: 1px 1px 1px 1px lightgray;
+
+}
+.car-info{
+
+}
+
+
+
+.list-wrap {
+
+}
+
+.wrap {
+  display: flex;
+  margin: auto;
+  margin-top: 100px;
+  max-width: 1200px;
 }
 
 .text-header {
   font-size: 42px;
   margin: 52px auto;
   text-align: center;
+  margin-top: 22px;
 }
-
 
 .actions {
   margin: 22px 0;
   text-align: center;
   .button {
     width: 200px;
-    &--cancel{
+    &--cancel {
       border: 1px solid;
       margin-right: 22px;
-      &:hover{
+      &:hover {
         background-color: black;
         color: white;
       }
     }
   }
 }
-input{
+input {
   width: 50px;
-  margin-right: 12px;
+  margin-right: 6px;
+}
+
+.disclaimer {
+  text-align: left;
+  padding: 12px;
+  margin-bottom: 22px;
+  &--ok {
+    ::ng-deep {
+      .mat-checkbox-layout .mat-checkbox-label {
+        color: #47477d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+  }
+}
+
+.big {
+  font-size: 18px;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.trash {
+  color: $warning-red;
+}
+
+.icon {
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.note {
+  margin-left: 12px;
+  display: inline-block;
+  color: gray;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+i {
+  cursor: pointer;
 }

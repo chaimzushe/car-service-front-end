@@ -10,29 +10,8 @@ h3 {
   margin: auto;
 }
 
-.repair-item {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 6px 0;
-  justify-content: space-between;
-  i {
-    color: red;
-    cursor: pointer;
-  }
-}
-.text-qty {
-  select {
-    margin-right: 3px;
-    padding: 3px;
-    border: none;
-    border-bottom: 1px solid;
-    width: 22px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    text-indent: 1px;
-    text-overflow: "";
-  }
-}
+
+
 
 .actions {
   margin: 22px 0;
@@ -54,30 +33,11 @@ h3 {
   margin: 52px 0;
 }
 
-.note-icon {
-  i {
-    color: rgb(1, 86, 115);
-    cursor: pointer;
-    margin-right: 8px;
-  }
-}
 
-.main-text {
-}
 
-.note {
-  width: 100%;
-  color: gray;
-  margin-top: 12px;
-  padding-left: 12px;
-  font-size: 13px;
-  font-weight: 300;
-  textarea {
-    padding: 6px;
-    border: 1px solid lightgray;
-    color: gray;
-  }
-}
+
+
+
 
 ::ng-deep {
   .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -109,4 +69,54 @@ h3 {
   }
 
 
+}
+
+
+// to ermeove
+
+.repair-item {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 6px 0;
+  justify-content: space-between;
+  i {
+    color: red;
+    cursor: pointer;
+  }
+}
+
+.text-qty {
+  select {
+    margin-right: 3px;
+    padding: 3px;
+    border: none;
+    border-bottom: 1px solid;
+    width: 22px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: "";
+  }
+}
+
+.note-icon {
+  i {
+    color: rgb(1, 86, 115);
+    cursor: pointer;
+    margin-right: 8px;
+  }
+}
+
+.note {
+  width: 100%;
+  color: gray;
+  margin-top: 12px;
+  padding-left: 12px;
+  font-size: 13px;
+  font-weight: 300;
+  textarea {
+    padding: 6px;
+    border: 1px solid lightgray;
+    color: gray;
+  }
 }

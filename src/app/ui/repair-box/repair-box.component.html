@@ -1,0 +1,38 @@
+<mat-card class="repair-item">
+
+  <span class="text-qty">
+    <span>
+
+      <select class="select" [(ngModel)]="repair.qty" name="car">
+        <option value="" selected></option>
+        <option *ngFor="let qty of [1,2,3,4,5,6,7,8,9,10,11,12,13]" [value]="qty">
+          {{qty}}
+        </option>
+      </select>
+    </span>
+
+    <span class="main-text"> {{repair?.repair?.name || repair.name}} <i *ngIf="!repair.note" (click)="toggleNote(true)" class="pencil fal fa-pencil-alt"></i> </span>
+
+
+  </span>
+  <span class="repair-actions">
+    <span *ngIf="!repair.isEditing" (click)="removeRepair()"><i class="fal fa-trash-alt icon"></i></span>
+  </span>
+
+  <div *ngIf="repair.note || repair.isEditing" class="note">
+    <ng-container *ngIf="repair.isEditing">
+      <input class="note-content" matInput [(ngModel)]="repair.note" type="text" >
+
+      <span *ngIf="repair.isEditing" class="actions">
+        <i (click)="toggleNote(false)" class="fal fa-check save"></i>
+        <i (click)="toggleNote(false)" class="fal fa-times remove"></i>
+      </span>
+    </ng-container>
+
+    <ng-container *ngIf="!repair.isEditing">
+      <p style="margin: 0" class="note-content">{{repair.note}}</p>
+      <i  (click)="toggleNote(true)" class="pencil fal fa-pencil-alt"></i>
+    </ng-container>
+
+  </div>
+</mat-card>

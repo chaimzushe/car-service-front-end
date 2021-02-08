@@ -9,9 +9,11 @@ export class ItemCardComponent implements OnInit, AfterViewInit {
   @ViewChild('host', { static: false }) host: ElementRef;
   @Input() index;
   @Input() item;
+  @Input() user;
   @Output() edited = new EventEmitter();
   @Output() deleted = new EventEmitter();
   highlight = false;
+
   constructor() { }
 
   ngOnInit(): void {

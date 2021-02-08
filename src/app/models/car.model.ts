@@ -14,11 +14,13 @@ export interface User {
 
 }
 
-interface workRepair{
+export interface workRepair{
   completed: boolean;
   note: string;
   qty:number;
   repair: Repair;
+  name?: string;
+  isEditing?: boolean;
 }
 
 export interface subNavInfo {
@@ -53,6 +55,7 @@ export interface Service {
 
 
 export interface CarFullInfo {
+  _id: string;
   car_id: number;
   vin: string,
   model: string,

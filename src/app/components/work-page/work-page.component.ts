@@ -4,7 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AddToWaitingComponent } from 'src/app/dialogs/add-to-waiting/add-to-waiting.component';
-import { Service, subNavInfo } from 'src/app/models/car.model';
+import { CarFullInfo, Service, subNavInfo } from 'src/app/models/car.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { CarServiceService } from 'src/app/services/car-service.service';
 
 @Component({
@@ -12,6 +13,8 @@ import { CarServiceService } from 'src/app/services/car-service.service';
   templateUrl: './work-page.component.html',
   styleUrls: ['./work-page.component.scss']
 })
+
+
 export class WorkPageComponent implements OnInit, OnDestroy {
   subNavInfo: subNavInfo = {
     actionText: 'Mark As Waiting',
@@ -19,22 +22,67 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     hideFilter: true,
     hideSearch: true
   }
+  loading = true;
   service: Service;
   subs: Subscription[] = [];
-  constructor(private carServiceService: CarServiceService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog, private snackbar: MatSnackBar) { }
+  confirm = false;
+  car: any;
+  user: any;
+  constructor(
+    private carServiceService: CarServiceService,
+    private router: Router,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar) {
+    let userSub = this.authService.userSubject.subscribe(user => {
+      if (user) {
+        this.user = user;
+      }
+    });
+    this.subs.push(userSub);
+  }
 
   async ngOnInit() {
     this.route.params.subscribe(async p => {
       this.service = await this.carServiceService.getServiceDetail(p.id).toPromise() as Service;
+      this.car = this.InfoToCard(this.service.car, this.service)
+      this.loading = false;
     });
 
+  }
+  InfoToCard(c: CarFullInfo, s: Service): any {
+    return {
+      _id: c._id,
+      header: `Car Number: ${c.car_id}`,
+      middles: [
+        { key: 'VIN', value: `${c.vin}` },
+        { key: 'Model', value: `${c.model}` },
+        { key: 'Year', value: `${c.year}` },
+        { key: 'Color', value: `${c.color}` },
+        { key: 'Last Miles', value: `${s.milesAtService}` }
+      ],
+      bottom: (c.driver),
+      warn: (c.driver === "STAGE 13")
+    }
   }
 
   ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
   }
-  markCompete() {
+  async markCompete() {
+    let newStatus = "COMPLETED";
 
+    this.service.status = newStatus;
+    try {
+      await this.carServiceService.editUServiceStatus(newStatus, this.service._id).toPromise();
+      let bar = this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
+      bar.afterDismissed().subscribe(x => {
+        this.router.navigate(['/services'], { queryParams: { link: 'COMPLETED' } })
+      })
+    } catch (err) {
+      this.snackbar.open("An error . Please try again", "dismiss", { duration: 3000, panelClass: 'bar-panel' });
+    }
   }
 
   markAsWaiting() {
@@ -56,4 +104,9 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     });
     this.subs.push(closedSub);
   }
+
+  removeRepair(repair, i) {
+    this.service.repairs.splice(i, 1);
+  }
+
 }

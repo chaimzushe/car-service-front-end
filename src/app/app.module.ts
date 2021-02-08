@@ -38,6 +38,7 @@ import { AssignToBayComponent } from './dialogs/assign-to-bay/assign-to-bay.comp
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { AddToWaitingComponent } from './dialogs/add-to-waiting/add-to-waiting.component';
 import { WorkPageComponent } from './components/work-page/work-page.component';
+import { RepairBoxComponent } from './ui/repair-box/repair-box.component';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -68,7 +69,8 @@ ModuleRegistry.registerModules(AllModules);
     ItemCardComponent,
     AssignToBayComponent,
     AddToWaitingComponent,
-    WorkPageComponent
+    WorkPageComponent,
+    RepairBoxComponent
   ],
   imports: [
     BrowserModule,

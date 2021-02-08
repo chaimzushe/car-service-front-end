@@ -44,39 +44,7 @@
           <ng-template matStepLabel>Repairs Needed</ng-template>
 
           <div class="repairs-needed" *ngIf="repairsNeeded.length">
-            <mat-card class="repair-item" *ngFor="let repair of repairsNeeded; index as i">
-
-              <span class="text-qty">
-                <span>
-
-                  <select [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.qty" name="car">
-                    <option value="" selected></option>
-                    <option *ngFor="let qty of [1,2,3,4,5,6,7,8,9,10,11,12,13]" [value]="qty">
-                      {{qty}}
-                    </option>
-                  </select>
-                </span>
-
-                <span class="main-text"> {{repair.name}} </span>
-
-
-              </span>
-              <span class="repair-actions">
-                <span (click)="editNote(repair, i)" class="note-icon">
-                  <i [ngClass]="{'fa-comment-alt-lines': !repair.isEditing, 'fa-save': repair.isEditing}"
-                    class="fal"></i>
-                </span>
-                <span (click)="removeRepair(i)"><i class="fal fa-trash-alt"></i></span>
-              </span>
-
-              <div *ngIf="repair.note || repair.isEditing" class="note">
-
-                <textarea [disabled]="!repair.isEditing" [ngModelOptions]="{standalone: true}" [(ngModel)]="repair.note"
-                  matInput placeholder="Note for mechanic">
-                  <span *ngIf="repair.note">*</span> {{repair.note}}
-                </textarea>
-              </div>
-            </mat-card>
+            <app-repair-box (remove)="removeRepair(i)" [repair]="r" *ngFor="let r of repairsNeeded; index as i"></app-repair-box>
           </div>
 
 
@@ -117,7 +85,7 @@
         </form>
       </mat-step>
 
-      <mat-step [optional]="true"  [stepControl]="mechanicFormGroup">
+      <mat-step [optional]="true" [stepControl]="mechanicFormGroup">
         <form [formGroup]="mechanicFormGroup">
           <ng-template matStepLabel>Assign Mechanic and Bay</ng-template>
           <mat-form-field>
@@ -149,13 +117,14 @@
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button (click)="stepper.reset()">Reset</button>
         </div>
-    </mat-step>
+      </mat-step>
     </mat-vertical-stepper>
   </ng-container>
 
   <div class="actions">
-    <button class="button button--cancel"mat-button  [routerLink]="['/services']">Cancel</button>
-    <button class="button" (click)="createLabel()" [disabled]="!completed" mat-raised-button color="primary">Confirm</button>
+    <button class="button button--cancel" mat-button [routerLink]="['/services']">Cancel</button>
+    <button class="button" (click)="createLabel()" [disabled]="!completed" mat-raised-button
+      color="primary">Confirm</button>
 
   </div>
 

@@ -70,7 +70,7 @@ export class CarServiceService {
     return this.http.post(`${baseApi}/update-cars-service/${id}`, service);
   }
 
-  editUServiceStatus(status: any, id: number) {
+  editUServiceStatus(status: any, id: any) {
     return this.http.post(`${baseApi}/update-cars-service-status/${id}`, { status });
   }
 

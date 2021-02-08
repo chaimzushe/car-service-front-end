@@ -18,11 +18,11 @@
 
 
     <mat-menu [yPosition]="'above'" [xPosition]="'before'" #menu="matMenu">
-      <button (click)="navigateToEdit()" mat-menu-item>
+      <button [disabled]="user && user.role !== 'Admin'" (click)="navigateToEdit()" mat-menu-item>
         <i class="fal fa-edit icon"></i>
         <span>Edit</span>
       </button>
-      <button (click)="deleteItem()" mat-menu-item>
+      <button [disabled]="user && user.role !== 'Admin'" (click)="deleteItem()" mat-menu-item>
         <i class="fal fa-trash-alt icon"></i>
         <span>Delete</span>
       </button>

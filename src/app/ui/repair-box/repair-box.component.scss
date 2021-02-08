@@ -1,0 +1,84 @@
+@import "../../../vars.scss";
+.repair-item {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 6px 0;
+  justify-content: space-between;
+}
+
+.icon {
+  color: $warning-red;
+  cursor: pointer;
+}
+
+.text-qty {
+  .select {
+    margin-right: 3px;
+    padding: 3px;
+    border: none;
+    border-bottom: 1px solid;
+    width: 22px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: "";
+  }
+}
+
+.main-text {
+}
+
+.note-icon {
+  i {
+    color: rgb(1, 86, 115);
+    cursor: pointer;
+    margin-right: 8px;
+  }
+}
+
+.note {
+  width: 100%;
+  color: gray;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  input {
+    border: none;
+    border-bottom: 1px solid #efefef;
+    color: gray;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 300;
+    padding-bottom: 3px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  .save {
+    margin-right: 8px;
+    color: $success-green;
+  }
+}
+
+i {
+  cursor: pointer;
+}
+
+.pencil {
+  margin-left: 6px;
+  color: lightgrey;
+  font-size: 12px;
+  &:hover {
+    color: $success-green;
+  }
+}
+
+.note-content {
+  color: gray;
+  font-size: 12px;
+  font-weight: 300;
+}
