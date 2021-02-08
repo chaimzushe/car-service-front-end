@@ -4,9 +4,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AddToWaitingComponent } from 'src/app/dialogs/add-to-waiting/add-to-waiting.component';
+import { SelectItemComponent } from 'src/app/dialogs/select-item/select-item.component';
 import { CarFullInfo, Service, subNavInfo } from 'src/app/models/car.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CarServiceService } from 'src/app/services/car-service.service';
+import { RepairService } from 'src/app/services/repair.service';
 
 @Component({
   selector: 'app-work-page',
@@ -28,12 +30,16 @@ export class WorkPageComponent implements OnInit, OnDestroy {
   confirm = false;
   car: any;
   user: any;
+  filteredRepairs: any;
+  allRepairs: any;
+  addedRepairs: any = [];
   constructor(
     private carServiceService: CarServiceService,
     private router: Router,
     private authService: AuthService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
+    private repairService: RepairService,
     private snackbar: MatSnackBar) {
     let userSub = this.authService.userSubject.subscribe(user => {
       if (user) {
@@ -46,7 +52,10 @@ export class WorkPageComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.route.params.subscribe(async p => {
       this.service = await this.carServiceService.getServiceDetail(p.id).toPromise() as Service;
-      this.car = this.InfoToCard(this.service.car, this.service)
+      this.car = this.InfoToCard(this.service.car, this.service);
+      this.filteredRepairs = this.allRepairs = (await this.repairService
+        .getAllRepairs()
+        .toPromise()) as [];
       this.loading = false;
     });
 
@@ -70,19 +79,72 @@ export class WorkPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
   }
+
+
+  getRepairId(repair) {
+    let curRepair = this.allRepairs.find(r => r.name === repair.name);
+    return curRepair._id;
+  }
+
   async markCompete() {
     let newStatus = "COMPLETED";
 
     this.service.status = newStatus;
     try {
-      await this.carServiceService.editUServiceStatus(newStatus, this.service._id).toPromise();
-      let bar = this.snackbar.open("Updated successfully", "dismiss", { duration: 3000 });
-      bar.afterDismissed().subscribe(x => {
-        this.router.navigate(['/services'], { queryParams: { link: 'COMPLETED' } })
-      })
+      this.loading = true;
+      let newCarService = this.formatServiceForUpdate();
+      await this.carServiceService.editUService(newCarService, this.service._id).toPromise();
+      this.router.navigate(['/services'], { queryParams: { link: 'COMPLETED' } });
     } catch (err) {
-      this.snackbar.open("An error . Please try again", "dismiss", { duration: 3000, panelClass: 'bar-panel' });
+      this.snackbar.open("An error . Please try again", "dismiss", { duration: 3000, panelClass: 'err-panel' });
+      this.loading = false;
     }
+  }
+
+  formatServiceForUpdate() {
+    const repairs = this.service.repairs;
+    let newRepairs = this.addedRepairs.map(r => ({
+      qty: r.qty,
+      note: r.note,
+      completed: false,
+      repair: this.getRepairId(r)
+    }));
+    repairs.push(...newRepairs);
+
+    const newCarService = {
+      mechanic: this.service.mechanic,
+      mechanicName: this.service.mechanicName,
+      carNumber: this.service.carNumber,
+      car: this.service.car._id,
+      milesAtService: this.service.milesAtService,
+      note: this.service.note,
+      visitType: this.service.visitType,
+      priceOfOtherWork: this.service.priceOfOtherWork,
+      status: 'COMPLETED',
+      repairs,
+      bayNumber: (this.service.bayNumber),
+    }
+    return newCarService;
+  }
+
+  addRepair() {
+    let item = {
+      name: "Select Repair",
+      dropDownItems: this.allRepairs.map(r => ({ ...r, value: r.name })),
+      filteredDropDownItems: this.allRepairs.map(r => ({ ...r, value: r.name })),
+      actionText: "Add Repair",
+    }
+    let dialogRef = this.dialog.open(SelectItemComponent, {
+      width: "400px",
+      autoFocus: false,
+      data: { item, selectedItem: null }
+    });
+
+    let closedSub = dialogRef.afterClosed().subscribe(async newRepair => {
+      if (!newRepair) return;
+      this.addedRepairs.push({ name: newRepair, qty: 1 });
+    });
+    this.subs.push(closedSub);
   }
 
   markAsWaiting() {
@@ -107,6 +169,10 @@ export class WorkPageComponent implements OnInit, OnDestroy {
 
   removeRepair(repair, i) {
     this.service.repairs.splice(i, 1);
+  }
+
+  removeAdddedRepair(rep, i){
+    this.addedRepairs.splice(i, 1);
   }
 
 }

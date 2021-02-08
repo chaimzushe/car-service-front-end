@@ -105,3 +105,15 @@ input {
 i {
   cursor: pointer;
 }
+
+.add-items{
+  text-align: center;
+  margin: 18px 0;
+  margin-bottom: 70px;
+  cursor: pointer;
+  span{
+    text-decoration: underline;
+    margin-right: 6px;
+    font-size: 18px;
+  }
+}

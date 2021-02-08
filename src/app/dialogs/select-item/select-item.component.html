@@ -1,0 +1,26 @@
+<div class="header">
+  <p><span>{{item.name}}</span> </p>
+</div>
+
+
+
+<mat-form-field *ngIf="!item.filteredDropDownItems">
+  <mat-select [(ngModel)]="selectedItem" class="input" [placeholder]="item.name">
+    <mat-option *ngFor="let o of item.dropDownItems"  [value]="o.value">{{o.name}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field *ngIf="item.filteredDropDownItems">
+  <input type="text" [placeholder]="item.name"  matInput class="repair-input"
+    (keyup)="filterItems($event)" [(ngModel)]="selectedItem" [matAutocomplete]="autoRepairs">
+  <mat-autocomplete autoActiveFirstOption #autoRepairs="matAutocomplete">
+    <mat-option *ngFor="let o of item.filteredDropDownItems"  [value]="o.value">{{o.name}}</mat-option>
+  </mat-autocomplete>
+
+</mat-form-field>
+
+
+
+<div class="btn-wrap">
+  <button style="width: 200px" (click)="confirm()" mat-raised-button color="primary">{{item.actionText}}</button>
+</div>

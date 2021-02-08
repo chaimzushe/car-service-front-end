@@ -66,7 +66,7 @@ export class CarServiceService {
     return this.http.post(`${baseApi}/car-service-filter`, filter);
   }
 
-  editUService(service: any, id: number) {
+  editUService(service: any, id: any) {
     return this.http.post(`${baseApi}/update-cars-service/${id}`, service);
   }
 

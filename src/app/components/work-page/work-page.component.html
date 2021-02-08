@@ -6,8 +6,18 @@
 <div class="service-info">
   <h3 class="text-header">Work Sheet </h3>
   <div class="list-wrap">
-    <app-repair-box (remove)="removeRepair(i)" [repair]="r" *ngFor="let r of service.repairs; index as i">
+    <app-repair-box (remove)="removeRepair(r, i)" [repair]="r" *ngFor="let r of service.repairs; index as i">
     </app-repair-box>
+
+    <app-repair-box (remove)="removeAdddedRepair(r, i)" [repair]="r" *ngFor="let r of addedRepairs; index as i">
+    </app-repair-box>
+    <div  class="add-items">
+      <span (click)="addRepair()">
+        <span>Add items</span>
+        <i class="fal fa-plus"></i>
+      </span>
+
+    </div>
   </div>
 
   <div class="actions">

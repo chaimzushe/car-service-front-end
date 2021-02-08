@@ -15,10 +15,10 @@ export interface User {
 }
 
 export interface workRepair{
-  completed: boolean;
-  note: string;
+  completed?: boolean;
+  note?: string;
   qty:number;
-  repair: Repair;
+  repair?: Repair;
   name?: string;
   isEditing?: boolean;
 }
@@ -51,6 +51,8 @@ export interface Service {
   serviceTime: Date;
   totalPrice: number;
   waitingInfo: any;
+  bayNumber?: number;
+  priceOfOtherWork: number;
 }
 
 
