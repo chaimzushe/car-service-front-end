@@ -12,7 +12,9 @@
           <i (click)="toggleNote(true)" class="pencil fal fa-pencil-alt"></i>
         </div>
         <div class="note" *ngIf="service.isEditing">
-          <input class="note-content" matInput [(ngModel)]="service.note" type="text">
+          <textarea class="note-content" matInput [(ngModel)]="service.note">
+            {{service.note}}
+          </textarea>
 
           <span class="actions">
             <i (click)="toggleNote(false)" class="fal fa-check save"></i>

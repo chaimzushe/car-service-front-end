@@ -84,13 +84,7 @@ input {
   margin-right: 6px;
 }
 
-.note {
-  margin-left: 12px;
-  display: inline-block;
-  color: gray;
-  font-size: 14px;
-  font-weight: 300;
-}
+
 
 i {
   cursor: pointer;
@@ -108,7 +102,7 @@ i {
   }
 }
 .service-note {
-  padding: 16px;
+  padding: 16px 0;
   color: gray;
   font-size: 13px;
   i {
@@ -139,7 +133,7 @@ i {
   font-weight: 300;
   display: flex;
   align-items: center;
-  input {
+  textarea {
     border: none;
     border-bottom: 1px solid #efefef;
     color: gray;

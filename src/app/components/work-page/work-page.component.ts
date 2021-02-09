@@ -80,11 +80,16 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => s.unsubscribe());
   }
 
-  openNote(){
+  openNote() {
   }
 
-  toggleNote(isEdit){
+  toggleNote(isEdit) {
     this.service.isEditing = isEdit;
+    if (isEdit) {
+      setTimeout( _ => {
+        document.querySelector('textarea').focus()
+       }, 200);
+    }
   }
 
   getRepairId(repair) {
