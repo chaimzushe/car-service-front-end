@@ -1,8 +1,8 @@
 <app-sub-nav (dialogOpened)="openFilter()" (searched)="search($event)" [subNavInfo]="subNavInfo">
 </app-sub-nav>
 <div class="nav-filter">
-  <span [matBadge]="link.itemCount" [matBadgeHidden]="!link.active" [matBadgeOverlap]="false" class="link" (click)="setActive(link, i)"
-    [class.link--active]="link.active" *ngFor="let link of links; index as i"> {{link.name || 'ALL'}}</span>
+  <span [matBadge]="link.itemCount" [matBadgeHidden]="!link.active" [matBadgeOverlap]="false" class="link"
+    (click)="setActive(link, i)" [class.link--active]="link.active" *ngFor="let link of links; index as i"> {{link.name}}</span>
 </div>
 
 
@@ -20,6 +20,16 @@
 <div infiniteScroll [infiniteScrollDistance]="3" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="list">
   <h3 class="text-header">Car Services</h3>
   <span class="toggle-expand-all">
+    <span class="sort-by">
+      <i (click)="setSortingDir()" [ngClass]="{'fa-sort-amount-up': (filter.dir === 1), 'fa-sort-amount-down': (filter.dir === -1) }"
+        class="fal"></i>
+      <mat-form-field>
+        <mat-select (selectionChange)="sortItems()" [(ngModel)]="filter.sortBy" class="input">
+          <mat-option *ngFor="let s of sortOptions" [value]="s.value">{{s.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </span>
     <mat-slide-toggle *ngIf="filter.status !== 'WAITING'" [color]="'primary'" (change)="toggleCollapseAll($event)"
       [(ngModel)]="isCollapsed"> Collapse all
     </mat-slide-toggle>

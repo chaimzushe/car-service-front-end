@@ -36,10 +36,15 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   services: Service[] = [];
   loading = true;
   subs: Subscription[] = [];
+  sortOptions = [
+    { name: 'UPDATED TIME', value: 'updatedAt' },
+    { name: 'IN TAKE TIME', value: 'serviceTime' },
+    { name: 'MILES', value: 'milesAtService' }
+  ]
   users: any[] = [];
   searchWord: any;
   noItemText = 'Loading...';
-  filter: any = { limit: 6, skip: 0, status: 'IN QUEUE' };
+  filter: any = { limit: 6, skip: 0, status: 'IN QUEUE', sortBy: 'serviceTime', dir: -1 };
   listCount = 0;
   waitingFilter = [
     { name: 'All', active: true },
@@ -89,13 +94,24 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.subs.push(userSub);
   }
 
+  sortItems() {
+    this.filter.skip = 0;
+    this.getList();
+  }
+
+  setSortingDir() {
+    this.filter.dir = this.filter.dir === -1 ? 1 : -1;
+    this.filter.skip = 0;
+    this.getList();
+  }
+
   async ngOnInit() {
     this.getList();
     this.users = (await this.userService.getAllUsers().toPromise() as any[]).map(u => u.name);
     this.getUsedBays();
     this.setupSocketIo();
     this.route.queryParams.subscribe(qp => {
-      if(qp.link){
+      if (qp.link) {
         let activeLinkIdx = this.links.findIndex(l => l.name === qp.link);
         this.setActive(this.links[activeLinkIdx], activeLinkIdx)
       }
@@ -106,7 +122,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.waitingFilter.forEach((f, idx) => {
       f.active = idx === i;
     });
-    this.services = this.allWaitingServices.filter( s => {
+    this.services = this.allWaitingServices.filter(s => {
       return r.name === 'All' || s.waitingInfo.reason === r.name;
     });
   }
@@ -128,7 +144,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   async getUsedBays() {
-    let {allCarsIds : inProgress} = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any;
+    let { allCarsIds: inProgress } = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any;
     this.usedBays = inProgress.filter(s => s.bayNumber).map(s => s.bayNumber);
     this.carServiceService.currentBays.forEach(bay => {
       bay.inUse = !!this.usedBays.find(b => b === bay.value);
@@ -158,7 +174,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   setCurrentFilters() {
     this.currentFilters = Object.keys(this.filter).filter(k => {
-      return !['status', 'skip', 'limit', 'searchWord'].includes(k) && this.filter[k]
+      return !['status', 'skip', 'limit', 'searchWord', 'dir', 'sortBy'].includes(k) && this.filter[k]
     }).map(k => {
       let value = this.filter[k];
       if ((value instanceof Date)) value = this.datePipe.transform(new Date(value), 'longDate')
@@ -224,7 +240,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   async onScroll() {
     this.filter.skip += 6;
     this.loading = true;
-    let {allCarsIds : mewServices} = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as any;
+    let { allCarsIds: mewServices } = await this.carServiceService.applyFilters(this.filter, this.searchWord).toPromise() as any;
     mewServices.forEach(s => {
       s.totalPrice = this.getTotalPrice(s);
       s.expanded = !this.isCollapsed;
@@ -273,11 +289,11 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   getList() {
     this.loading = true;
     let sub = this.carServiceService.applyFilters(this.filter, this.searchWord).subscribe((f: any) => {
-      if(this.filter.status === "WAITING") {
+      if (this.filter.status === "WAITING") {
         this.allWaitingServices = f.allCarsIds;
       }
       this.services = f.allCarsIds;
-      this.links.find( l => l.name === this.filter.status).itemCount = (f.count >= 99 ? '99+' : f.count);
+      this.links.find(l => l.name === this.filter.status).itemCount = (f.count >= 99 ? '99+' : f.count);
       this.services.forEach(s => {
         s.totalPrice = this.getTotalPrice(s);
         s.expanded = !this.isCollapsed;
@@ -290,6 +306,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     });
     this.subs.push(sub)
   }
+
   assignToBay(service, i) {
     if (i !== 0) {
       return this.snackbar.open(`Only item on top of the list can be assigned to a bay`, "dismiss", { panelClass: 'err-panel', duration: 3000 });
