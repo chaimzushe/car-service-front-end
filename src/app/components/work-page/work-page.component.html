@@ -1,4 +1,4 @@
-<app-sub-nav (actionBtnClicked)="markAsWaiting()" [subNavInfo]="subNavInfo">
+<app-sub-nav (actionBtnClicked)="viewFullHistory()" [subNavInfo]="subNavInfo">
 </app-sub-nav>
 
 <div class="wrap" *ngIf="!loading">
@@ -8,7 +8,7 @@
     <div class="list-wrap">
       <div class="service-note">
         <div *ngIf="!service.isEditing">
-          <i (click)="openNote()" class="fad fa-comment-alt-exclamation"></i> {{service.note || 'No notes'}}
+          <i class="fad fa-comment-alt-exclamation"></i> {{service.note || 'No notes'}}
           <i (click)="toggleNote(true)" class="pencil fal fa-pencil-alt"></i>
         </div>
         <div class="note" *ngIf="service.isEditing">
@@ -45,6 +45,7 @@
       </div>
 
       <button class="button button--cancel" mat-button [routerLink]="['/services']">Cancel</button>
+      <button class="button button--warn" mat-button (click)="markAsWaiting()">Mark as Waiting</button>
       <button class="button" [disabled]="!confirm" (click)="markCompete()" mat-raised-button color="primary">Mark
         Done</button>
     </div>

@@ -19,7 +19,7 @@ import { RepairService } from 'src/app/services/repair.service';
 
 export class WorkPageComponent implements OnInit, OnDestroy {
   subNavInfo: subNavInfo = {
-    actionText: 'Mark As Waiting',
+    actionText: 'View Full History',
     backLink: '/services',
     hideFilter: true,
     hideSearch: true
@@ -80,8 +80,7 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => s.unsubscribe());
   }
 
-  openNote() {
-  }
+
 
   toggleNote(isEdit) {
     this.service.isEditing = isEdit;
@@ -105,6 +104,7 @@ export class WorkPageComponent implements OnInit, OnDestroy {
       this.loading = true;
       let newCarService = this.formatServiceForUpdate();
       await this.carServiceService.editUService(newCarService, this.service._id).toPromise();
+      await this.carServiceService.editUServiceStatus("COMPLETED", this.service._id).toPromise();
       this.router.navigate(['/services'], { queryParams: { link: 'COMPLETED' } });
     } catch (err) {
       this.snackbar.open("An error . Please try again", "dismiss", { duration: 3000, panelClass: 'err-panel' });
@@ -136,6 +136,9 @@ export class WorkPageComponent implements OnInit, OnDestroy {
       bayNumber: (this.service.bayNumber),
     }
     return newCarService;
+  }
+  viewFullHistory(){
+    this.router.navigate(['/services/history', this.service.carNumber], { relativeTo: this.route })
   }
 
   addRepair() {
