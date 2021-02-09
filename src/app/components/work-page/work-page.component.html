@@ -7,10 +7,10 @@
     <h3 class="text-header">Work Sheet </h3>
     <div class="list-wrap">
       <div class="service-note">
-        <ng-container *ngIf="!service.isEditing">
+        <div *ngIf="!service.isEditing">
           <i (click)="openNote()" class="fad fa-comment-alt-exclamation"></i> {{service.note || 'No notes'}}
           <i (click)="toggleNote(true)" class="pencil fal fa-pencil-alt"></i>
-        </ng-container>
+        </div>
         <div class="note" *ngIf="service.isEditing">
           <input class="note-content" matInput [(ngModel)]="service.note" type="text">
 
@@ -19,42 +19,42 @@
             <i (click)="toggleNote(false)" class="fal fa-times remove"></i>
           </span>
         </div>
-
-        <app-repair-box (remove)="removeRepair(r, i)" [repair]="r" *ngFor="let r of service.repairs; index as i">
-        </app-repair-box>
-
-        <app-repair-box (remove)="removeAdddedRepair(r, i)" [repair]="r" *ngFor="let r of addedRepairs; index as i">
-        </app-repair-box>
-        <div class="add-items">
-          <span (click)="addRepair()">
-            <span>Add items</span>
-            <i class="fal fa-plus"></i>
-          </span>
-
-        </div>
       </div>
+      <app-repair-box (remove)="removeRepair(r, i)" [repair]="r" *ngFor="let r of service.repairs; index as i">
+      </app-repair-box>
 
-      <div class="actions">
+      <app-repair-box (remove)="removeAdddedRepair(r, i)" [repair]="r" *ngFor="let r of addedRepairs; index as i">
+      </app-repair-box>
+      <div class="add-items">
+        <span (click)="addRepair()">
+          <span>Add items</span>
+          <i class="fal fa-plus"></i>
+        </span>
 
-        <div [class.disclaimer--ok]="confirm" class="disclaimer">
-          <mat-checkbox [(ngModel)]="confirm" class="example-margin"> The Car number <span class="big">
-              {{service.carNumber}}</span> matches vin
-            number <span class="big"> {{service.car.vin}}</span> </mat-checkbox>
-        </div>
-
-        <button class="button button--cancel" mat-button [routerLink]="['/services']">Cancel</button>
-        <button class="button" [disabled]="!confirm" (click)="markCompete()" mat-raised-button color="primary">Mark
-          Done</button>
       </div>
     </div>
-    <div class="car-info">
-      <app-item-card [user]="user" *ngIf="car" [item]="car">
-      </app-item-card>
+
+    <div class="actions">
+
+      <div [class.disclaimer--ok]="confirm" class="disclaimer">
+        <mat-checkbox [(ngModel)]="confirm" class="example-margin"> The Car number <span class="big">
+            {{service.carNumber}}</span> matches vin
+          number <span class="big"> {{service.car.vin}}</span> </mat-checkbox>
+      </div>
+
+      <button class="button button--cancel" mat-button [routerLink]="['/services']">Cancel</button>
+      <button class="button" [disabled]="!confirm" (click)="markCompete()" mat-raised-button color="primary">Mark
+        Done</button>
     </div>
   </div>
-
-
-  <div *ngIf="loading" class="spinner">
-    <mat-spinner></mat-spinner>
-    <p>Preparing Work sheet</p>
+  <div class="car-info">
+    <app-item-card [user]="user" *ngIf="car" [item]="car">
+    </app-item-card>
   </div>
+</div>
+
+
+<div *ngIf="loading" class="spinner">
+  <mat-spinner></mat-spinner>
+  <p>Preparing Work sheet</p>
+</div>
