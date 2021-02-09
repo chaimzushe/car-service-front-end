@@ -80,6 +80,12 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => s.unsubscribe());
   }
 
+  openNote(){
+  }
+
+  toggleNote(isEdit){
+    this.service.isEditing = isEdit;
+  }
 
   getRepairId(repair) {
     let curRepair = this.allRepairs.find(r => r.name === repair.name);
@@ -171,7 +177,7 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     this.service.repairs.splice(i, 1);
   }
 
-  removeAdddedRepair(rep, i){
+  removeAdddedRepair(rep, i) {
     this.addedRepairs.splice(i, 1);
   }
 

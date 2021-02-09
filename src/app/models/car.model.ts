@@ -53,6 +53,7 @@ export interface Service {
   waitingInfo: any;
   bayNumber?: number;
   priceOfOtherWork: number;
+  isEditing: boolean;
 }
 
 

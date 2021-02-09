@@ -11,23 +11,14 @@
   }
 }
 
-
-
-
-
-.service-info{
+.service-info {
   margin: auto;
   max-width: 800px;
-
 }
-.car-info{
-
+.car-info {
 }
-
-
 
 .list-wrap {
-
 }
 
 .wrap {
@@ -81,7 +72,6 @@ input {
 
 .big {
   font-size: 18px;
-  text-decoration: underline;
   font-weight: bold;
 }
 
@@ -106,14 +96,65 @@ i {
   cursor: pointer;
 }
 
-.add-items{
+.add-items {
   text-align: center;
   margin: 18px 0;
   margin-bottom: 70px;
   cursor: pointer;
-  span{
+  span {
     text-decoration: underline;
     margin-right: 6px;
     font-size: 18px;
+  }
+}
+.service-note {
+  padding: 16px;
+  color: gray;
+  font-size: 13px;
+  i {
+    margin-right: 6px;
+  }
+}
+
+.pencil {
+  margin-left: 6px;
+  color: lightgrey;
+  font-size: 12px;
+  &:hover {
+    color: $success-green;
+  }
+}
+
+.note-content {
+  color: gray;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.note {
+  width: 100%;
+  color: gray;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  input {
+    border: none;
+    border-bottom: 1px solid #efefef;
+    color: gray;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 300;
+    padding-bottom: 3px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  .save {
+    margin-right: 8px;
+    color: $success-green;
   }
 }
