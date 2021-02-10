@@ -282,7 +282,6 @@ export class ReceiveCarComponent implements OnInit {
   selectionsChanged(e) {
     if (e.previouslySelectedIndex === 0 && e.selectedIndex === 1) {
       this.addCar();
-    } else if(e.previouslySelectedIndex === 1 && e.selectedIndex === 2){
       this.completed = true;
     }
   }
@@ -308,6 +307,7 @@ export class ReceiveCarComponent implements OnInit {
   alreadySelected(r) {
     return this.repairsNeeded.find((rep) => rep.name === r.name);
   }
+
   getRepairId(repair) {
     let curRepair = this.allRepairs.find(r => r.name === repair.name);
     return curRepair._id;

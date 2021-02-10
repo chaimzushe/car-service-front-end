@@ -34,7 +34,6 @@ import { EditRendererComponent } from './components/edit-renderer/edit-renderer.
 import { MaterialModule } from './material/material.module';
 import { GoogleSpreadsheetWarnComponent } from './dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
 import { ItemCardComponent } from './components/item-card/item-card.component';
-import { AssignToBayComponent } from './dialogs/assign-to-bay/assign-to-bay.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { AddToWaitingComponent } from './dialogs/add-to-waiting/add-to-waiting.component';
 import { WorkPageComponent } from './components/work-page/work-page.component';
@@ -68,7 +67,6 @@ ModuleRegistry.registerModules(AllModules);
     EditRendererComponent,
     GoogleSpreadsheetWarnComponent,
     ItemCardComponent,
-    AssignToBayComponent,
     AddToWaitingComponent,
     WorkPageComponent,
     RepairBoxComponent,

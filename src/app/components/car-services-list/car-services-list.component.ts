@@ -10,9 +10,9 @@ import { ServicesFilterComponent } from 'src/app/dialogs/services-filter/service
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadsheet-warn/google-spreadsheet-warn.component';
-import { AssignToBayComponent } from 'src/app/dialogs/assign-to-bay/assign-to-bay.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { AddToWaitingComponent } from 'src/app/dialogs/add-to-waiting/add-to-waiting.component';
+import { SelectItemComponent } from 'src/app/dialogs/select-item/select-item.component';
 
 @Component({
   selector: 'app-car-services-list',
@@ -155,9 +155,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => s.unsubscribe());
   }
 
-  sync() {
-    return this.snackbar.open("sync with google sheets in progress", "dismiss", { duration: 3000, panelClass: "err-panel" })
-  }
+
 
   toggleCollapseAll(event) {
     this.services.forEach(s => {
@@ -311,10 +309,17 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     if (i !== 0) {
       return this.snackbar.open(`Only item on top of the list can be assigned to a bay`, "dismiss", { panelClass: 'err-panel', duration: 3000 });
     }
-    let dialogRef = this.dialog.open(AssignToBayComponent, {
+
+    let item = {
+      name: "Select Bay",
+      dropDownItems: this.bays,
+      actionText: "Assign To Bay",
+    }
+
+    let dialogRef = this.dialog.open(SelectItemComponent, {
       width: "400px",
       autoFocus: false,
-      data: { usedBays: this.usedBays }
+      data: { item, selectedItem: service.bayNumber }
     });
 
     let closedSub = dialogRef.afterClosed().subscribe(async bay => {
@@ -329,7 +334,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         });
 
         let result = await dialogRef.afterClosed().toPromise();
-        console.log(result)
         if (!result) return;
       }
       await this.carServiceService.assignBay(bay, service._id).toPromise();
