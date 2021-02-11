@@ -66,6 +66,7 @@ a {
   cursor: pointer;
   outline: none !important;
   color: lightgrey;
+  font-weight: 600;
   &--active {
     color: white;
   }
@@ -117,6 +118,7 @@ a {
   padding: 22px;
   color: lightgrey;
   outline: none;
+  font-weight: 600;
   &--active {
     color: white;
   }
