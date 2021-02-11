@@ -39,6 +39,8 @@ import { AddToWaitingComponent } from './dialogs/add-to-waiting/add-to-waiting.c
 import { WorkPageComponent } from './components/work-page/work-page.component';
 import { RepairBoxComponent } from './ui/repair-box/repair-box.component';
 import { SelectItemComponent } from './dialogs/select-item/select-item.component';
+import { BayListComponent } from './components/bay-list/bay-list.component';
+import { BayFormComponent } from './components/bay-form/bay-form.component';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -70,7 +72,9 @@ ModuleRegistry.registerModules(AllModules);
     AddToWaitingComponent,
     WorkPageComponent,
     RepairBoxComponent,
-    SelectItemComponent
+    SelectItemComponent,
+    BayListComponent,
+    BayFormComponent
   ],
   imports: [
     BrowserModule,

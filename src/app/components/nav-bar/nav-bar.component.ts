@@ -12,9 +12,11 @@ export class NavBarComponent implements OnInit {
     {name: 'Repairs', route: '/repair-options' },
     {name: 'Users', route: '/users' },
     {name: 'Cars', route: '/cars' },
+    {name: 'Bays', route: '/bays' },
     {name: 'Services', route: '/services' },
   ]
   user: any;
+  menuOpen: any;
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -32,6 +34,10 @@ export class NavBarComponent implements OnInit {
   logout(){
     this.authService.logOut();
     this.router.navigate(['entry-page'])
+  }
+
+  openMenu(isOpen){
+    this.menuOpen = isOpen;
   }
 
 }

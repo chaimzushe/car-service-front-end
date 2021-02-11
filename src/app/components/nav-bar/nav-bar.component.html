@@ -1,6 +1,10 @@
 <div class="wrapper">
-  <span [routerLink]="'/home'" class="logo">
-    Car Repair
+
+  <span  class="logo">
+    <span (click)="openMenu(true)" class="logo_bars">
+      <i class="fal fa-bars"></i>
+    </span>
+   <span [routerLink]="'/home'" class="logo_text"> Car Repair </span>
   </span>
   <span class="links">
      <span [routerLink]="link.route" routerLinkActive="link--active"  *ngFor="let link of links" class="link"> {{link.name}}</span>
@@ -12,6 +16,18 @@
     </span>
     <span class="logout" (click)="logout()"> <i class="far fa-sign-out-alt"></i></span>
   </span>
+</div>
+
+<div [class.slideout--active]="menuOpen" class="slideout">
+  <div class="mobile-header">
+    <span class="logo_text"> Car Repair </span>
+    <span (click)="openMenu(false)"> <i class="fal fa-times"></i></span>
+  </div>
+  <div class="mobile-links">
+    <span (click)="openMenu(false)" [routerLink]="'/'" routerLinkActive="mobile-link--active"  class="mobile-link"> Home</span>
+    <span (click)="openMenu(false)" [routerLink]="link.route" routerLinkActive="mobile-link--active"  *ngFor="let link of links" class="mobile-link"> {{link.name}}</span>
+  </div>
+
 </div>
 
 

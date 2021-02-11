@@ -18,9 +18,16 @@ h3 {
   text-align: center;
   .button {
     width: 200px;
+    @media(max-width: 440px){
+      width: 100%;
+    }
     &--cancel{
       border: 1px solid;
       margin-right: 22px;
+      @media(max-width: 440px){
+        margin:0;
+        margin-bottom: 22px;
+      }
       &:hover{
         background-color: black;
         color: white;

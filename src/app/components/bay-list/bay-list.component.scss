@@ -1,0 +1,19 @@
+.list {
+  width: 100%;
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  box-sizing: border-box;
+  padding-top: 4px;
+  justify-items: center;
+  max-width: 1400px;
+  margin: auto;
+  margin-top: 36px;
+}
+
+
+.text-header {
+  font-size: 42px;
+  margin: 52px auto;
+  text-align: center;
+}

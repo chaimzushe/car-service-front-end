@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { BayFormComponent } from './components/bay-form/bay-form.component';
+import { BayListComponent } from './components/bay-list/bay-list.component';
 import { CarFormComponent } from './components/car-form/car-form.component';
 import { CarHistoryComponent } from './components/car-history/car-history.component';
 import { CarListComponent } from './components/car-list/car-list.component';
@@ -96,6 +98,21 @@ const routes: Routes = [
       {
         path: "edit/:id",
         component: UserFormComponent,
+      }
+    ]
+  },
+  {
+    canActivate: [AuthGuardService],
+    path: "bays",
+    children: [
+      {
+        path: '',
+        component: BayListComponent
+
+      },
+      {
+        path: "edit/:id",
+        component: BayFormComponent,
       }
     ]
   },

@@ -1,0 +1,11 @@
+<app-sub-nav (searched)="search($event)" [subNavInfo]="subNavInfo"></app-sub-nav>
+<h3 class="text-header">Bays</h3>
+<div class="list">
+
+  <app-item-card (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [item]="user" [index]="i"
+  *ngFor="let user of filteredBays; index as i">
+</app-item-card>
+
+
+</div>
+<app-no-items-found [text]="noItemsText" *ngIf="filteredBays.length ===0"></app-no-items-found>

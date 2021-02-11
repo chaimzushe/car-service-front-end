@@ -1,0 +1,28 @@
+<app-sub-nav [subNavInfo]="subNavInfo"></app-sub-nav>
+<div class="wrapper">
+  <h3 class="form_header"> {{(bayId && bayEditing) ? 'Edit ' + bayEditing?.name : 'New Bay'}} </h3>
+  <form (submit)="submit()" class="form" *ngIf="form" [formGroup]="form">
+    <mat-form-field appearance="standard">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Name">
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Capacity</mat-label>
+      <input type="number" formControlName="capacity" matInput placeholder="Days">
+    </mat-form-field>
+
+
+
+    <mat-form-field appearance="fill">
+      <mat-label>Number</mat-label>
+      <mat-select formControlName="number">
+        <mat-option *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]" [value]="num">{{num}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="actions">
+      <button type="submit" (click)="submit()" class="form_submit" mat-raised-button color="primary">Submit</button>
+    </div>
+  </form>
+</div>

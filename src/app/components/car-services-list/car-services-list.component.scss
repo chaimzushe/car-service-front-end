@@ -7,7 +7,9 @@
     .mat-select-trigger {
       font-size: 12px;
     }
-    .mat-checkbox-checked.mat-accent.mat-checkbox-disabled .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    .mat-checkbox-checked.mat-accent.mat-checkbox-disabled
+      .mat-checkbox-background,
+    .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
       background-color: $success-green !important;
     }
   }
@@ -187,7 +189,6 @@ button {
 .toggle-expand-all {
   font-size: 18px;
   width: 100%;
-
   display: flex;
   justify-content: flex-end;
   align-items: center;
