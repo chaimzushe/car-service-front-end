@@ -8,6 +8,10 @@ import { workRepair } from 'src/app/models/car.model';
 })
 export class RepairBoxComponent implements OnInit {
   @Input() repair: workRepair;
+  @Input() showDelete = false;
+  @Input() showEdit = false;
+
+
   @Output() remove = new EventEmitter();
   @Output() edited = new EventEmitter();
   isEditing: boolean;

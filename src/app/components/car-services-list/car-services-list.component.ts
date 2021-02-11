@@ -107,7 +107,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.getList();
-    this.users = (await this.userService.getAllUsers().toPromise() as any[]).map(u => u.name);
+    this.users = (await this.userService.getAllUsers('Mechanic').toPromise() as any[]);
     this.getUsedBays();
     this.setupSocketIo();
     this.route.queryParams.subscribe(qp => {
@@ -139,9 +139,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.subs.push(sub);
   }
 
-  bayUpdated(e) {
-    console.log('Updated', { e });
-  }
+
 
   async getUsedBays() {
     let { allCarsIds: inProgress } = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any;
@@ -225,6 +223,31 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.getList();
   }
 
+  assignUser(service){
+    if(service.status !== "IN QUEUE") return;
+    let item = {
+      name: "Select User",
+      dropDownItems: this.users.map( u => ({name: u.name, value: u._id})),
+      actionText: "Assign User",
+    }
+
+    let dialogRef = this.dialog.open(SelectItemComponent, {
+      width: "400px",
+      autoFocus: false,
+      data: { item, selectedItem: (service.mechanic && service.mechanic._id)}
+    });
+
+    let closedSub = dialogRef.afterClosed().subscribe(async userId => {
+      if (!userId) { return;}
+      let user = this.users.find(u => u._id === userId);
+      let newMechanicInfo = {mechanicName: user.name, mechanic: user._id};
+      await this.carServiceService.assignUser(newMechanicInfo, service._id).toPromise();
+      service.mechanic = user;
+      service.mechanicName = user.name;
+    });
+    this.subs.push(closedSub);
+  }
+
   getTotalPrice(s) {
     let sum = 0
     s.repairs.forEach(r => {
@@ -305,9 +328,15 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.subs.push(sub)
   }
 
-  assignToBay(service, i) {
+  assignToBay(service: Service, i) {
     if (i !== 0) {
       return this.snackbar.open(`Only item on top of the list can be assigned to a bay`, "dismiss", { panelClass: 'err-panel', duration: 3000 });
+    } else if(!service.mechanicName){
+      let snackBarRef = this.snackbar.open(`Please assign a mechanic before adding it to a bay`, "Assign User", { panelClass: 'err-panel', duration: 3000 });
+      snackBarRef.onAction().subscribe(a => {
+        this.assignUser(service);
+      });
+      return;
     }
 
     let item = {
@@ -390,7 +419,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
           { name: 'View Full History', icon: 'fal fa-history', actionFunction: this.goToHistory.bind(this) },
           { name: 'Download Maintenance PDF', icon: 'fal fa-file-pdf', actionFunction: this.downloadODF.bind(this) },
           { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
-          { name: 'Mark Completed', icon: 'fal fa-check-circle', actionFunction: this.toggleApprove.bind(this, 'COMPLETED') },
           { name: 'Work Page', icon: 'fal fa-wrench', actionFunction: this.goToWorkPage.bind(this) },
           { name: 'Add to waiting list', icon: 'fal fa-exclamation-triangle', actionFunction: this.addToWaitingList.bind(this) },
         )

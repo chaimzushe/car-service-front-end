@@ -2,7 +2,8 @@
 </app-sub-nav>
 <div class="nav-filter">
   <span [matBadge]="link.itemCount" [matBadgeHidden]="!link.active" [matBadgeOverlap]="false" class="link"
-    (click)="setActive(link, i)" [class.link--active]="link.active" *ngFor="let link of links; index as i"> {{link.name}}</span>
+    (click)="setActive(link, i)" [class.link--active]="link.active" *ngFor="let link of links; index as i">
+    {{link.name}}</span>
 </div>
 
 
@@ -21,7 +22,8 @@
   <h3 class="text-header">Car Services</h3>
   <span class="toggle-expand-all">
     <span class="sort-by">
-      <i (click)="setSortingDir()" [ngClass]="{'fa-sort-amount-up': (filter.dir === 1), 'fa-sort-amount-down': (filter.dir === -1) }"
+      <i (click)="setSortingDir()"
+        [ngClass]="{'fa-sort-amount-up': (filter.dir === 1), 'fa-sort-amount-down': (filter.dir === -1) }"
         class="fal"></i>
       <mat-form-field>
         <mat-select (selectionChange)="sortItems()" [(ngModel)]="filter.sortBy" class="input">
@@ -64,7 +66,7 @@
           {{ (service.totalPrice )| currency: 0 }}
         </span>
 
-        <span [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
+        <span (click)="assignUser(service)"  [matTooltip]="service.mechanic?.name || 'Not Assigned'" class="user">
           {{(service.mechanic?.name || 'N/A').slice(0, 3) | uppercase }}
         </span>
         <span [matMenuTriggerFor]="menu" class="action-icon">
@@ -86,8 +88,12 @@
       </mat-menu>
       <div *ngIf="service.expanded && service.status !== 'WAITING'" class="expanded">
         <li [class.service-note--last]="isLast" *ngFor="let repair of service.repairs; last as isLast;">
-          <span> fixed: {{repair.qty}} {{repair.repair?.name}} <span class="rep-price"> ({{(repair.repair?.price || 0) |
-              currency }}) </span> </span> <span class="repair-note" *ngIf="repair.note">
+          <span>
+            <mat-checkbox [checked]="repair.completed" [disabled]="true">
+              {{repair.qty}} {{repair.repair?.name}} </mat-checkbox>
+            <span class="rep-price"> ({{(repair.repair?.price || 0) |
+              currency }}) </span>
+          </span> <span class="repair-note" *ngIf="repair.note">
             *{{repair.note}}</span>
         </li>
         <div class="service-note" *ngIf="service.note">

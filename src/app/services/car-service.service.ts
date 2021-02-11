@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CarServiceService {
+
   socket: any;
 
   currentBays = Array.from({ length: 10 }, (k, i) => {
@@ -76,6 +77,10 @@ export class CarServiceService {
 
   assignBay(bay: any, id: any) {
     return this.http.post(`${baseApi}/assign-bay/${id}`, { bay });
+  }
+
+  assignUser(user, id) {
+    return this.http.post(`${baseApi}/assign-user/${id}`, user);
   }
 
   waiting(waitingInfo, id: any) {

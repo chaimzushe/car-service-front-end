@@ -83,6 +83,7 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     }
   }
 
+
   findLastToneDone(rep, services: Service[]): any {
     let doneLast =   services.find( s => s.repairs.find(r => (r.repair && r.repair.name) === rep.name));
     return doneLast && doneLast.serviceTime
@@ -145,7 +146,7 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     let newRepairs = this.addedRepairs.map(r => ({
       qty: r.qty,
       note: r.note,
-      completed: false,
+      completed: r.completed,
       repair: this.getRepairId(r)
     }));
     repairs.push(...newRepairs);

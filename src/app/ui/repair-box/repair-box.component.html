@@ -16,7 +16,8 @@
 
   </span>
   <span class="repair-actions">
-    <span *ngIf="!repair.isEditing" (click)="removeRepair()"><i class="fal fa-trash-alt icon"></i></span>
+    <mat-checkbox  *ngIf="!repair.isEditing && showEdit" [(ngModel)]="repair.completed"></mat-checkbox>
+    <span *ngIf="!repair.isEditing && showDelete" (click)="removeRepair()"><i class="fal fa-trash-alt icon"></i></span>
   </span>
 
   <div *ngIf="repair.note || repair.isEditing" class="note">

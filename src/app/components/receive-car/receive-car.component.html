@@ -44,7 +44,7 @@
           <ng-template matStepLabel>Repairs Needed</ng-template>
 
           <div class="repairs-needed" *ngIf="repairsNeeded.length">
-            <app-repair-box (remove)="removeRepair(i)" [repair]="r" *ngFor="let r of repairsNeeded; index as i"></app-repair-box>
+            <app-repair-box [showDelete]="true" (remove)="removeRepair(i)" [repair]="r" *ngFor="let r of repairsNeeded; index as i"></app-repair-box>
           </div>
 
 

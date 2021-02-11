@@ -228,7 +228,7 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   repairDone(service, repair) {
-    return service.repairs.find(curRep => (curRep.repair && curRep.repair.name) === repair.name && curRep.qty > 0);
+    return service.repairs.find(curRep => (curRep.repair && curRep.repair.name) === repair.name && curRep.qty > 0 && curRep.completed);
   }
 
   getLastTimeRepDone(r, services) {

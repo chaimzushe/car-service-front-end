@@ -22,10 +22,10 @@
           </span>
         </div>
       </div>
-      <app-repair-box (remove)="removeRepair(r, i)" [repair]="r" *ngFor="let r of service.repairs; index as i">
+      <app-repair-box [showEdit]="true"  [repair]="r" *ngFor="let r of service.repairs; index as i">
       </app-repair-box>
 
-      <app-repair-box (remove)="removeAdddedRepair(r, i)" [repair]="r" *ngFor="let r of addedRepairs; index as i">
+      <app-repair-box [showEdit]="true"   [repair]="r" *ngFor="let r of addedRepairs; index as i">
       </app-repair-box>
       <div class="add-items">
         <span (click)="addRepair()">
