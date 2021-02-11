@@ -43,6 +43,7 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
           { key: 'Check after interval of', value: `${r.intervalCheck} days` },
           { key: 'Check after traveled', value: `${r.checkWhenMilageIsAt} miles` },
           { key: 'Check if visit is', value: `${(r.forVisit || 'N/A')}` },
+          { key: 'Show last time done', value: `${(r.showLastPerformed ? 'Yes' : 'No')}` },
         ],
         bottom: (r.active ? 'Active' : 'Inactive'),
         warn: !r.active

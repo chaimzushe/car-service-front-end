@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -33,6 +34,9 @@ export class WorkPageComponent implements OnInit, OnDestroy {
   filteredRepairs: any;
   allRepairs: any;
   addedRepairs: any = [];
+  repairsToCheck: any;
+  allServicesForCar: any;
+  serviceInfo: any;
   constructor(
     private carServiceService: CarServiceService,
     private router: Router,
@@ -40,6 +44,7 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private repairService: RepairService,
+    private datePipe : DatePipe,
     private snackbar: MatSnackBar) {
     let userSub = this.authService.userSubject.subscribe(user => {
       if (user) {
@@ -53,13 +58,36 @@ export class WorkPageComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(async p => {
       this.service = await this.carServiceService.getServiceDetail(p.id).toPromise() as Service;
       this.car = this.InfoToCard(this.service.car, this.service);
-      this.filteredRepairs = this.allRepairs = (await this.repairService
-        .getAllRepairs()
-        .toPromise()) as [];
+      this.filteredRepairs = this.allRepairs = (await this.repairService.getAllRepairs().toPromise()) as [];
+      this.repairsToCheck = this.allRepairs.filter(r => r.showLastPerformed);
+     let { allCarsIds} = await this.carServiceService.applyFilters({}, this.service.carNumber).toPromise() as any;
+     allCarsIds = allCarsIds.filter(s => s.status === "APPROVED");
+      this.repairsToCheck.forEach(r => {
+        r.lastDone = this.findLastToneDone(r, allCarsIds);
+      });
+      this.serviceInfo = this.ServiceToCard();
+      console.table(this.repairsToCheck)
       this.loading = false;
     });
 
   }
+
+  ServiceToCard(): any {
+   return {
+      header: `Last time repaired`,
+      middles: this.repairsToCheck.map( r => {
+        return  {
+          key: r.name,
+          value: (r.lastDone && this.datePipe.transform(new Date(r.lastDone), 'longDate') || 'Never')
+        }}),
+    }
+  }
+
+  findLastToneDone(rep, services: Service[]): any {
+    let doneLast =   services.find( s => s.repairs.find(r => (r.repair && r.repair.name) === rep.name));
+    return doneLast && doneLast.serviceTime
+  }
+
   InfoToCard(c: CarFullInfo, s: Service): any {
     return {
       _id: c._id,

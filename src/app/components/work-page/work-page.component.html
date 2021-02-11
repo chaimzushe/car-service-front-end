@@ -53,6 +53,9 @@
   <div class="car-info">
     <app-item-card [user]="user" *ngIf="car" [item]="car">
     </app-item-card>
+
+    <app-item-card [hideActions]="true" [user]="user" *ngIf="serviceInfo" [item]="serviceInfo">
+    </app-item-card>
   </div>
 </div>
 

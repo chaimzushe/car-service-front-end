@@ -17,7 +17,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Visit Reason</mat-label>
+      <mat-label>Check when visit reason</mat-label>
       <mat-select formControlName="forVisit">
         <mat-option *ngFor="let visitType of visitTypes" [value]="visitType">{{visitType}}</mat-option>
       </mat-select>
@@ -27,6 +27,14 @@
       <mat-label>Price</mat-label>
       <input formControlName="price" matInput placeholder="Price">
     </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Show last tine done</mat-label>
+      <mat-select formControlName="showLastPerformed">
+        <mat-option *ngFor="let show of [true, false]" [value]="show">{{show}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div class="active-toggle">
       <mat-slide-toggle labelPosition="before" color="primary" formControlName="active">Active</mat-slide-toggle>
 

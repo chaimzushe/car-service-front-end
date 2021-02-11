@@ -10,6 +10,7 @@ export class ItemCardComponent implements OnInit, AfterViewInit {
   @Input() index;
   @Input() item;
   @Input() user;
+  @Input() hideActions = false;
   @Output() edited = new EventEmitter();
   @Output() deleted = new EventEmitter();
   highlight = false;
