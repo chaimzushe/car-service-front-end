@@ -20,6 +20,7 @@
 </div>
 <div infiniteScroll [infiniteScrollDistance]="3" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="list">
   <h3 class="text-header">Car Services</h3>
+
   <span class="toggle-expand-all">
     <span class="sort-by">
       <i (click)="setSortingDir()"
@@ -42,6 +43,7 @@
       </span>
     </span>
   </span>
+
   <div cdkDropList [cdkDropListDisabled]="filter.status  !== 'IN QUEUE'" [cdkDropListData]="services"
     (cdkDropListDropped)="reOrder($event)" class="list-wrap">
 

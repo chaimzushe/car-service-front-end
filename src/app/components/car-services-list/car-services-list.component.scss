@@ -1,5 +1,8 @@
 @import "../../../vars.scss";
 :host {
+  min-height: calc(100vh - 160px);
+  display: block;
+
   ::ng-deep {
     .mat-select-trigger {
       font-size: 12px;
@@ -182,11 +185,11 @@ button {
 }
 
 .toggle-expand-all {
-  position: absolute;
-  top: 45px;
-  right: 16px;
   font-size: 18px;
+  width: 100%;
+
   display: flex;
+  justify-content: flex-end;
   align-items: center;
 }
 .sort-by {
