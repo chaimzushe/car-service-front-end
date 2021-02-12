@@ -132,7 +132,7 @@ export class ReceiveCarComponent implements OnInit {
     });
     this.mechanicFormGroup = this.fb.group({
       mechanic: [this.serviceObj.mechanic],
-      bayNumber: [this.serviceObj.bayNumber],
+      bayNumber: [this.serviceObj.bayNumber &&  this.serviceObj.bayNumber._id],
     });
     this.repairListFormGroup = this.fb.group({
       selectedFirstRepair: [null],
