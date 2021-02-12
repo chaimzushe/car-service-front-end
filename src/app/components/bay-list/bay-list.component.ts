@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
 import { Bay, subNavInfo } from 'src/app/models/car.model';
 import { BayService } from 'src/app/services/bay.service';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-bay-list',
   templateUrl: './bay-list.component.html',
@@ -57,7 +57,10 @@ export class BayListComponent implements OnInit {
     if(!b.currentCars.length ){
       return [{key: 'Current Cars', value: 0}]
     } else {
-      return b.currentCars.map(c => ({ key: `car number ${c.carNumber}:`, value: this.datePipe.transform(c.timeIn, 'short') }))
+      return b.currentCars.map(c => ({
+          key: `Car ${c.carNumber}:`,
+         value: `${moment.duration(moment().diff(c.timeIn)).humanize()} in bay`
+      }))
     }
   }
 
