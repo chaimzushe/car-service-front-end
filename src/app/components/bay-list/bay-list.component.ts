@@ -1,9 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
-import { subNavInfo } from 'src/app/models/car.model';
+import { Bay, subNavInfo } from 'src/app/models/car.model';
 import { BayService } from 'src/app/services/bay.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class BayListComponent implements OnInit {
   filteredBays = [];
   constructor(private bayService: BayService,
     private router: Router,
+    private datePipe: DatePipe,
     private route: ActivatedRoute,
     private dialog: MatDialog) { }
 
@@ -33,7 +35,7 @@ export class BayListComponent implements OnInit {
   async ngOnInit() {
     this.bays = await this.bayService.getAllBays().toPromise() as [];
     this.filteredBays = this.mapBayToCard(this.bays);
-    if(this.filteredBays .length === 0)  this.noItemsText = "No bays found";
+    if(this.filteredBays.length === 0)  this.noItemsText = "No bays found";
   }
 
   ngOnDestroy(): void {
@@ -45,14 +47,18 @@ export class BayListComponent implements OnInit {
       return ({
         _id: b._id,
         header: b.name,
-        middles: [
-          { key: 'Bay Number', value: `${b.number}` },
-          { key: 'Capacity', value: `${b.capacity} cars` },
-        ],
+        middles: this.getMiddles(b),
         bottom: `${!b.currentCars.length ? 'Empty' : 'Occupied' }`,
-        warn: false
+        warn: b.currentCars.length
       })
     });
+  }
+  getMiddles(b: Bay) {
+    if(!b.currentCars.length ){
+      return [{key: 'Current Cars', value: 0}]
+    } else {
+      return b.currentCars.map(c => ({ key: `car number ${c.carNumber}:`, value: this.datePipe.transform(c.timeIn, 'short') }))
+    }
   }
 
   navigateToEdit(car) {

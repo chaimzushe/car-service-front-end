@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { subNavInfo } from 'src/app/models/car.model';
+import { Bay, subNavInfo } from 'src/app/models/car.model';
 import { CarService } from 'src/app/services/car.service';
 import { RepairService } from 'src/app/services/repair.service';
 import { UserService } from 'src/app/services/user.service';
@@ -18,10 +18,11 @@ import {
   switchMap,
   tap
 } from 'rxjs/operators';
-import { pipe } from 'rxjs';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarServiceService } from 'src/app/services/car-service.service';
 import { DatePipe } from '@angular/common';
+import { BayService } from 'src/app/services/bay.service';
 
 interface IRepair {
   name: String;
@@ -59,10 +60,11 @@ export class ReceiveCarComponent implements OnInit {
   serviceObj: any = {};
   LoadingText = "Loading...";
   allServices: any[] = [];
-  currentBays: { name: string; value: number; inUse: boolean; }[];
+  currentBays: Bay[] = [];
   completed = false;
   constructor(
     private carService: CarService,
+    private bayService: BayService,
     private repairService: RepairService,
     private snackbar: MatSnackBar,
     private fb: FormBuilder,
@@ -279,6 +281,7 @@ export class ReceiveCarComponent implements OnInit {
     }
 
   }
+
   selectionsChanged(e) {
     if (e.previouslySelectedIndex === 0 && e.selectedIndex === 1) {
       this.addCar();

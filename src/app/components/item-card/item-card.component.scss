@@ -4,6 +4,10 @@
   width: 300px;
   margin: 12px;
   cursor: pointer;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   &--highlighted{
     background-color: #e2f5fb;
   }
@@ -46,6 +50,7 @@
 
 .bottom {
   text-align: right;
+  margin-top: auto;
 }
 
 .badge {

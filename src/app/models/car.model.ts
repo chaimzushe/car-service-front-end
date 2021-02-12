@@ -23,6 +23,14 @@ export interface workRepair{
   isEditing?: boolean;
 }
 
+export interface Bay{
+  _id: string;
+  name?: string;
+  number: number;
+  capacity: number;
+  currentCars: carInBay[]
+}
+
 export interface subNavInfo {
   actionText: string;
   backLink: string;
@@ -31,6 +39,12 @@ export interface subNavInfo {
   hideFilter?: boolean;
   hideSearch?: boolean;
   sync?: boolean;
+}
+
+interface carInBay{
+  timeIn: Date;
+  carNumber: Number;
+  paused: boolean;
 }
 
 export interface Service {
@@ -51,7 +65,7 @@ export interface Service {
   serviceTime: Date;
   totalPrice: number;
   waitingInfo: any;
-  bayNumber?: number;
+  bayNumber?: any;
   priceOfOtherWork: number;
   isEditing: boolean;
 }

@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { baseApi, socketIo } from '../util/global-config';
 import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { BayService } from './bay.service';
+import { Bay } from '../models/car.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +13,7 @@ export class CarServiceService {
 
   socket: any;
 
-  currentBays = Array.from({ length: 10 }, (k, i) => {
-    return { name: `Bay ${i + 1}`, value: (i + 1), inUse: false }
-  });
+  currentBays: Bay[] = [];
 
   visitTypesColor = {
     Maintenance: 'lightblue',
@@ -23,12 +23,17 @@ export class CarServiceService {
     Scheduled: '#60ff69f5',
   }
 
-  bayInUse(bay) {
-    return this.currentBays.find(b => b.value === bay && b.inUse);
+
+
+  constructor(private http: HttpClient, private bayService: BayService) {
+    this.socket = io(socketIo);
+
+    this.getBays();
   }
 
-  constructor(private http: HttpClient) {
-    this.socket = io(socketIo);
+  async getBays(){
+    let newBays = await this.bayService.getAllBays().toPromise() as Bay[];
+    this.currentBays.push(...newBays);
   }
 
   getAllServices() {

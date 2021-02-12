@@ -53,7 +53,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   ];
 
   authorizationToken = "";
-  bays = []
+
   links: any[] = [
     { name: 'IN QUEUE', active: true },
     { name: 'IN PROGRESS', active: false },
@@ -83,7 +83,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private dialog: MatDialog) {
-    this.bays = this.carServiceService.currentBays;
+
     this.visitTypesColor = carServiceService.visitTypesColor;
     let userSub = this.authService.userSubject.subscribe(user => {
       if (user) {
@@ -144,9 +144,6 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   async getUsedBays() {
     let { allCarsIds: inProgress } = await this.carServiceService.applyFilters({ status: 'IN PROGRESS' }, '').toPromise() as any;
     this.usedBays = inProgress.filter(s => s.bayNumber).map(s => s.bayNumber);
-    this.carServiceService.currentBays.forEach(bay => {
-      bay.inUse = !!this.usedBays.find(b => b === bay.value);
-    });
   }
 
   ngOnDestroy() {
@@ -193,7 +190,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
     ]
     if (this.filter.status === "IN PROGRESS" && service.bayNumber) {
-      fields.unshift({ name: 'Bay Number', value: service.bayNumber })
+      fields.unshift({ name: 'Bay Number', value: service.bayNumber.name })
     }
 
     if (["COMPLETED", "APPROVED"].includes(service.status) && service.visitType) {
@@ -223,24 +220,24 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     this.getList();
   }
 
-  assignUser(service){
-    if(service.status !== "IN QUEUE") return;
+  assignUser(service) {
+    if (service.status !== "IN QUEUE") return;
     let item = {
       name: "Select User",
-      dropDownItems: this.users.map( u => ({name: u.name, value: u._id})),
+      dropDownItems: this.users.map(u => ({ name: u.name, value: u._id })),
       actionText: "Assign User",
     }
 
     let dialogRef = this.dialog.open(SelectItemComponent, {
       width: "400px",
       autoFocus: false,
-      data: { item, selectedItem: (service.mechanic && service.mechanic._id)}
+      data: { item, selectedItem: (service.mechanic && service.mechanic._id) }
     });
 
     let closedSub = dialogRef.afterClosed().subscribe(async userId => {
-      if (!userId) { return;}
+      if (!userId) { return; }
       let user = this.users.find(u => u._id === userId);
-      let newMechanicInfo = {mechanicName: user.name, mechanic: user._id};
+      let newMechanicInfo = { mechanicName: user.name, mechanic: user._id };
       await this.carServiceService.assignUser(newMechanicInfo, service._id).toPromise();
       service.mechanic = user;
       service.mechanicName = user.name;
@@ -331,7 +328,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   assignToBay(service: Service, i) {
     if (i !== 0) {
       return this.snackbar.open(`Only item on top of the list can be assigned to a bay`, "dismiss", { panelClass: 'err-panel', duration: 3000 });
-    } else if(!service.mechanicName){
+    } else if (!service.mechanicName) {
       let snackBarRef = this.snackbar.open(`Please assign a mechanic before adding it to a bay`, "Assign User", { panelClass: 'err-panel', duration: 3000 });
       snackBarRef.onAction().subscribe(a => {
         this.assignUser(service);
@@ -341,7 +338,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
 
     let item = {
       name: "Select Bay",
-      dropDownItems: this.bays,
+      dropDownItems: this.carServiceService.currentBays.map((b => ({ name: b.name, value: b._id }))),
       actionText: "Assign To Bay",
     }
 
@@ -355,7 +352,8 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       if (!bay) {
         return;
       }
-      if (this.carServiceService.bayInUse(bay)) {
+      let selectedBay = this.carServiceService.currentBays.find(b => b._id === bay);
+      if (selectedBay.currentCars.length) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
           width: '250px',
           data: { msg: 'This bay is already in use. Do you want to assign another car to it?' },
@@ -366,7 +364,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         if (!result) return;
       }
       await this.carServiceService.assignBay(bay, service._id).toPromise();
-      this.snackbar.open(`Successfully added to bay number ${bay}`, "dismiss", { duration: 3000 });
+      this.snackbar.open(`Successfully added to bay ${selectedBay.name}`, "dismiss", { duration: 3000 });
       this.usedBays.push(bay);
       this.filter.skip = 0;
       this.getList();
@@ -445,7 +443,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
       case "WAITING": {
         this.actionMenu.unshift(
           { name: 'Edit Waiting Info', icon: 'fal fa-exclamation-triangle', actionFunction: this.addToWaitingList.bind(this) },
-          { name: 'Back To Progress', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN PROGRESS') },
+          { name: 'Back to Queue', icon: 'fal fa-undo', actionFunction: this.toggleApprove.bind(this, 'IN QUEUE') },
         )
         return;
       }
@@ -469,6 +467,8 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     let dialogSub = dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.services.splice(i, 1);
+      let link = this.links.find(l => l.name === this.filter.status);
+      if(link) link.itemCount -= 1;
       let removeSub = this.carServiceService.removeService(service._id).subscribe(x => {
       });
       this.subs.push(removeSub);
