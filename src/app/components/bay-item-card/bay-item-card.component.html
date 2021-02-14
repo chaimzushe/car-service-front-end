@@ -1,0 +1,34 @@
+<div #host class="host">
+  <mat-card [class.card--not-in-use]="bay.currentCars.length ===0" [matMenuTriggerFor]="menu" class="card">
+    <div class="top">
+      <h4 class="top-header"> <span> {{bay.name}} </span> </h4>
+      <i class="fal fa-ellipsis-v menu-icon"></i>
+    </div>
+    <div class="content">
+      <div class="car-item-list">
+        <div (click)="navigateToWorkPage($event, car)" *ngFor="let car of bay.currentCars" [class.car-item--warn]="isOverAnHour(car)" class="car-item">
+          <span class="car-item_key">
+            <b>  <i class="fal fa-car"></i> {{car.carNumber}} </b>
+          </span>
+        <span class="car-item_value">  {{car.duration}} <i class="fal fa-clock"></i> </span>
+
+        </div>
+      </div>
+      <app-no-items-found *ngIf="bay.currentCars.length ===0" [text]="'No Cars in bay'"></app-no-items-found>
+    </div>
+
+
+
+    <mat-menu [yPosition]="'above'" [xPosition]="'before'" #menu="matMenu">
+      <button [disabled]="user && user.role !== 'Admin'" (click)="navigateToEdit()" mat-menu-item>
+        <i class="fal fa-edit icon"></i>
+        <span>Edit</span>
+      </button>
+      <button [disabled]="user && user.role !== 'Admin'" (click)="deleteBay()" mat-menu-item>
+        <i class="fal fa-trash-alt icon"></i>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card>
+
+</div>

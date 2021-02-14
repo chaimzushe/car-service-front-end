@@ -41,6 +41,7 @@ import { RepairBoxComponent } from './ui/repair-box/repair-box.component';
 import { SelectItemComponent } from './dialogs/select-item/select-item.component';
 import { BayListComponent } from './components/bay-list/bay-list.component';
 import { BayFormComponent } from './components/bay-form/bay-form.component';
+import { BayItemCardComponent } from './components/bay-item-card/bay-item-card.component';
 
 ModuleRegistry.registerModules(AllModules);
 @NgModule({
@@ -74,7 +75,8 @@ ModuleRegistry.registerModules(AllModules);
     RepairBoxComponent,
     SelectItemComponent,
     BayListComponent,
-    BayFormComponent
+    BayFormComponent,
+    BayItemCardComponent
   ],
   imports: [
     BrowserModule,

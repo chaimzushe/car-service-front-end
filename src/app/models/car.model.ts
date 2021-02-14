@@ -45,6 +45,8 @@ interface carInBay{
   timeIn: Date;
   carNumber: Number;
   paused: boolean;
+  duration: string;
+  serviceId: string;
 }
 
 export interface Service {

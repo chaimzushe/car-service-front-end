@@ -9,17 +9,17 @@
 
     <mat-form-field appearance="standard">
       <mat-label>Capacity</mat-label>
-      <input type="number" formControlName="capacity" matInput placeholder="Days">
+      <input type="number" formControlName="capacity" matInput placeholder="How many cars can it hold?">
     </mat-form-field>
 
 
 
-    <mat-form-field appearance="fill">
+    <!-- <mat-form-field appearance="fill">
       <mat-label>Number</mat-label>
       <mat-select formControlName="number">
         <mat-option *ngFor="let num of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="num">{{num}}</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <div class="actions">
       <button type="submit" (click)="submit()" class="form_submit" mat-raised-button color="primary">Submit</button>

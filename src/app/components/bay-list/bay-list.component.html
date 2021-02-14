@@ -2,9 +2,9 @@
 <h3 class="text-header">Bays</h3>
 <div class="list">
 
-  <app-item-card (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [item]="user" [index]="i"
-  *ngFor="let user of filteredBays; index as i">
-</app-item-card>
+  <app-bay-item-card (goToWorkPage)="goToWorkPage($event)" (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [bay]="bay"
+    *ngFor="let bay of filteredBays; index as i">
+  </app-bay-item-card>
 
 
 </div>

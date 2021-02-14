@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
 import { Bay, subNavInfo } from 'src/app/models/car.model';
 import { BayService } from 'src/app/services/bay.service';
-import * as moment from 'moment';
+
 @Component({
   selector: 'app-bay-list',
   templateUrl: './bay-list.component.html',
@@ -34,7 +34,7 @@ export class BayListComponent implements OnInit {
 
   async ngOnInit() {
     this.bays = await this.bayService.getAllBays().toPromise() as [];
-    this.filteredBays = this.mapBayToCard(this.bays);
+    this.filteredBays = [...this.bays];
     if(this.filteredBays.length === 0)  this.noItemsText = "No bays found";
   }
 
@@ -42,26 +42,9 @@ export class BayListComponent implements OnInit {
     this.subs.forEach(s => s.unsubscribe())
   }
 
-  mapBayToCard(bays) {
-    return bays.map(b => {
-      return ({
-        _id: b._id,
-        header: b.name,
-        middles: this.getMiddles(b),
-        bottom: `${!b.currentCars.length ? 'Empty' : 'Occupied' }`,
-        warn: b.currentCars.length
-      })
-    });
-  }
-  getMiddles(b: Bay) {
-    if(!b.currentCars.length ){
-      return [{key: 'Current Cars', value: 0}]
-    } else {
-      return b.currentCars.map(c => ({
-          key: `Car ${c.carNumber}:`,
-         value: `${moment.duration(moment().diff(c.timeIn)).humanize()} in bay`
-      }))
-    }
+
+  goToWorkPage(bayEvent: any){
+    this.router.navigate(['work-page', bayEvent]);
   }
 
   navigateToEdit(car) {
@@ -89,7 +72,6 @@ export class BayListComponent implements OnInit {
 
   search(e) {
     this.filteredBays = this.bays.filter(r => r.name.toLowerCase().startsWith(e.toLowerCase()));
-    this.filteredBays = this.mapBayToCard(this.filteredBays);
     if (this.filteredBays.length === 0) {
       this.noItemsText = "No bays found";
     }

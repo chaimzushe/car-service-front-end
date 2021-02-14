@@ -1,0 +1,76 @@
+@import "../../../vars.scss";
+
+.card {
+  width: 300px;
+  margin: 12px;
+  cursor: pointer;
+  min-height: 375px;
+
+  &--not-in-use {
+    background-color: rgb(0 0 0 / 20%);
+    opacity: 0.5;
+  }
+}
+
+
+.top {
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-header {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-right: 22px;
+  margin-bottom: 0;
+  font-size: 18px;
+}
+
+.menu-icon {
+  font-size: 20px;
+}
+
+.car-item{
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px 0;
+
+  &_key{
+    i {
+      margin-right: 6px;
+    }
+  }
+  &_value{
+    font-weight: 300;
+    color: gray;
+    font-size: 16px;
+  }
+
+  &--warn {
+    color: $warning-red;
+    .car-item_value{
+      color: $warning-red;
+    }
+  }
+}
+
+
+
+
+.icon {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+
+
+
+
