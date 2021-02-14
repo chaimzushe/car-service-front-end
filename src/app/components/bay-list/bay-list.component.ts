@@ -80,7 +80,12 @@ export class BayListComponent implements OnInit {
     }
   }
   toggleActive() {
-    if (this.onlyActive) this.filteredBays = this.bays.filter(b => b.currentCars.length);
+    if (this.onlyActive) {
+      this.filteredBays = this.bays.filter(b => b.currentCars.length);
+      if (this.filteredBays.length === 0) {
+        this.noItemsText = "No bays found";
+      }
+    }
     else this.search(this.searchWord);
   }
 
