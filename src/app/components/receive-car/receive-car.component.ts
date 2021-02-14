@@ -356,6 +356,13 @@ export class ReceiveCarComponent implements OnInit {
     });
   }
 
+  validateBay(){
+    if(!this.mechanicFormGroup.value.mechanic){
+      this.snackbar.open("Please assign a mechanic before assigning bay", "Dismiss", { duration: 3000, panelClass: 'err-panel' });
+      this.mechanicFormGroup.patchValue({bayNumber: null});
+    }
+  }
+
   updateService(newCarService) {
     this.loading = true;
     this.LoadingText = "Updating service info";

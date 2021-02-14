@@ -99,7 +99,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <mat-form-field>
-            <mat-select formControlName="bayNumber" class="input" placeholder="Bay Number">
+            <mat-select (selectionChange)="validateBay()" formControlName="bayNumber" class="input" placeholder="Bay Number">
               <mat-option *ngFor="let bay of currentBays" [value]="bay._id">{{bay.name}}</mat-option>
             </mat-select>
           </mat-form-field>

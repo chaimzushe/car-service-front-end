@@ -158,6 +158,10 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     })
   }
 
+  navigateToLink(link){
+    this.router.navigate(['/services'] ,{queryParams: {link: link.name}} );
+  }
+
   setActive(link, idx) {
     this.links.forEach((l, i) => l.active = i === idx);
     this.filter.status = link.name;

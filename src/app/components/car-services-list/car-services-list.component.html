@@ -2,7 +2,7 @@
 </app-sub-nav>
 <div class="nav-filter">
   <span [matBadge]="link.itemCount" [matBadgeHidden]="!link.active" [matBadgeOverlap]="false" class="link"
-    (click)="setActive(link, i)" [class.link--active]="link.active" *ngFor="let link of links; index as i">
+    (click)="navigateToLink(link, i)" [class.link--active]="link.active" *ngFor="let link of links; index as i">
     {{link.name}}</span>
 </div>
 
