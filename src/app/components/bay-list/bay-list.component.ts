@@ -24,6 +24,8 @@ export class BayListComponent implements OnInit {
   noItemsText = "Loading...";
   bays = [];
   filteredBays = [];
+  onlyActive = false;
+  searchWord = "";
   constructor(private bayService: BayService,
     private router: Router,
     private datePipe: DatePipe,
@@ -35,7 +37,7 @@ export class BayListComponent implements OnInit {
   async ngOnInit() {
     this.bays = await this.bayService.getAllBays().toPromise() as [];
     this.filteredBays = [...this.bays];
-    if(this.filteredBays.length === 0)  this.noItemsText = "No bays found";
+    if (this.filteredBays.length === 0) this.noItemsText = "No bays found";
   }
 
   ngOnDestroy(): void {
@@ -43,7 +45,7 @@ export class BayListComponent implements OnInit {
   }
 
 
-  goToWorkPage(bayEvent: any){
+  goToWorkPage(bayEvent: any) {
     this.router.navigate(['work-page', bayEvent]);
   }
 
@@ -71,12 +73,15 @@ export class BayListComponent implements OnInit {
   }
 
   search(e) {
-    this.filteredBays = this.bays.filter(r => r.name.toLowerCase().startsWith(e.toLowerCase()));
+    this.searchWord = e.toLowerCase();
+    this.filteredBays = this.bays.filter(r => r.name.toLowerCase().startsWith(this.searchWord));
     if (this.filteredBays.length === 0) {
       this.noItemsText = "No bays found";
     }
-
   }
-
+  toggleActive() {
+    if (this.onlyActive) this.filteredBays = this.bays.filter(b => b.currentCars.length);
+    else this.search(this.searchWord);
+  }
 
 }
