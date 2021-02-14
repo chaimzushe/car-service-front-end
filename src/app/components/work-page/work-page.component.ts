@@ -201,6 +201,9 @@ export class WorkPageComponent implements OnInit, OnDestroy {
       if (!res) {
         return;
       }
+      if(res.timeIn){
+        res.timeIn= new Date();
+      }
       let data = await this.carServiceService.waiting(res, this.service._id).toPromise();
       let bar = this.snackbar.open(`Successfully added to waiting area`, "dismiss", { duration: 2000 });
       bar.afterDismissed().subscribe(x => {

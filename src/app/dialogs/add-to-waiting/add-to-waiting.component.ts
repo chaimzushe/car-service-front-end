@@ -10,6 +10,7 @@ export class AddToWaitingComponent implements OnInit {
   selectedReason;
   location: any;
   note: any;
+  timeIn: any;
   constructor(
     private dialogRef: MatDialogRef<AddToWaitingComponent>,
     @Inject(MAT_DIALOG_DATA) data
@@ -18,6 +19,7 @@ export class AddToWaitingComponent implements OnInit {
     this.selectedReason = data.info.reason;
     this.location = data.info.location;
     this.note = data.info.note;
+    this.timeIn = data.info.timeIn;
   }
 
   ngOnInit(): void {
@@ -27,7 +29,8 @@ export class AddToWaitingComponent implements OnInit {
     let waitingInfo = {
       reason: this.selectedReason,
       location: this.location,
-      note: this.note
+      note: this.note,
+      timeIn:  this.timeIn
     }
     this.dialogRef.close(waitingInfo);
   }

@@ -13,7 +13,7 @@ import { GoogleSpreadsheetWarnComponent } from 'src/app/dialogs/google-spreadshe
 import { AuthService } from 'src/app/services/auth.service';
 import { AddToWaitingComponent } from 'src/app/dialogs/add-to-waiting/add-to-waiting.component';
 import { SelectItemComponent } from 'src/app/dialogs/select-item/select-item.component';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-car-services-list',
   templateUrl: './car-services-list.component.html',
@@ -202,6 +202,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
         { name: "Reason", value: service.waitingInfo.reason },
         { name: "Car Location", value: service.waitingInfo.location },
         { name: 'Updated', value: this.datePipe.transform(service.updatedAt, 'short') },
+        {name: 'Waiting for', value:  `${moment.duration(moment().diff(service.waitingInfo.timeIn)).humanize()}`}
       ]
     }
     return fields;
@@ -386,6 +387,9 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
     let closedSub = dialogRef.afterClosed().subscribe(async res => {
       if (!res) {
         return;
+      }
+      if(!res.timeIn) {
+        res.timeIn = new Date();
       }
       let data = await this.carServiceService.waiting(res, service._id).toPromise();
       this.filter.skip = 0;
