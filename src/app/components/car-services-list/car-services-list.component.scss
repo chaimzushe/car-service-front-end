@@ -1,4 +1,6 @@
 @import "../../../vars.scss";
+$tablet-break: 850px;
+
 :host {
   min-height: calc(100vh - 160px);
   display: block;
@@ -138,6 +140,11 @@ button {
   max-width: 1600px;
   margin: auto;
   margin-top: 36px;
+  @media(max-width: $tablet-break){
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   }
   .link {
     margin: 0 22px;
     font-weight: 400;
@@ -146,10 +153,25 @@ button {
     @media (max-width: 1200px) {
       font-size: 16px;
     }
+
+    @media(max-width: $tablet-break){
+      font-size: 16px;
+      padding: 8px;
+      border: 1px solid;
+      border-radius: 4px;
+      margin: 4px 0;
+      width: 300px;
+      text-align: center;
+    }
     &--active {
       font-weight: bold;
       border-bottom: 1px solid;
+      @media(max-width: $tablet-break){
+        background-color: $deep-blue;
+        color: white;
+       }
     }
+
   }
 }
 
@@ -192,6 +214,7 @@ button {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-wrap: wrap;
 }
 .sort-by {
   margin-right: 50px;

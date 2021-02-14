@@ -19,10 +19,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authService.retrieveAuthFromUrl();
-    if (window.screen.width < 650 && this.showFooter()) {
-      let msg = "Looks like you are using a mobile device. This site is not optimized for small screens";
-      return this.snackbar.open(msg, "dismiss", { duration: 10000, panelClass: "err-panel" })
-    }
     let userSub = this.authService.userSubject.subscribe(user => {
       if (user) {
         this.user = user;
