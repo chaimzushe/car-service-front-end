@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
 import { subNavInfo } from 'src/app/models/car.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -18,20 +16,21 @@ export class UserListComponent implements OnInit {
     backLink: '/home',
     hideFilter: true
   }
+
+  list: any = { header: 'Users', items: [], noItemsText: 'Loading...' };
   subs: Subscription[] = [];
   noItemsText = "Loading...";
   users = [];
   filteredUsers = [];
   constructor(private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute,
-    private dialog: MatDialog) { }
+    private route: ActivatedRoute) { }
 
 
 
   async ngOnInit() {
     this.users = await this.userService.getAllUsers().toPromise() as [];
-    this.filteredUsers = this.mapUserToCard(this.users);
+    this.list.items = this.mapUserToCard(this.users);
   }
 
   ngOnDestroy(): void {
@@ -52,36 +51,23 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  navigateToEdit(car) {
-    this.router.navigate(['edit', car._id], { relativeTo: this.route });
+
+  navigateToEdit(user) {
+    console.log(user)
+    this.router.navigate(['edit', user._id], { relativeTo: this.route });
   }
 
-  deleteItem(user, i) {
-    const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '250px',
-      data: { msg: 'Are you sure you would like to delete this user?' },
-      autoFocus: false
-    });
-
-    let dialogSub = dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
-      this.users = this.users.filter(u => u.name !== user.name)
-      this.filteredUsers = this.filteredUsers.filter(u => u.header !== user.header)
-      let removeSub = this.userService.removeUser(user._id).subscribe(x => {
-        //this.users.splice(i, 1);
-      });
-      this.subs.push(removeSub);
-    });
-    this.subs.push(dialogSub);
+  async deleteItem(user) {
+    this.users = this.users.filter(u => u.name !== user.name)
+    this.list.items = this.list.items.filter(u => u.header !== user.header)
+    if (this.list.items.length === 0) this.list.noItemsText = "No users found";
+    await this.userService.removeUser(user._id).toPromise();
   }
 
   search(e) {
     this.filteredUsers = this.users.filter(r => r.name.toLowerCase().startsWith(e.toLowerCase()));
-    this.filteredUsers = this.mapUserToCard(this.filteredUsers);
-    if (this.filteredUsers.length === 0) {
-      this.noItemsText = "No users found";
-    }
-
+    this.list.items = this.mapUserToCard(this.filteredUsers);
+    if (this.filteredUsers.length === 0) this.list.noItemsText = "No users found";
   }
 
 }

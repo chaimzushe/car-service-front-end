@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
@@ -19,34 +18,32 @@ export class CarListComponent implements OnInit, OnDestroy {
     backLink: '/home',
     hideFilter: true
   }
+
+  list: any = { header: 'Cars', items: [], noItemsText: 'Loading...' };
   filter: any = { skip: 0 };
-  filteredCars: any[] = [];
-  constructor(private carService: CarService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
+  constructor(private carService: CarService, private router: Router, private route: ActivatedRoute) { }
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
   }
   cars: CarFullInfo[] = [];
-  noItemsText = "Loading...";
   searchWord = "";
 
-
-
-   ngOnInit() {
+  ngOnInit() {
     this.loadCars();
   }
   async loadCars(append = false) {
-    let cars = await this.carService.getCarTypeAhead(this.searchWord , this.filter ).toPromise() as CarFullInfo[];
+    let cars = await this.carService.getCarTypeAhead(this.searchWord, this.filter).toPromise() as CarFullInfo[];
     let mappedCars = this.mapCarsToCard(cars) as [];
-    if(append){
-      this.filteredCars.push(...mappedCars);
+    if (append) {
+      this.list.items.push(...mappedCars);
     } else {
-      this.filteredCars = mappedCars;
+      this.list.items = mappedCars;
     }
-    if(this.filteredCars.length === 0) this.noItemsText = "No cars found";
+    if (this.list.items.length === 0) this.list.noItemsText = "No cars found";
   }
 
-  mapCarsToCard(cars){
-    return cars.map(c=> {
+  mapCarsToCard(cars) {
+    return cars.map(c => {
       return ({
         _id: c._id,
         header: `Car Number: ${c.car_id}`,
@@ -66,33 +63,21 @@ export class CarListComponent implements OnInit, OnDestroy {
     this.router.navigate(['edit', car._id], { relativeTo: this.route });
   }
 
-  viewItem(car) {
-    this.router.navigate(['edit', car._id], { relativeTo: this.route });
+
+
+  async deleteItem(car) {
+    this.cars = this.cars.filter(c => c.car_id !== car.header)
+    this.list.items = this.list.items.filter(c => c.header !== car.header);
+    if (this.list.items.length === 0) this.list.noItemsText = "No cars found";
+    await this.carService.removeCar(car._id).toPromise();
   }
 
-  deleteItem(car, i) {
-    const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '250px',
-      data: { msg: 'Are you sure you would like to delete this car?' },
-      autoFocus: false
-    });
-
-    let dialogSub = dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
-      this.cars = this.cars.filter(c => c.car_id !== car.header)
-      this.filteredCars = this.filteredCars.filter(c => c.header !== car.header);
-      let removeSub = this.carService.removeCar(car._id).subscribe(x => { });
-      this.subs.push(removeSub);
-    });
-    this.subs.push(dialogSub);
-  }
-
-  onScroll(){
+  onScroll() {
     this.filter.skip += 10;
     this.loadCars(true);
   }
 
-  search(e){
+  search(e) {
     this.searchWord = e;
     this.filter.skip = 0;
     this.loadCars();

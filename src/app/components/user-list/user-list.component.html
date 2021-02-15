@@ -1,11 +1,7 @@
 <app-sub-nav (searched)="search($event)" [subNavInfo]="subNavInfo"></app-sub-nav>
-<h3 class="text-header">Users</h3>
-<div class="list">
 
-  <app-item-card (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [item]="user" [index]="i"
-  *ngFor="let user of filteredUsers; index as i">
-</app-item-card>
+<app-item-list (navigateToEditClicked)="navigateToEdit($event)"
+(deleteClicked)="deleteItem($event)"
+  [list]="list"
 
-
-</div>
-<app-no-items-found [text]="noItemsText" *ngIf="filteredUsers.length ===0"></app-no-items-found>
+  ></app-item-list>

@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ConfirmActionComponent } from 'src/app/dialogs/confirm-action/confirm-action.component';
 import { subNavInfo } from 'src/app/models/car.model';
 import { RepairService } from 'src/app/services/repair.service';
 
@@ -20,15 +18,17 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
   }
   onlyActive = false;
   subs: Subscription[] = [];
-  noItemsText = "Loading...";
+  list: any = { header: 'Repairs', items: [], noItemsText: "Loading...", toggle: true }
   repairs = [];
-  filteredRepairs = [];
-  constructor(private repairService: RepairService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
+  constructor(private repairService: RepairService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   async ngOnInit() {
     this.repairs = await this.repairService.getAllRepairs().toPromise() as [];
-    this.filteredRepairs = this.mapRepairsToCard(this.repairs);
+    this.list.items = this.mapRepairsToCard(this.repairs);
   }
+
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe())
   }
@@ -51,44 +51,31 @@ export class RepairOptionListComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleActive() {
-    console.log(this.onlyActive);
-    if (this.onlyActive) this.filteredRepairs = this.repairs.filter(r => r.active);
-    else this.filteredRepairs = this.repairs.filter(r => r);
-    this.filteredRepairs = this.mapRepairsToCard(this.filteredRepairs);
+  toggleActive(isActive) {
+    this.onlyActive = isActive;
+    if (this.onlyActive) this.list.items = this.repairs.filter(r => r.active);
+    else this.list.items = this.repairs.filter(r => r);
+    this.list.items = this.mapRepairsToCard(this.list.items);
   }
 
-  navigateToEdit(reapir) {
-    this.router.navigate(['edit', reapir._id], { relativeTo: this.route });
+  navigateToEdit(repair) {
+    this.router.navigate(['edit', repair._id], { relativeTo: this.route });
   }
 
 
 
-  deleteItem(rep, i) {
-    const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '250px',
-      data: { msg: 'Are you sure you would like to delete this repair?' },
-      autoFocus: false
-    });
-
-    let dialogSub = dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
-      this.repairs = this.repairs.filter(r => r.name !== rep.name)
-      this.filteredRepairs = this.filteredRepairs.filter(r => r.header !== rep.header)
-      let removeSub = this.repairService.removeRepair(rep._id).subscribe(x => { });
-      this.subs.push(removeSub);
-    });
-    this.subs.push(dialogSub);
+  async deleteItem(rep) {
+    this.repairs = this.repairs.filter(r => r.name !== rep.name)
+    this.list.items = this.list.items.filter(r => r.header !== rep.header)
+    if (this.list.items.length === 0) this.list.noItemsText = "No Repairs found";
+    await this.repairService.removeRepair(rep._id).toPromise();
   }
 
   search(e) {
-    this.filteredRepairs = this.repairs.filter(r => r.name.toLowerCase().startsWith(e.toLowerCase()));
-    this.filteredRepairs = this.mapRepairsToCard(this.filteredRepairs);
+    this.list.items = this.repairs.filter(r => r.name.toLowerCase().startsWith(e.toLowerCase()));
+    this.list.items = this.mapRepairsToCard(this.list.items);
     this.onlyActive = false;
-    if (this.filteredRepairs.length === 0) {
-      this.noItemsText = "No Repairs found";
-    }
-
+    if (this.list.items.length === 0) this.list.noItemsText = "No Repairs found";
   }
 
 }

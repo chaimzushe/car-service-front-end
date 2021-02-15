@@ -1,18 +1,6 @@
 <app-sub-nav (searched)="search($event)" [subNavInfo]="subNavInfo"></app-sub-nav>
-<h3 class="text-header">Repairs
-
-
-</h3>
-<div>
-  <div class="toggle">
-    <mat-slide-toggle [color]="'primary'" (change)="toggleActive()" [(ngModel)]="onlyActive"> View Active</mat-slide-toggle>
-  </div>
-  <div class="list">
-    <app-item-card (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [item]="repair" [index]="i"
-    *ngFor="let repair of filteredRepairs; index as i">
-  </app-item-card>
-
-</div>
-</div>
-
-<app-no-items-found [text]="noItemsText" *ngIf="filteredRepairs.length ===0"></app-no-items-found>
+<app-item-list
+(toggleActiveClicked)="toggleActive($event)"
+(navigateToEditClicked)="navigateToEdit($event)"
+(deleteClicked)="deleteItem($event)"
+  [list]="list"></app-item-list>

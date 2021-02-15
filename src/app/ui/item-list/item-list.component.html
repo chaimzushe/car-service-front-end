@@ -1,0 +1,20 @@
+
+<h3 class="text-header">{{list.header}}</h3>
+
+<div *ngIf="list.toggle" class="toggle">
+  <mat-slide-toggle [color]="'primary'" (change)="toggleActive()" [(ngModel)]="onlyActive"> View Active</mat-slide-toggle>
+</div>
+
+<div
+infiniteScroll
+[infiniteScrollDistance]="2"
+[infiniteScrollThrottle]="50"
+(scrolled)="onScroll()"
+class="list">
+  <app-item-card (edited)="navigateToEdit($event)" (deleted)="deleteItem($event, i)" [item]="user" [index]="i"
+  *ngFor="let user of list.items; index as i">
+</app-item-card>
+
+
+</div>
+<app-no-items-found [text]="list.noItemsText" *ngIf="list.items.length ===0"></app-no-items-found>
