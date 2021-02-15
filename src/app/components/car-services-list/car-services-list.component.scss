@@ -215,6 +215,13 @@ button {
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
+
+  @media(max-width: 450px){
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 8px;
+  }
 }
 .sort-by {
   margin-right: 50px;
@@ -247,11 +254,17 @@ button {
   background-color: #e1ecea99;
 }
 
+
+.sub-filters{
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .sub-filter {
   border-radius: 12px;
   cursor: pointer;
   padding: 4px 6px;
-  margin: 0 6px;
+  margin: 6px;
   text-align: center;
   text-transform: uppercase;
   color: #015673;
@@ -321,3 +334,5 @@ button {
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+
