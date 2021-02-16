@@ -191,6 +191,7 @@ export class ReceiveCarComponent implements OnInit {
   }
 
   async addCar() {
+
     if (this.serviceId || !this.carGroupControl.valid) return;
     this.loading = true;
     this.LoadingText = "Calculating repairs to add";
@@ -282,6 +283,12 @@ export class ReceiveCarComponent implements OnInit {
 
   }
 
+  validateCarNum(){
+    if(!this.carGroupControl.value.carNumber || !this.carGroupControl.value.carNumber.car_id){
+      this.snackbar.open("Please select a car from the type ahead", "Dismiss", {duration: 3000, panelClass: 'err-panel'});
+      return this.carGroupControl.patchValue({carNumber: null});
+    }
+  }
   selectionsChanged(e) {
     if (e.previouslySelectedIndex === 0 && e.selectedIndex === 1) {
       this.addCar();

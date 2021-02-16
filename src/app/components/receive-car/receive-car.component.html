@@ -10,7 +10,7 @@
           <ng-template matStepLabel>Enter Car or VIN Number</ng-template>
           <mat-form-field>
             <mat-label>Car or VIN Number </mat-label>
-            <input type="text" placeholder="Car#" aria-label="Number" matInput formControlName="carNumber"
+            <input (blur)="validateCarNum()"  type="text" placeholder="Car#" aria-label="Number" matInput formControlName="carNumber"
               [matAutocomplete]="autoCars" />
             <mat-autocomplete [displayWith]="carDisplayFunc" autoActiveFirstOption
               (optionSelected)="clearCurRepairs($event)" #autoCars="matAutocomplete">
