@@ -35,7 +35,7 @@ export class ItemListComponent implements OnInit {
   async deleteItem(item) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '250px',
-      data: { msg: 'Are you sure you would like to delete this repair?' },
+      data: { msg: 'Are you sure you would like to delete this item?' },
       autoFocus: false
     });
 
