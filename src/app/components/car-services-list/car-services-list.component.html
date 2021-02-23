@@ -44,7 +44,9 @@
     </span>
   </span>
 
-  <div cdkDropList [cdkDropListDisabled]="filter.status  !== 'IN QUEUE'" [cdkDropListData]="services"
+  <div cdkDropList
+  [cdkDropListDisabled]="filter.status  !== 'IN QUEUE' || true"
+  [cdkDropListData]="services"
     (cdkDropListDropped)="reOrder($event)" class="list-wrap">
 
 

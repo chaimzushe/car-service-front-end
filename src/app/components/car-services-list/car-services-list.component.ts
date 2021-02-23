@@ -331,9 +331,7 @@ export class CarServicesListComponent implements OnInit, OnDestroy {
   }
 
   assignToBay(service: Service, i) {
-    if (i !== 0) {
-      return this.snackbar.open(`Only item on top of the list can be assigned to a bay`, "dismiss", { panelClass: 'err-panel', duration: 3000 });
-    } else if (!service.mechanicName) {
+   if (!service.mechanicName) {
       let snackBarRef = this.snackbar.open(`Please assign a mechanic before adding it to a bay`, "Assign User", { panelClass: 'err-panel', duration: 3000 });
       snackBarRef.onAction().subscribe(a => {
         this.assignUser(service);

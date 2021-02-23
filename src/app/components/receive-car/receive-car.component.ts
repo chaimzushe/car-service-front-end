@@ -132,7 +132,7 @@ export class ReceiveCarComponent implements OnInit {
     });
     this.mechanicFormGroup = this.fb.group({
       mechanic: [this.serviceObj.mechanic],
-      bayNumber: [this.serviceObj.bayNumber &&  this.serviceObj.bayNumber._id],
+      bayNumber: [this.serviceObj.bayNumber && this.serviceObj.bayNumber._id],
     });
     this.repairListFormGroup = this.fb.group({
       selectedFirstRepair: [null],
@@ -200,9 +200,9 @@ export class ReceiveCarComponent implements OnInit {
     let carId = this.carGroupControl.value.carNumber.car_id;
     let visitType = this.carGroupControl.value.visitType;
     let allServices = this.allServices;
-    if(allServices) {
-       let {allCarsIds } = await this.carServiceService.applyFilters({}, carId).toPromise() as any;
-       allServices = allCarsIds;
+    if (allServices) {
+      let { allCarsIds } = await this.carServiceService.applyFilters({}, carId).toPromise() as any;
+      allServices = allCarsIds;
     }
     this.allRepairs.forEach(r => this.checkIfAutoAddRepair(r, allServices, currentMiles, visitType))
     this.loading = false;
@@ -215,14 +215,14 @@ export class ReceiveCarComponent implements OnInit {
 
   async clearCurRepairs(e) {
     this.repairsNeeded = [];
-   let carId = e.option.value.car_id;
-   this.loading = true;
-    const {allCarsIds} = await this.carServiceService.applyFilters({}, carId).toPromise() as any;
+    let carId = e.option.value.car_id;
+    this.loading = true;
+    const { allCarsIds } = await this.carServiceService.applyFilters({}, carId).toPromise() as any;
     this.allServices = allCarsIds;
     this.loading = false;
-    let curMiles =  this.carGroupControl.value.miles;
-    let lastMiles = this.stripNonNumbers( (this.allServices[0] && this.allServices[0].milesAtService));
-    if(!curMiles || lastMiles >  curMiles){
+    let curMiles = this.carGroupControl.value.miles;
+    let lastMiles = this.stripNonNumbers((this.allServices[0] && this.allServices[0].milesAtService));
+    if (!curMiles || lastMiles > curMiles) {
       this.carGroupControl.patchValue({
         miles: lastMiles
       });
@@ -242,7 +242,7 @@ export class ReceiveCarComponent implements OnInit {
     let hasNoMileCheck = !r.checkWhenMilageIsAt || r.checkWhenMilageIsAt == 0;
     let hasNoDateCheck = !r.intervalCheck || r.intervalCheck == 0;
     let hasNoChecksFor = hasNoMileCheck && hasNoDateCheck && !r.forVisit
-    return !r.active ||  hasNoChecksFor;
+    return !r.active || hasNoChecksFor;
   }
 
   autoAdRepair(r, note) {
@@ -263,11 +263,11 @@ export class ReceiveCarComponent implements OnInit {
     if (r.forVisit === visitType) {
       return this.autoAdRepair(r, `System added because visit reason is ${visitType}`);
     }
-    const lastTimeRepairDone = this.getLastTimeRepDone(r, allServices)  || {milesAtService: 0, serviceTime: new Date('1700, 1, ,1')};
+    const lastTimeRepairDone = this.getLastTimeRepDone(r, allServices) || { milesAtService: 0, serviceTime: new Date('1700, 1, ,1') };
     let milesTravelledSinceRepair = this.stripNonNumbers(currentMiles) - this.stripNonNumbers(lastTimeRepairDone.milesAtService);
     if (r.checkWhenMilageIsAt && r.checkWhenMilageIsAt != 0 && milesTravelledSinceRepair >= this.stripNonNumbers(r.checkWhenMilageIsAt)) {
       let msg = `LTS on ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'shortDate')}. Car was at ${this.stripNonNumbers(lastTimeRepairDone.milesAtService)} miles. Check when passing ${r.checkWhenMilageIsAt} miles`;
-      if(lastTimeRepairDone.milesAtService ==0){
+      if (lastTimeRepairDone.milesAtService == 0) {
         msg = `Never done this repair to car. Recommended to check when passing ${r.checkWhenMilageIsAt}`;
       }
       return this.autoAdRepair(r, msg);
@@ -275,7 +275,7 @@ export class ReceiveCarComponent implements OnInit {
     const daysSinceLatVisit = this.getTimeDiff(lastTimeRepairDone);
     if (r.intervalCheck && r.intervalCheck != 0 && daysSinceLatVisit >= this.stripNonNumbers(r.intervalCheck)) {
       let msg = `LTS on ${this.datePipe.transform(new Date(lastTimeRepairDone.serviceTime), 'shortDate')}. Recommended to check every ${r.intervalCheck} days`;
-      if(daysSinceLatVisit > 5000) {
+      if (daysSinceLatVisit > 5000) {
         msg = `Never done before. Recommended to check every ${r.intervalCheck} days`;
       }
       return this.autoAdRepair(r, msg);
@@ -283,11 +283,12 @@ export class ReceiveCarComponent implements OnInit {
 
   }
 
-  validateCarNum(){
-    if(!this.carGroupControl.value.carNumber || !this.carGroupControl.value.carNumber.car_id){
-      this.snackbar.open("Please select a car from the type ahead", "Dismiss", {duration: 3000, panelClass: 'err-panel'});
-      return this.carGroupControl.patchValue({carNumber: null});
-    }
+  validateCarNum() {
+
+      if (!this.carGroupControl.value.carNumber || !this.carGroupControl.value.carNumber.car_id) {
+        return this.carGroupControl.patchValue({ carNumber: null });
+      }
+
   }
   selectionsChanged(e) {
     if (e.previouslySelectedIndex === 0 && e.selectedIndex === 1) {
@@ -344,7 +345,7 @@ export class ReceiveCarComponent implements OnInit {
       repairs,
       bayNumber: (this.mechanicFormGroup.value.bayNumber),
     }
-    if(newCarService.bayNumber){
+    if (newCarService.bayNumber) {
       newCarService.status = "IN PROGRESS";
     }
 
@@ -355,7 +356,7 @@ export class ReceiveCarComponent implements OnInit {
     this.LoadingText = "Saving";
     this.carService.createService(newCarService).subscribe(x => {
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
-      this.router.navigate(['/services'] ,{queryParams: {link: newCarService.status}} )
+      this.router.navigate(['/services'], { queryParams: { link: newCarService.status } })
       this.loading = false;
       this.LoadingText = "";
     }, err => {
@@ -363,10 +364,10 @@ export class ReceiveCarComponent implements OnInit {
     });
   }
 
-  validateBay(){
-    if(!this.mechanicFormGroup.value.mechanic){
+  validateBay() {
+    if (!this.mechanicFormGroup.value.mechanic) {
       this.snackbar.open("Please assign a mechanic before assigning bay", "Dismiss", { duration: 3000, panelClass: 'err-panel' });
-      this.mechanicFormGroup.patchValue({bayNumber: null});
+      this.mechanicFormGroup.patchValue({ bayNumber: null });
     }
   }
 
@@ -375,7 +376,7 @@ export class ReceiveCarComponent implements OnInit {
     this.LoadingText = "Updating service info";
     this.carServiceService.editUService(newCarService, this.serviceId).subscribe(x => {
       this.snackbar.open("Success", "Dismiss", { duration: 3000 });
-      this.router.navigate(['/services'] ,{queryParams: {link: newCarService.status}} );
+      this.router.navigate(['/services'], { queryParams: { link: newCarService.status } });
     });
   }
 }
